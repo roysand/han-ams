@@ -1,0 +1,41 @@
+﻿<Properties StartupConfiguration="{EA444D94-12C6-4780-B450-9E197753AFF1}|Default">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Aidon/AidonMessageParser.cs">
+    <Files>
+      <File FileName="Program.cs" Line="10" Column="1" />
+      <File FileName="Contracts/IBaseMessage.cs" Line="13" Column="6" />
+      <File FileName="Aidon/AidonMessageParser.cs" Line="131" Column="44" />
+      <File FileName="Contracts/IStreamReader.cs" Line="8" Column="27" />
+      <File FileName="Aidon/AidonStreamReader.cs" Line="76" Column="14" />
+      <File FileName="DTO/AidonMessage.cs" Line="18" Column="37" />
+    </Files>
+    <Pads>
+      <Pad Id="ProjectPad">
+        <State name="__root__">
+          <Node name="ParseMessages" expanded="True">
+            <Node name="ParseMessages" expanded="True">
+              <Node name="Aidon" expanded="True">
+                <Node name="AidonMessageParser.cs" selected="True" />
+              </Node>
+              <Node name="Contracts" expanded="True" />
+              <Node name="DTO" expanded="True" />
+            </Node>
+          </Node>
+        </State>
+      </Pad>
+      <Pad Id="MonoDevelop.Debugger.WatchPad">
+        <State />
+      </Pad>
+    </Pads>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore>
+      <Breakpoint file="/Users/roy/repo/han-ams/ParseMessages/Program.cs" relfile="Program.cs" line="10" column="1" />
+      <Breakpoint file="/Users/roy/repo/han-ams/ParseMessages/Aidon/AidonMessageParser.cs" relfile="Aidon/AidonMessageParser.cs" line="115" column="1" />
+      <Breakpoint file="/Users/roy/repo/han-ams/ParseMessages/Aidon/AidonMessageParser.cs" relfile="Aidon/AidonMessageParser.cs" line="133" column="1" />
+    </BreakpointStore>
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MultiItemStartupConfigurations />
+  <MonoDevelop.Ide.ItemProperties.ParseMessages PreferredExecutionTarget="MonoDevelop.Default" />
+</Properties>

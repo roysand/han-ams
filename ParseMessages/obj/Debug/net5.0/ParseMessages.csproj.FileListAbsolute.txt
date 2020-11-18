@@ -1,0 +1,15 @@
+/Users/roy/repo/han-ams/ParseMessages/bin/Debug/net5.0/ParseMessages.deps.json
+/Users/roy/repo/han-ams/ParseMessages/bin/Debug/net5.0/ParseMessages.runtimeconfig.json
+/Users/roy/repo/han-ams/ParseMessages/bin/Debug/net5.0/ParseMessages.runtimeconfig.dev.json
+/Users/roy/repo/han-ams/ParseMessages/bin/Debug/net5.0/ParseMessages.dll
+/Users/roy/repo/han-ams/ParseMessages/bin/Debug/net5.0/ref/ParseMessages.dll
+/Users/roy/repo/han-ams/ParseMessages/bin/Debug/net5.0/ParseMessages.pdb
+/Users/roy/repo/han-ams/ParseMessages/obj/Debug/net5.0/ParseMessages.csprojAssemblyReference.cache
+/Users/roy/repo/han-ams/ParseMessages/obj/Debug/net5.0/ParseMessages.GeneratedMSBuildEditorConfig.editorconfig
+/Users/roy/repo/han-ams/ParseMessages/obj/Debug/net5.0/ParseMessages.AssemblyInfoInputs.cache
+/Users/roy/repo/han-ams/ParseMessages/obj/Debug/net5.0/ParseMessages.AssemblyInfo.cs
+/Users/roy/repo/han-ams/ParseMessages/obj/Debug/net5.0/ParseMessages.csproj.CoreCompileInputs.cache
+/Users/roy/repo/han-ams/ParseMessages/obj/Debug/net5.0/ParseMessages.dll
+/Users/roy/repo/han-ams/ParseMessages/obj/Debug/net5.0/ref/ParseMessages.dll
+/Users/roy/repo/han-ams/ParseMessages/obj/Debug/net5.0/ParseMessages.pdb
+/Users/roy/repo/han-ams/ParseMessages/obj/Debug/net5.0/ParseMessages.genruntimeconfig.cache
