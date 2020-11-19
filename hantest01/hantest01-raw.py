@@ -1,6 +1,7 @@
 import serial
 import codecs
 import sys
+import datetime
 
 ser = serial.Serial(
     port='/dev/ttyUSB0',
@@ -11,7 +12,7 @@ ser = serial.Serial(
     timeout=4)
 print("Connected to: " + ser.portstr)
 
-with open (f'han-data-raw-{datetime.now()}.strftime('%Y%m%d-%H%M')}.bin', 'wb') as file:
+with open (f'han-data-raw-{datetime.datetime.now().strftime("%Y%m%d-%H%M").bin}', 'wb') as file:
     while True:
         bytes = ser.read(1024)
         if bytes:
