@@ -20,6 +20,6 @@ with open (f'han-data-raw-{datetime.datetime.now().strftime("%Y%m%d-%H%M")}.bin'
             bytes = ('%02x' % int(codecs.encode(bytes, 'hex'), 16)).upper()
             bytes = ' '.join(bytes[i:i+2] for i in range(0, len(bytes), 2))
             print(bytes)
-            file.write(bytes)
+            file.write(bytearray(bytes))
         else:
             print('Got nothing')
