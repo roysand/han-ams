@@ -1,13 +1,18 @@
 import os
+import struct
 import sys
 import re
 
 # State
+import crcmod as crcmod
+
 WAITING = 0
 DATA = 1
+ESCAPED = 2
 
 VALID_BYTE = b'[A-F0-9]'
 FLAG = '7E'
+ESCAPE = '7D'
 
 
 class HdlcParse:
@@ -16,6 +21,7 @@ class HdlcParse:
         self.pkt = ""
         self.file = open(file_name, "rb")
         self.state = WAITING
+        self.crc_func = crcmod.mkCrcFun(0x11021, rev=True, initCrc=0xffff, xorOut=0x0000)
 
     # General HDLC decoder
     # File format is 7E A0 21 FF B1
@@ -39,15 +45,26 @@ class HdlcParse:
                     if (len(self.pkt) >= 19):
                         # Check CRC
                         # TODO CRC Check
-                        self.parse(self.pkt)
+                        crc = self.crc_func(self.pkt[:-2].encode('utf-8'))
+                        crc ^= 0xffff
+                        if crc == struct.unpack("<H", self.pkt[-2:].encode('utf-8'))[0]:
+                            self.parse(self.pkt)
+                        else:
+                            print('CRC-check failed')
+                            self.parse(self.pkt)
 
                         self.pkt = ""
                         self.state = WAITING
+                elif byte == ESCAPE:
+                    self.state = ESCAPED
                 else:
                     self.pkt += byte
+            elif self.state == ESCAPED:
+                self.pkt += chr(ord(byte) ^ 0x20)
+                self.state = DATA
 
     def parse(self, pkt):
-        print('Parse: ', pkt)
+        print(f'Parse ({len(pkt)}): {pkt}')
 
     def read_byte_from_file(self, file):
         byte = ''
