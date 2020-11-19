@@ -126,6 +126,7 @@ class aidon:
 					crc = self.crc_func(self.pkt[:-2])
 					crc ^= 0xffff
 					if (crc == struct.unpack("<H", self.pkt[-2:])[0]):
+						print('CRC ok!')
 						self.parse(self.pkt)
 				self.pkt = ""
 			elif (c == ESCAPE):
