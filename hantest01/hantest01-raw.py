@@ -2,6 +2,7 @@ import serial
 import codecs
 import sys
 import datetime
+import time
 
 ser = serial.Serial(
     port='/dev/ttyUSB0',
@@ -12,14 +13,11 @@ ser = serial.Serial(
     timeout=4)
 print("Connected to: " + ser.portstr)
 
+loop = 0
 with open (f'han-data-raw-{datetime.datetime.now().strftime("%Y%m%d-%H%M")}.bin', 'wb') as file:
-    while True:
-        bytes = ser.read(1024)
-        if bytes:
-            print('Got %d bytes:' % len(bytes))
-            bytes = ('%02x' % int(codecs.encode(bytes, 'hex'), 16)).upper()
-            bytes = ' '.join(bytes[i:i+2] for i in range(0, len(bytes), 2))
-            print(bytes)
-            file.write(bytearray(bytes))
-        else:
-            print('Got nothing')
+    while (1):
+        while ser.inWaiting():
+            byte = ser.read(1)
+            file.write(byte)
+
+        time.sleep(0.01)
