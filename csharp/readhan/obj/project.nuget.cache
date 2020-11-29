@@ -1,0 +1,19 @@
+{
+  "version": 2,
+  "dgSpecHash": "1qVV+Ry7ooleJ/tHBdeJKf7pRZ0Wt6kMC5urqpkvv/dm5xJM/IoiT7nPWFhhYLMuX2OVXLesj9bYhHbKDxPZow==",
+  "success": true,
+  "projectFilePath": "/home/roy/repo/han-ams/csharp/readhan/readhan.csproj",
+  "expectedPackageFiles": [
+    "/home/roy/.nuget/packages/microsoft.netcore.platforms/5.0.0/microsoft.netcore.platforms.5.0.0.nupkg.sha512",
+    "/home/roy/.nuget/packages/microsoft.win32.registry/5.0.0/microsoft.win32.registry.5.0.0.nupkg.sha512",
+    "/home/roy/.nuget/packages/runtime.linux-arm.runtime.native.system.io.ports/5.0.0-rtm.20519.4/runtime.linux-arm.runtime.native.system.io.ports.5.0.0-rtm.20519.4.nupkg.sha512",
+    "/home/roy/.nuget/packages/runtime.linux-arm64.runtime.native.system.io.ports/5.0.0-rtm.20519.4/runtime.linux-arm64.runtime.native.system.io.ports.5.0.0-rtm.20519.4.nupkg.sha512",
+    "/home/roy/.nuget/packages/runtime.linux-x64.runtime.native.system.io.ports/5.0.0-rtm.20519.4/runtime.linux-x64.runtime.native.system.io.ports.5.0.0-rtm.20519.4.nupkg.sha512",
+    "/home/roy/.nuget/packages/runtime.native.system.io.ports/5.0.0/runtime.native.system.io.ports.5.0.0.nupkg.sha512",
+    "/home/roy/.nuget/packages/runtime.osx-x64.runtime.native.system.io.ports/5.0.0-rtm.20519.4/runtime.osx-x64.runtime.native.system.io.ports.5.0.0-rtm.20519.4.nupkg.sha512",
+    "/home/roy/.nuget/packages/system.io.ports/5.0.0/system.io.ports.5.0.0.nupkg.sha512",
+    "/home/roy/.nuget/packages/system.security.accesscontrol/5.0.0/system.security.accesscontrol.5.0.0.nupkg.sha512",
+    "/home/roy/.nuget/packages/system.security.principal.windows/5.0.0/system.security.principal.windows.5.0.0.nupkg.sha512"
+  ],
+  "logs": []
+}
