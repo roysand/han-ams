@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using MBusReader.Contracts;
 
 namespace JustRead
@@ -12,7 +13,7 @@ namespace JustRead
 
             while (!Console.KeyAvailable)
             {
-                
+                Thread.Sleep(100);
             }
             
             Console.WriteLine("Stop reading data ...!");
