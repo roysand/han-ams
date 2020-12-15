@@ -2,11 +2,11 @@
   <MonoDevelop.Ide.Workbench ActiveDocument="Aidon/AidonMessageParser.cs">
     <Files>
       <File FileName="Program.cs" Line="10" Column="1" />
-      <File FileName="Contracts/IBaseMessage.cs" Line="13" Column="6" />
-      <File FileName="Aidon/AidonMessageParser.cs" Line="131" Column="44" />
-      <File FileName="Contracts/IStreamReader.cs" Line="8" Column="27" />
-      <File FileName="Aidon/AidonStreamReader.cs" Line="76" Column="14" />
-      <File FileName="DTO/AidonMessage.cs" Line="18" Column="37" />
+      <File FileName="Contracts/IBaseMessage.cs" />
+      <File FileName="Aidon/AidonMessageParser.cs" Line="122" Column="57" />
+      <File FileName="Contracts/IStreamReader.cs" />
+      <File FileName="Aidon/AidonStreamReader.cs" />
+      <File FileName="DTO/AidonMessage.cs" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
@@ -21,9 +21,6 @@
             </Node>
           </Node>
         </State>
-      </Pad>
-      <Pad Id="MonoDevelop.Debugger.WatchPad">
-        <State />
       </Pad>
     </Pads>
   </MonoDevelop.Ide.Workbench>

@@ -4,7 +4,22 @@
     <projectFile>readhan.csproj</projectFile>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="2a6928f5-6f1a-4de9-98a7-3fb81af51197" name="Default Changelist" comment="" />
+    <list default="true" id="2a6928f5-6f1a-4de9-98a7-3fb81af51197" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/../../python/readmeteringdata/aidon_parse.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../python/readmeteringdata/read.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../ParseMessages/.vs/ParseMessages/xs/UserPrefs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../ParseMessages/.vs/ParseMessages/xs/UserPrefs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../ParseMessages/obj/Debug/net5.0/ParseMessages.csprojAssemblyReference.cache" beforeDir="false" afterPath="$PROJECT_DIR$/../../ParseMessages/obj/Debug/net5.0/ParseMessages.csprojAssemblyReference.cache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.readhan/.idea/contentModel.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.readhan/.idea/contentModel.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/obj/Debug/netcoreapp3.1/readhan.assets.cache" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/netcoreapp3.1/readhan.assets.cache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/obj/Debug/netcoreapp3.1/readhan.csprojAssemblyReference.cache" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/netcoreapp3.1/readhan.csprojAssemblyReference.cache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/obj/project.assets.json" beforeDir="false" afterPath="$PROJECT_DIR$/obj/project.assets.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/obj/project.nuget.cache" beforeDir="false" afterPath="$PROJECT_DIR$/obj/project.nuget.cache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/obj/project.packagespec.json" beforeDir="false" afterPath="$PROJECT_DIR$/obj/project.packagespec.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/obj/readhan.csproj.nuget.dgspec.json" beforeDir="false" afterPath="$PROJECT_DIR$/obj/readhan.csproj.nuget.dgspec.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/obj/readhan.csproj.nuget.g.props" beforeDir="false" afterPath="$PROJECT_DIR$/obj/readhan.csproj.nuget.g.props" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/obj/rider.project.restore.info" beforeDir="false" afterPath="$PROJECT_DIR$/obj/rider.project.restore.info" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../python/readmeteringdata/HdlcParse.py" beforeDir="false" afterPath="$PROJECT_DIR$/../../python/readmeteringdata/HdlcParse.py" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -12,10 +27,6 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../.." />
-  </component>
-  <component name="HighlightingSettingsPerFile">
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/B1AAA40E-527B-4D3A-A908-685AC5A3F0A9/F/SerialStream.Unix.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/B1AAA40E-527B-4D3A-A908-685AC5A3F0A9/10/SafeSerialDeviceHandle.Unix.cs" root0="SKIP_HIGHLIGHTING" />
   </component>
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
@@ -67,13 +78,14 @@
       <option name="presentableId" value="Default" />
       <updated>1606662730126</updated>
       <workItem from="1606662750866" duration="4259000" />
+      <workItem from="1607959542000" duration="385000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
-  <component name="UnityProjectConfiguration" hasMinimizedUI="null" />
+  <component name="UnityProjectConfiguration" hasMinimizedUI="false" />
   <component name="UnityUnitTestConfiguration" currentTestLauncher="NUnit" />
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />

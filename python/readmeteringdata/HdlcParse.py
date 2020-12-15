@@ -11,7 +11,7 @@ DATA = 1
 ESCAPED = 2
 
 VALID_BYTE = b'[A-F0-9]'
-FLAG = '7E'
+FLAG = '\x7e'
 ESCAPE = '7D'
 
 
@@ -29,6 +29,7 @@ class HdlcParse:
     def run(self):
         self.pkt = ""
         # byte = self.file.read(1)
+        print(type(self.pkt))
 
         while (1):
             byte = self.read_byte_from_file(self.file)
@@ -45,9 +46,13 @@ class HdlcParse:
                     if (len(self.pkt) >= 19):
                         # Check CRC
                         # TODO CRC Check
-                        crc = self.crc_func(self.pkt[:-2].encode('utf-8'))
+                        self.pkt = self.pkt.encode('utf-8')
+
+                        crc = self.crc_func(self.pkt[:-2])
                         crc ^= 0xffff
-                        if crc == struct.unpack("<H", self.pkt[-2:].encode('utf-8'))[0]:
+
+                        test = struct.unpack("<H", self.pkt[-2:])[0]
+                        if crc == test: #struct.unpack("<H", self.pkt[-2:])[0]:
                             self.parse(self.pkt)
                         else:
                             print('CRC-check failed')
@@ -68,11 +73,13 @@ class HdlcParse:
 
     def read_byte_from_file(self, file):
         byte = ''
+        y = ""
         hi = b'x'
         lo = b'x'
         i = 0
 
         while bool(not (re.match(VALID_BYTE, hi))) and hi != b'':
+            # y = format(file.read(1), '02X')
             hi = file.read(1)
 
         if not hi:
@@ -85,5 +92,7 @@ class HdlcParse:
             return b''
 
         x = hi + lo
-        val = format(int(hi + lo, 16), '02X')
+        i = int(x, 16)
+        val = r"\x{0}".format(format(int(hi + lo, 16), '02X'))
+        val = chr(i);
         return val

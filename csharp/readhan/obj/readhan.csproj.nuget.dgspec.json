@@ -1,29 +1,31 @@
 {
   "format": 1,
   "restore": {
-    "/home/roy/repo/han-ams/csharp/readhan/readhan.csproj": {}
+    "/Users/roy/repo/han-ams/csharp/readhan/readhan.csproj": {}
   },
   "projects": {
-    "/home/roy/repo/han-ams/csharp/readhan/readhan.csproj": {
+    "/Users/roy/repo/han-ams/csharp/readhan/readhan.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/home/roy/repo/han-ams/csharp/readhan/readhan.csproj",
+        "projectUniqueName": "/Users/roy/repo/han-ams/csharp/readhan/readhan.csproj",
         "projectName": "readhan",
-        "projectPath": "/home/roy/repo/han-ams/csharp/readhan/readhan.csproj",
-        "packagesPath": "/home/roy/.nuget/packages/",
-        "outputPath": "/home/roy/repo/han-ams/csharp/readhan/obj/",
+        "projectPath": "/Users/roy/repo/han-ams/csharp/readhan/readhan.csproj",
+        "packagesPath": "/Users/roy/.nuget/packages/",
+        "outputPath": "/Users/roy/repo/han-ams/csharp/readhan/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "/home/roy/.nuget/NuGet/NuGet.Config"
+          "/Users/roy/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "netcoreapp3.1"
         ],
         "sources": {
-          "https://api.nuget.org/v3/index.json": {}
+          "https://api.nuget.org/v3/index.json": {},
+          "https://pkgs.dev.azure.com/netlifedialogmain/_packaging/BDN/nuget/v3/index.json": {}
         },
         "frameworks": {
           "netcoreapp3.1": {
+            "targetAlias": "netcoreapp3.1",
             "projectReferences": {}
           }
         },
@@ -35,6 +37,7 @@
       },
       "frameworks": {
         "netcoreapp3.1": {
+          "targetAlias": "netcoreapp3.1",
           "dependencies": {
             "System.IO.Ports": {
               "target": "Package",
@@ -56,7 +59,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/3.1.404/RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/5.0.100/RuntimeIdentifierGraph.json"
         }
       }
     }
