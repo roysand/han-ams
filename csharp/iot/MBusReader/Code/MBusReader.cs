@@ -7,12 +7,23 @@ using System.Text;
 
 namespace MBusReader.Code
 {
-    class MBusReader : IMBusReader, IDisposable
+    public enum STATUS
+    {
+        Unknown = 0,
+        Searching,
+        Data
+    }
+    public class MBusReader : IMBusReader, IDisposable
     {
         private Stream _stream;
         private  ISettingsSerial _settingsSerial = null;
         private SerialPort _serialPort;
-        
+        private STATUS _status = STATUS.Unknown;
+
+        public MBusReader()
+        {
+            Init();
+        }
         public MBusReader(Stream stream)
         {
             _stream = stream;
@@ -34,11 +45,13 @@ namespace MBusReader.Code
 
         private void Init()
         {
+            _status = STATUS.Searching;
+            
             if (_settingsSerial == null)
             {
                 _settingsSerial = new SettingsSerial();
             }
-
+            
             _serialPort = new SerialPort(_settingsSerial.PortName, _settingsSerial.BaudRate, _settingsSerial.Parity,
                 _settingsSerial.DataBits);
             _serialPort.Open();
@@ -50,8 +63,30 @@ namespace MBusReader.Code
 
         private void DataReceivedHandler(object sender, SerialDataReceivedEventArgs e)
         {
-            var serialport = (SerialPort) sender;
-            
+            var serialPort = (SerialPort) sender;
+            byte[] data = new byte[serialPort.BytesToRead];
+            serialPort.Read(data, 0, data.Length);
+
+            foreach (var b in data)
+            {
+                if ((b == 0x7E) && (_status == STATUS.Searching))
+                {
+                    // Beginning of a new message
+                    _status = STATUS.Data;
+                    Console.Write($"{b.ToString("X2")} ");
+                }
+                else if ((b == 0x7E) && _status == STATUS.Data)
+                {
+                    // End of message
+                    _status = STATUS.Searching;
+                    Console.WriteLine($"{b.ToString("X2")}");
+                }
+                else
+                {
+                    // Inside a message
+                    Console.Write($"{b.ToString("X2")} ");
+                }
+            }
         }
 
         public byte[] Pull()
