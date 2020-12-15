@@ -1,4 +1,5 @@
 ﻿using System;
+using MBusReader.Contracts;
 
 namespace JustRead
 {
@@ -6,7 +7,15 @@ namespace JustRead
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            IMBusReader mbusReader = new MBusReader.Code.MBusReader();
+            mbusReader.Run();
+
+            while (!Console.KeyAvailable)
+            {
+                
+            }
+            
+            Console.WriteLine("Stop reading data ...!");
         }
     }
 }

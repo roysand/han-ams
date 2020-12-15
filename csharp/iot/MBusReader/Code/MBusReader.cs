@@ -57,8 +57,6 @@ namespace MBusReader.Code
             _serialPort.Open();
 
             _stream = _serialPort.BaseStream;
-            
-            _serialPort.DataReceived  += new SerialDataReceivedEventHandler(DataReceivedHandler);
         }
 
         private void DataReceivedHandler(object sender, SerialDataReceivedEventArgs e)
@@ -104,9 +102,11 @@ namespace MBusReader.Code
             return true;
         }
 
-        public byte Read()
+        public void Run()
         {
-            throw new NotImplementedException();
+            Console.WriteLine("Starting reading data ...!");
+            
+            _serialPort.DataReceived  += new SerialDataReceivedEventHandler(DataReceivedHandler);
         }
 
         public void Dispose()

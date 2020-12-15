@@ -6,7 +6,7 @@ namespace MBusReader.Contracts
 {
     public interface IMBusReader
     {
-        Byte Read();
+        void Run();
         Byte[] Pull();
         bool Close();
     }
