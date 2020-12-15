@@ -50,7 +50,7 @@ namespace MBusReader.Code
 
         private void DataReceivedHandler(object sender, SerialDataReceivedEventArgs e)
         {
-            
+            var serialport = (SerialPort) sender;
         }
 
         public byte[] Pull()
