@@ -9,7 +9,10 @@ namespace JustRead
     {
         static void Main(string[] args)
         {
-            Stream stream = new FileStream($"data{Path.PathSeparator}binary-{DateTime.Now.ToString("yyyy-MM-dd-HH24-mm")}.dat",FileMode.Create);
+            var fileName = "data{Path.PathSeparator}binary-{DateTime.Now.ToString("yyyy-MM-dd-HH24-mm")}.dat";
+            Console.WriteLine($"Filename: {fileName}");
+            
+            Stream stream = new FileStream(fileName,FileMode.Create);
             IMBusReader mbusReader = new MBusReader.Code.MBusReader(stream);
             mbusReader.Run();
 
