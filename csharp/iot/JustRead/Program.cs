@@ -9,7 +9,7 @@ namespace JustRead
     {
         static void Main(string[] args)
         {
-            var fileName = "data{Path.PathSeparator}binary-{DateTime.Now.ToString("yyyy-MM-dd-HH24-mm")}.dat";
+            var fileName = $"data{Path.PathSeparator}binary-{DateTime.Now.ToString("yyyy-MM-dd-HH24-mm")}.dat";
             Console.WriteLine($"Filename: {fileName}");
             
             Stream stream = new FileStream(fileName,FileMode.Create);
