@@ -65,6 +65,7 @@ namespace MBusReader.Code
         {
             // var serialPort = (SerialPort) sender;
             byte[] data = e.Data; // new byte[serialPort.BytesToRead];
+            Console.WriteLine($"Length of byte stream: {e.Data.Length}");
             List<byte> message = new List<byte>();
             
             // serialPort.Read(data, 0, data.Length);
@@ -76,7 +77,7 @@ namespace MBusReader.Code
                     // Beginning of a new message
                     Console.WriteLine("Start of new message..!");
                     _status = STATUS.Data;
-                    // message.Clear();
+                    message.Clear();
                     message.Add(b);
                     
                     Console.Write($"{b.ToString("X2")} ");
@@ -94,6 +95,7 @@ namespace MBusReader.Code
                 else if (_status == STATUS.Data)
                 {
                     // Inside a message
+                    
                     message.Add(b);
                     Console.Write($"{b.ToString("X2")} ");
                 }
