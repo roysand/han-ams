@@ -96,6 +96,7 @@ namespace MBusReader.Code
 
                     if (_bw != null)
                     {
+                        Console.WriteLine("Write to file");
                         message.ForEach(item => _bw.Write(item));
                     }
                 }
