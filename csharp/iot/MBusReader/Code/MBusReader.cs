@@ -86,7 +86,7 @@ namespace MBusReader.Code
                     message.Add(b);
                     Console.WriteLine($"{b.ToString("X2")}");
                     Console.WriteLine($"Message length: {message.Count}");
-                    message.ForEach(item => Console.Write(item.ToString("X2")));
+                    message.ForEach(item => Console.Write(item.ToString("X2 ")));
                     Console.WriteLine();
                 }
                 else if (_status == STATUS.Data)
