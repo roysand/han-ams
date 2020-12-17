@@ -20,7 +20,10 @@ namespace ExtendedSerialPort
 
         public ReliableSerialPort(string portName, int baudRate, Parity parity, int dataBits)
         {
-            
+            PortName = portName;
+            BaudRate = baudRate;
+            Parity = parity;
+            DataBits = dataBits;
         }
         new public void Open()
         {
@@ -49,19 +52,19 @@ namespace ExtendedSerialPort
             }, null)); kickoffRead();
         }
 
-        public delegate void DataReceivedEventHandler(object sender, SerialDataReceivedEventArgs e);
-        public event EventHandler<SerialDataReceivedEventArgs> DataReceived;
+         public delegate void RoyDataReceivedEventHandler(object sender, DataReceivedArgs e);
+        public event RoyDataReceivedEventHandler DataReady;
         public virtual void OnDataReceived(byte[] data)
         {
-            var handler = DataReceived;
+            var handler = DataReady;
             if (handler != null)
             {
-                handler(this, new SerialDataReceivedEventArgs { Data = data });
+                handler(this, new DataReceivedArgs  { Data = data });
             }
         }
     }
 
-    public class SerialDataReceivedEventArgs : EventArgs
+    public class DataReceivedArgs  : EventArgs
     {
         public byte[] Data { get; set; }
     }
