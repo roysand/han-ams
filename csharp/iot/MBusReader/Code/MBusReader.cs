@@ -74,6 +74,7 @@ namespace MBusReader.Code
                 if ((b == 0x7E) && (_status == STATUS.Searching))
                 {
                     // Beginning of a new message
+                    Console.WriteLine("Start of new message..!");
                     _status = STATUS.Data;
                     message.Clear();
                     message.Add(b);
@@ -123,6 +124,7 @@ namespace MBusReader.Code
 
         public void Dispose()
         {
+            Console.WriteLine("Dispose ...!");
             _stream?.Dispose();
             _serialPort?.Dispose();
         }
