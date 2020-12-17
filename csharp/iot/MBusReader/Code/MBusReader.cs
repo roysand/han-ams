@@ -65,6 +65,8 @@ namespace MBusReader.Code
         {
             var serialPort = (SerialPort) sender;
             byte[] data = e.Data; // new byte[serialPort.BytesToRead];
+            List<byte> message = new List<byte>();
+            
             // serialPort.Read(data, 0, data.Length);
 
             foreach (var b in data)
@@ -73,17 +75,25 @@ namespace MBusReader.Code
                 {
                     // Beginning of a new message
                     _status = STATUS.Data;
+                    message.Clear();
+                    message.Add(b);
+                    
                     Console.Write($"{b.ToString("X2")} ");
                 }
                 else if ((b == 0x7E) && _status == STATUS.Data)
                 {
                     // End of message
                     _status = STATUS.Searching;
+                    message.Add(b);
                     Console.WriteLine($"{b.ToString("X2")}");
+                    Console.WriteLine($"Message length: {message.Count}");
+                    message.ForEach(item => Console.Write(item.ToString("X2")));
+                    Console.WriteLine();
                 }
                 else
                 {
                     // Inside a message
+                    message.Add(b);
                     Console.Write($"{b.ToString("X2")} ");
                 }
             }
