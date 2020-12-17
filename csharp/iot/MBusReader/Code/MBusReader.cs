@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.IO.Ports;
 using System.Text;
+using ExtendedSerialPort;
 
 namespace MBusReader.Code
 {
@@ -16,8 +17,8 @@ namespace MBusReader.Code
     public class MBusReader : IMBusReader, IDisposable
     {
         private Stream _stream;
-        private  ISettingsSerial _settingsSerial = null;
-        private SerialPort _serialPort;
+        private ISettingsSerial _settingsSerial = null;
+        private ReliableSerialPort _serialPort;
         private STATUS _status = STATUS.Unknown;
 
         public MBusReader()
@@ -46,13 +47,13 @@ namespace MBusReader.Code
         private void Init()
         {
             _status = STATUS.Searching;
-            
+                
             if (_settingsSerial == null)
             {
                 _settingsSerial = new SettingsSerial();
             }
             
-            _serialPort = new SerialPort(_settingsSerial.PortName, _settingsSerial.BaudRate, _settingsSerial.Parity,
+            _serialPort = new ReliableSerialPort(_settingsSerial.PortName, _settingsSerial.BaudRate, _settingsSerial.Parity,
                 _settingsSerial.DataBits);
             _serialPort.Open();
 
@@ -91,7 +92,7 @@ namespace MBusReader.Code
         {
             throw new NotImplementedException();
         }
-
+        
         public bool Close()
         {
             if (_serialPort.IsOpen)
@@ -105,8 +106,8 @@ namespace MBusReader.Code
         public void Run()
         {
             Console.WriteLine("Starting reading data ...!");
-            
-            _serialPort.DataReceived  += new SerialDataReceivedEventHandler(DataReceivedHandler);
+
+            _serialPort.DataReceived += new SerialDataReceivedEventHandler(DataReceivedHandler);
         }
 
         public void Dispose()
