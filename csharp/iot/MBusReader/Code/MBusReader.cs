@@ -20,6 +20,7 @@ namespace MBusReader.Code
         private ISettingsSerial _settingsSerial = null;
         private ReliableSerialPort _serialPort;
         private STATUS _status = STATUS.Unknown;
+        private List<byte> message = new List<byte>();
 
         public MBusReader()
         {
@@ -64,18 +65,14 @@ namespace MBusReader.Code
         private void DataReceivedHandler(object sender, DataReceivedArgs e)
         {
             // var serialPort = (SerialPort) sender;
-            byte[] data = e.Data; // new byte[serialPort.BytesToRead];
-            Console.WriteLine($"Length of byte stream: {e.Data.Length}");
-            List<byte> message = new List<byte>();
             
             // serialPort.Read(data, 0, data.Length);
 
-            foreach (var b in data)
+            foreach (var b in e.Data)
             {
                 if ((b == 0x7E) && (_status == STATUS.Searching))
                 {
                     // Beginning of a new message
-                    Console.WriteLine("Start of new message..!");
                     _status = STATUS.Data;
                     message.Clear();
                     message.Add(b);
@@ -95,7 +92,6 @@ namespace MBusReader.Code
                 else if (_status == STATUS.Data)
                 {
                     // Inside a message
-                    
                     message.Add(b);
                     Console.Write($"{b.ToString("X2")} ");
                 }
