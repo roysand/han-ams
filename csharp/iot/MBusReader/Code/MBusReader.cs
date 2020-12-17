@@ -77,14 +77,14 @@ namespace MBusReader.Code
                     message.Clear();
                     message.Add(b);
                     
-                    Console.Write($"{b.ToString("X2")} ");
+                    // Console.Write($"{b.ToString("X2")} ");
                 }
                 else if ((b == 0x7E) && _status == STATUS.Data)
                 {
                     // End of message
                     _status = STATUS.Searching;
                     message.Add(b);
-                    Console.WriteLine($"{b.ToString("X2")}");
+                    // Console.WriteLine($"{b.ToString("X2")}");
                     Console.WriteLine($"Message length: {message.Count}");
                     message.ForEach(item => Console.Write($"{item.ToString("X2")} "));
                     Console.WriteLine();
@@ -93,7 +93,7 @@ namespace MBusReader.Code
                 {
                     // Inside a message
                     message.Add(b);
-                    Console.Write($"{b.ToString("X2")} ");
+                    // Console.Write($"{b.ToString("X2")} ");
                 }
             }
         }
