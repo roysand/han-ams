@@ -16,7 +16,8 @@ namespace MBusReader.Code
     }
     public class MBusReader : IMBusReader, IDisposable
     {
-        private Stream _stream;
+        private Stream _stream = null;
+        private BinaryWriter _bw = null;
         private ISettingsSerial _settingsSerial = null;
         private ReliableSerialPort _serialPort;
         private STATUS _status = STATUS.Unknown;
@@ -29,6 +30,10 @@ namespace MBusReader.Code
         public MBusReader(Stream stream)
         {
             _stream = stream;
+            if (_stream != null)
+            {
+                _bw = new BinaryWriter(_stream);
+            }
             Init();
         }
 
@@ -88,6 +93,11 @@ namespace MBusReader.Code
                     Console.WriteLine($"Message length: {message.Count}");
                     message.ForEach(item => Console.Write($"{item.ToString("X2")} "));
                     Console.WriteLine();
+
+                    if (_bw != null)
+                    {
+                        message.ForEach(item => _bw.Write(item));
+                    }
                 }
                 else if (_status == STATUS.Data)
                 {
