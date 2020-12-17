@@ -90,7 +90,7 @@ namespace MBusReader.Code
                     message.ForEach(item => Console.Write(item.ToString("X2")));
                     Console.WriteLine();
                 }
-                else
+                else if (_status == STATUS.Data)
                 {
                     // Inside a message
                     message.Add(b);
