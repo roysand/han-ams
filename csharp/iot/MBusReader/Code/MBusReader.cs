@@ -94,10 +94,10 @@ namespace MBusReader.Code
                     message.ForEach(item => Console.Write($"{item.ToString("X2")} "));
                     Console.WriteLine();
 
-                    if (_bw != null)
-                    {
-                        message.ForEach(item => _bw.Write(item));
-                    }
+                    // if (_bw != null)
+                    // {
+                    //     message.ForEach(item => _bw.Write(item));
+                    // }
                 }
                 else if (_status == STATUS.Data)
                 {
