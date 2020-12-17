@@ -65,7 +65,7 @@ namespace MBusReader.Code
         {
             var serialPort = (SerialPort) sender;
             byte[] data = e.Data; // new byte[serialPort.BytesToRead];
-            serialPort.Read(data, 0, data.Length);
+            // serialPort.Read(data, 0, data.Length);
 
             foreach (var b in data)
             {
