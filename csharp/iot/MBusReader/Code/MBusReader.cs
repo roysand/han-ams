@@ -63,7 +63,7 @@ namespace MBusReader.Code
         // (delegate) void System.IO.Ports.SerialDataReceivedEventHandler(object sender, SerialDataReceivedEventArgs e
         private void DataReceivedHandler(object sender, DataReceivedArgs e)
         {
-            var serialPort = (SerialPort) sender;
+            // var serialPort = (SerialPort) sender;
             byte[] data = e.Data; // new byte[serialPort.BytesToRead];
             List<byte> message = new List<byte>();
             
@@ -76,7 +76,7 @@ namespace MBusReader.Code
                     // Beginning of a new message
                     Console.WriteLine("Start of new message..!");
                     _status = STATUS.Data;
-                    message.Clear();
+                    // message.Clear();
                     message.Add(b);
                     
                     Console.Write($"{b.ToString("X2")} ");
