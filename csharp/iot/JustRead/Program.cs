@@ -13,7 +13,7 @@ namespace JustRead
             Console.WriteLine($"Filename: {fileName}");
             
             Stream stream = new FileStream(fileName,FileMode.Create);
-            IMBusReader mbusReader = new MBusReader.Code.MBusReader(stream);
+            IMBusReader mbusReader = new MBusReader.Code.ReliableMBusReader(stream);
             mbusReader.Run();
 
             while (!Console.KeyAvailable)

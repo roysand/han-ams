@@ -46,7 +46,7 @@ namespace ExtendedSerialPort
                 }
                 catch (Exception exception)
                 {
-                    Console.WriteLine("OptimizedSerialPort exception !");
+                    Console.WriteLine($"OptimizedSerialPort exception! {exception.Message}");
                 }
                 kickoffRead();
             }, null)); kickoffRead();
