@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Ports;
-using System.Text;
-using ExtendedSerialPort;
 using MBusReader.Contracts;
 
 namespace MBusReader.Code
@@ -69,6 +67,7 @@ namespace MBusReader.Code
         
         private void DataReceivedHandler(object sender, SerialDataReceivedEventArgs e)
         {
+            Console.WriteLine("Data is ready ...");
             var serialPort = (SerialPort) sender;
             var byte2Read = serialPort.BytesToRead;
             var data = new byte[byte2Read];
