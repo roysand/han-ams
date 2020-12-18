@@ -104,7 +104,7 @@ namespace MBusReader.Code
                 {
                     // Inside a message
                     message.Add(b);
-                    Console.Write($"{b.ToString("X2")} ");
+                    // Console.Write($"{b.ToString("X2")} ");
                 }
             }
         }
