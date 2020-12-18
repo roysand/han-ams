@@ -22,6 +22,7 @@ namespace MBusReader.Code
         private STATUS _status = STATUS.Unknown;
         private List<byte> message = new List<byte>();
         private int _counter = 0;
+        private long _dataCounter = 0;
 
         public MBusReader()
         {
@@ -73,11 +74,14 @@ namespace MBusReader.Code
             var data = new byte[byte2Read];
 
             _counter++;
+            serialPort.Read(data, 0, data.Length);
+            _dataCounter += byte2Read;
+            
             if ((_counter % 1000) == 0)
             {
-                Console.WriteLine($"Data comming from MBus ({_counter}");
+                Console.WriteLine($"Data coming from MBus ({_dataCounter})");
             }
-            serialPort.Read(data, 0, data.Length);
+            
 
             foreach (var b in data)
             {
@@ -92,18 +96,26 @@ namespace MBusReader.Code
                 }
                 else if ((b == 0x7E) && _status == STATUS.Data)
                 {
-                    // End of message
-                    _status = STATUS.Searching;
-                    message.Add(b);
-                    // Console.WriteLine($"{b.ToString("X2")}");
-                    Console.WriteLine($"Message length: {message.Count}");
-                    message.ForEach(item => Console.Write($"{item.ToString("X2")} "));
-                    Console.WriteLine();
-
-                    if (_bw != null)
+                    if (message.Count == 1)
                     {
-                        Console.WriteLine("Write to file");
-                        message.ForEach(item => _bw.Write(item));
+                        message.Clear();
+                        message.Add(b);
+                    }
+                    else
+                    {
+                        // End of message
+                        _status = STATUS.Searching;
+                        message.Add(b);
+                        // Console.WriteLine($"{b.ToString("X2")}");
+                        Console.WriteLine($"Message length: {message.Count}");
+                        message.ForEach(item => Console.Write($"{item.ToString("X2")} "));
+                        Console.WriteLine();
+
+                        if (_bw != null)
+                        {
+                            Console.WriteLine("Write to file");
+                            message.ForEach(item => _bw.Write(item));
+                        }
                     }
                 }
                 else if (_status == STATUS.Data)
@@ -111,6 +123,10 @@ namespace MBusReader.Code
                     // Inside a message
                     message.Add(b);
                     // Console.Write($"{b.ToString("X2")} ");
+                }
+                else
+                {
+                    Console.WriteLine($"Waiting for package start");
                 }
             }
         }

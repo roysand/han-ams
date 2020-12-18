@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MBusReader", "MBusReader\MB
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JustRead", "JustRead\JustRead.csproj", "{17DBB73C-F5F6-437A-ABA9-9AB697DECA62}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MessageParser", "MessageParser\MessageParser.csproj", "{3DD844D2-B411-4B65-84DE-AE9250618998}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{17DBB73C-F5F6-437A-ABA9-9AB697DECA62}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{17DBB73C-F5F6-437A-ABA9-9AB697DECA62}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{17DBB73C-F5F6-437A-ABA9-9AB697DECA62}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3DD844D2-B411-4B65-84DE-AE9250618998}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3DD844D2-B411-4B65-84DE-AE9250618998}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3DD844D2-B411-4B65-84DE-AE9250618998}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3DD844D2-B411-4B65-84DE-AE9250618998}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
