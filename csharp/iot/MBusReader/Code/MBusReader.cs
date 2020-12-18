@@ -75,7 +75,7 @@ namespace MBusReader.Code
             _counter++;
             if ((_counter % 1000) == 0)
             {
-                Console.WriteLine("Data comming from MBus");
+                Console.WriteLine($"Data comming from MBus ({_counter}");
             }
             serialPort.Read(data, 0, data.Length);
 
