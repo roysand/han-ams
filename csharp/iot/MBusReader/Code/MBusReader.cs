@@ -21,6 +21,7 @@ namespace MBusReader.Code
         private SerialPort _serialPort;
         private STATUS _status = STATUS.Unknown;
         private List<byte> message = new List<byte>();
+        private int _counter = 0;
 
         public MBusReader()
         {
@@ -70,7 +71,12 @@ namespace MBusReader.Code
             var serialPort = (SerialPort) sender;
             var byte2Read = serialPort.BytesToRead;
             var data = new byte[byte2Read];
-            
+
+            _counter++;
+            if ((_counter % 1000) == 0)
+            {
+                Console.WriteLine("Data comming from MBus");
+            }
             serialPort.Read(data, 0, data.Length);
 
             foreach (var b in data)
