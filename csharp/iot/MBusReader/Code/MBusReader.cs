@@ -67,7 +67,6 @@ namespace MBusReader.Code
         
         private void DataReceivedHandler(object sender, SerialDataReceivedEventArgs e)
         {
-            Console.WriteLine("Data is ready ...");
             var serialPort = (SerialPort) sender;
             var byte2Read = serialPort.BytesToRead;
             var data = new byte[byte2Read];
