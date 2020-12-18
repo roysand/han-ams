@@ -20,7 +20,7 @@ namespace MBusReader.Code
         private Stream _stream = null;
         private BinaryWriter _bw = null;
         private ISettingsSerial _settingsSerial = null;
-        private ReliableSerialPort _serialPort;
+        private SerialPort _serialPort;
         private STATUS _status = STATUS.Unknown;
         private List<byte> message = new List<byte>();
 
@@ -60,11 +60,11 @@ namespace MBusReader.Code
                 _settingsSerial = new SettingsSerial();
             }
             
-            _serialPort = new ReliableSerialPort(_settingsSerial.PortName, _settingsSerial.BaudRate, _settingsSerial.Parity,
+            _serialPort = new SerialPort(_settingsSerial.PortName, _settingsSerial.BaudRate, _settingsSerial.Parity,
                 _settingsSerial.DataBits);
             _serialPort.Open();
 
-            _stream = _serialPort.BaseStream;
+            // _stream = _serialPort.BaseStream;
         }
         
         private void DataReceivedHandler(object sender, SerialDataReceivedEventArgs e)
@@ -106,7 +106,7 @@ namespace MBusReader.Code
                 {
                     // Inside a message
                     message.Add(b);
-                    // Console.Write($"{b.ToString("X2")} ");
+                    Console.Write($"{b.ToString("X2")} ");
                 }
             }
         }
