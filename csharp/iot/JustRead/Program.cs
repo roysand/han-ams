@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Globalization;
 using System.IO;
 using System.Threading;
+using MBusReader.Code;
 using MBusReader.Contracts;
 
 namespace JustRead
@@ -13,17 +15,25 @@ namespace JustRead
             Console.WriteLine($"Filename: {fileName}");
             
             Stream stream = new FileStream(fileName,FileMode.Create);
-            // IMBusReader mbusReader = new MBusReader.Code.ReliableMBusReader(stream);
-            IMBusReader mbusReader = new MBusReader.Code.MBusReader(stream);
+            ISettingsSerial serialSettings = new SettingsSerial();
+            if (System.OperatingSystem.IsWindows())
+            {
+                serialSettings.PortName = "com3";
+            }
+            
+            IMBusReader mbusReader = new MBusReader.Code.ReliableMBusReader(stream, serialSettings);
+            // IMBusReader mbusReader = new MBusReader.Code.MBusReader(stream, serialSettings);
             mbusReader.Run();
 
             while (!Console.KeyAvailable)
             {
                 Thread.Sleep(100);
             }
-            
-            Console.WriteLine("Stop reading data ...!");
-            stream.Close();
+
+             mbusReader.Close();
+             stream.Close();
+
+            Console.WriteLine("Program end ...!!");
         }
     }
 }

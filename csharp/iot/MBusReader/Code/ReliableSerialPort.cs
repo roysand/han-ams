@@ -51,8 +51,9 @@ namespace ExtendedSerialPort
                 kickoffRead();
             }, null)); kickoffRead();
         }
-         public delegate void RoyDataReceivedEventHandler(object sender, DataReceivedArgs e);
-        public event RoyDataReceivedEventHandler DataReady;
+        public delegate void DataReceivedEventHandler(object sender, DataReceivedArgs e);
+        public event DataReceivedEventHandler DataReady;
+        
         public virtual void OnDataReceived(byte[] data)
         {
             var handler = DataReady;

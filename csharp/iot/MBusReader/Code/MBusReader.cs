@@ -13,7 +13,7 @@ namespace MBusReader.Code
         Data
     }
     
-    public class MBusReader : IMBusReader, IDisposable
+    public class MBusReader : IMBusReader
     {
         private Stream _stream = null;
         private BinaryWriter _bw = null;
@@ -31,10 +31,6 @@ namespace MBusReader.Code
         public MBusReader(Stream stream)
         {
             _stream = stream;
-            if (_stream != null)
-            {
-                _bw = new BinaryWriter(_stream);
-            }
             Init();
         }
 
@@ -54,6 +50,12 @@ namespace MBusReader.Code
         private void Init()
         {
             _status = STATUS.Searching;
+
+            if (_stream != null)
+            {
+                Console.WriteLine("Write to file");
+                _bw = new BinaryWriter(_stream);
+            }
                 
             if (_settingsSerial == null)
             {
@@ -91,8 +93,11 @@ namespace MBusReader.Code
                     _status = STATUS.Data;
                     message.Clear();
                     message.Add(b);
-                    
                     // Console.Write($"{b.ToString("X2")} ");
+                }
+                else if ((b == 0x7E) && _status == STATUS.Data && message.Count == 1 && message[0] == 0x7E)
+                {
+                    Console.WriteLine("Skipping end of frame");
                 }
                 else if ((b == 0x7E) && _status == STATUS.Data)
                 {
@@ -113,7 +118,6 @@ namespace MBusReader.Code
 
                         if (_bw != null)
                         {
-                            Console.WriteLine("Write to file");
                             message.ForEach(item => _bw.Write(item));
                         }
                     }

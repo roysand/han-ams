@@ -22,10 +22,7 @@ namespace MBusReader.Code
         public ReliableMBusReader(Stream stream)
         {
             _stream = stream;
-            if (_stream != null)
-            {
-                _bw = new BinaryWriter(_stream);
-            }
+
             Init();
         }
 
@@ -45,7 +42,12 @@ namespace MBusReader.Code
         private void Init()
         {
             _status = STATUS.Searching;
-                
+            if (_stream != null)
+            {
+                Console.WriteLine("Write to file");
+                _bw = new BinaryWriter(_stream);
+            }
+            
             if (_settingsSerial == null)
             {
                 _settingsSerial = new SettingsSerial();
@@ -73,8 +75,11 @@ namespace MBusReader.Code
                     _status = STATUS.Data;
                     message.Clear();
                     message.Add(b);
-                    
                     // Console.Write($"{b.ToString("X2")} ");
+                }
+                else if ((b == 0x7E) && _status == STATUS.Data && message.Count == 1 && message[0] == 0x7E)
+                {
+                    Console.WriteLine("Skipping end of frame");
                 }
                 else if ((b == 0x7E) && _status == STATUS.Data)
                 {
@@ -82,13 +87,12 @@ namespace MBusReader.Code
                     _status = STATUS.Searching;
                     message.Add(b);
                     // Console.WriteLine($"{b.ToString("X2")}");
-                    Console.WriteLine($"Message length: {message.Count}");
+                    Console.WriteLine($"{DateTime.Now.ToString("HH:mm:ss yyyyMMdd")} Message length: {message.Count}");
                     message.ForEach(item => Console.Write($"{item.ToString("X2")} "));
                     Console.WriteLine();
 
                     if (_bw != null)
                     {
-                        Console.WriteLine("Write to file");
                         message.ForEach(item => _bw.Write(item));
                     }
                 }
@@ -110,7 +114,8 @@ namespace MBusReader.Code
         {
             if (_serialPort.IsOpen)
             {
-                _serialPort.Close();
+                _serialPort.DataReady -= DataReceivedHandler;
+                // _serialPort.Close();
             }
 
             return true;

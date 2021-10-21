@@ -4,7 +4,7 @@ using System.Text;
 
 namespace MBusReader.Contracts
 {
-    public interface IMBusReader
+    public interface IMBusReader : IDisposable
     {
         void Run();
         Byte[] Pull();

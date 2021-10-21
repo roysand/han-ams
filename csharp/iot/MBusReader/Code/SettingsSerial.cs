@@ -9,13 +9,21 @@ namespace MBusReader.Code
     public class SettingsSerial : ISettingsSerial
     {
         private readonly StopBits _stopBits = StopBits.One;
-        private readonly string _portName = "/dev/ttyUSB0";
+        private string _portName = "/dev/ttyUSB0";
         private readonly Parity _parity = Parity.None;
         private readonly int _dataBits = 8;
         private readonly int _baudRate = 2400;
 
         
-        public string PortName => _portName;
+        public string PortName
+        {
+            get => _portName;
+            set
+            {
+                _portName = value;
+            }
+        }
+
         public int DataBits => _dataBits;
         public int BaudRate => _baudRate;
         public Parity Parity => _parity;
