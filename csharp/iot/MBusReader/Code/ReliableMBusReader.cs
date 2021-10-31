@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using ExtendedSerialPort;
 using MBusReader.Contracts;
+using MessageParser;
+using MessageParser.Code;
 
 namespace MBusReader.Code
 {
@@ -95,6 +97,10 @@ namespace MBusReader.Code
                     {
                         message.ForEach(item => _bw.Write(item));
                     }
+
+                    IHDLCMessage hdlcMessage = new HDLCMessage();
+                    var parser = new Parser(hdlcMessage);
+                    hdlcMessage = parser.Parse(message);
                 }
                 else if (_status == STATUS.Data)
                 {

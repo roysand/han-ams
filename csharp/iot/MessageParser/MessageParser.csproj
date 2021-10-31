@@ -5,6 +5,10 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\MBusReader\MBusReader.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
       <Folder Include="Code" />
       <Folder Include="Contracts" />
     </ItemGroup>

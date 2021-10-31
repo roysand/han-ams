@@ -21,7 +21,7 @@ namespace JustRead
                 serialSettings.PortName = "com3";
             }
             
-            IMBusReader mbusReader = new MBusReader.Code.ReliableMBusReader(stream, serialSettings);
+            IMBusReader mbusReader = new ReliableMBusReader(stream, serialSettings);
             // IMBusReader mbusReader = new MBusReader.Code.MBusReader(stream, serialSettings);
             mbusReader.Run();
 
