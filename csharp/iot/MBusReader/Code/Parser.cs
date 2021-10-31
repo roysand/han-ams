@@ -17,7 +17,7 @@ namespace MessageParser.Code
         public IHDLCMessage Parse(List<byte> data)
         {
             // First elemnt is start mark 7E
-            var pkt = BitConverter.ToString(data.ToArray());
+            var pkt = BitConverter.ToString(data.ToArray()).Replace("-","");
             Console.WriteLine($"Parser: {pkt}");
             
             return _hdlcMessage;
