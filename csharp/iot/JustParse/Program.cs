@@ -50,7 +50,7 @@ namespace JustParse
                             var result = parser.Parse(bytes);
                             if (result.Data.Count > 0)
                             {
-                                Console.Write($"({packageCounter}) - EpocTime: {result.Header.EpocDateString} -");
+                                Console.Write($"({packageCounter}) - EpocTime: {result.Header.SecondsSinceEpoc} -");
                                 
                                 foreach (var measurement in result.Data)
                                 {

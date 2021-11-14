@@ -61,7 +61,7 @@ namespace MessageParser.Code
 
         private int ConvertSecondsToEpoc(DateTime dateTime)
         {
-            TimeSpan t = DateTime.Now - new DateTime(1970, 1, 1);
+            TimeSpan t = dateTime - new DateTime(1970, 1, 1);
             int secondsSinceEpoch = (int)t.TotalSeconds;
 
             return secondsSinceEpoch;
