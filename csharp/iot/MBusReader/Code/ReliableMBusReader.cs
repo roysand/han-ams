@@ -91,7 +91,7 @@ namespace MBusReader.Code
                     message.Add(b);
                     
                     var epocTimeString = ConvertToEpocHexString(DateTime.Now);
-);
+
                     // Console.WriteLine($"{b.ToString("X2")}");
                     Console.WriteLine($"{epocTimeString} Message length: {message.Count}");
                     message.ForEach(item => Console.Write($"{item.ToString("X2")} "));
