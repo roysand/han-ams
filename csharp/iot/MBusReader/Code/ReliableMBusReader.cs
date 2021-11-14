@@ -104,8 +104,8 @@ namespace MBusReader.Code
                     }
 
                     IHDLCMessage hdlcMessage = new HDLCMessage();
-                    var parser = new Parser(hdlcMessage);
-                    hdlcMessage = parser.Parse(message);
+                    var parser = new Parser();
+                    hdlcMessage = parser.Parse(message.Skip(1).Take(message.Count-1).ToList());
                     
                     if (PrintToScreen && hdlcMessage.Data.Count > 0)
                     {
