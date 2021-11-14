@@ -20,7 +20,7 @@ namespace MBusReader.Code
         public int Hdlc_Length { get; set; }
         public int DataType { get; set; }
         public int DataLen { get; set; }
-        public string EpocDateString { get; set; }
+        public int SecondsSinceEpoc { get; set; }
 
         public HDLCHeader()
         {

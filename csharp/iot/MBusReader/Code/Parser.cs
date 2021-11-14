@@ -33,7 +33,7 @@ namespace MessageParser.Code
             IHDLCMessage hdlcMessage = new HDLCMessage();
             hdlcMessage.Header.DataLen = data[18];
             hdlcMessage.Header.DataType = data[17];
-            hdlcMessage.Header.EpocDateString = ConvertToEpocHexString(DateTime.Now);
+            hdlcMessage.Header.SecondsSinceEpoc = ConvertSecondsToEpoc(DateTime.Now);
 
             if (hdlcMessage.Header.DataLen != 1)
                 return hdlcMessage;
@@ -59,6 +59,13 @@ namespace MessageParser.Code
             return hdlcMessage;
         }
 
+        private int ConvertSecondsToEpoc(DateTime dateTime)
+        {
+            TimeSpan t = DateTime.Now - new DateTime(1970, 1, 1);
+            int secondsSinceEpoch = (int)t.TotalSeconds;
+
+            return secondsSinceEpoch;
+        }
         private string ConvertToEpocHexString(DateTime dateTime)
         {
             TimeSpan t = dateTime- new DateTime(1970, 1, 1);

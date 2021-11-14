@@ -15,7 +15,7 @@ namespace MBusReader.Contracts
         int Hdlc_Length { get; set; }
         int DataType { get; set; }
         int DataLen { get; set; }
-        string EpocDateString { get; set; }
+        int SecondsSinceEpoc{ get; set; }
 
     }
 
