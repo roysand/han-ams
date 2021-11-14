@@ -33,6 +33,7 @@ namespace MessageParser.Code
             IHDLCMessage hdlcMessage = new HDLCMessage();
             hdlcMessage.Header.DataLen = data[18];
             hdlcMessage.Header.DataType = data[17];
+            hdlcMessage.Header.EpocDateString = ConvertToEpocHexString(DateTime.Now);
 
             if (hdlcMessage.Header.DataLen != 1)
                 return hdlcMessage;
@@ -63,7 +64,7 @@ namespace MessageParser.Code
                 epocByte = epocByte.Reverse().ToArray();
             var epocString = BitConverter.ToString(epocByte);
             
-            return _hdlcMessage;
+            return hdlcMessage;
         }
 
         private string ConvertToEpocHexString(DateTime dateTime)

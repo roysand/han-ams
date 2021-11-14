@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using ExtendedSerialPort;
 using MBusReader.Contracts;
 using MessageParser;
@@ -99,7 +100,7 @@ namespace MBusReader.Code
 
                     if (_bw != null)
                     {
-                        _bw.Write(epocTimeString);
+                        _bw.Write(epocTimeString.ToArray());
                         message.ForEach(item => _bw.Write(item));
                     }
 

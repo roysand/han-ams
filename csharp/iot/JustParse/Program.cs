@@ -47,6 +47,18 @@ namespace JustParse
                             }
                             
                             var result = parser.Parse(bytes);
+                            if (result.Data.Count > 0)
+                            {
+                                Console.Write($"({packageCounter}) - EpocTime: {result.Header.EpocDateString} -");
+                                
+                                foreach (var measurement in result.Data)
+                                {
+                                    Console.Write($"MeasureType={measurement.Name } Value = {measurement.Value}");
+                                }
+                            
+                                Console.WriteLine();
+                            }
+                            
                             packageCounter++;
                             
                             if (packageCounter > 1500)
