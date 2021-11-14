@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using ExtendedSerialPort;
 using MBusReader.Contracts;
 using MessageParser;
@@ -88,13 +89,17 @@ namespace MBusReader.Code
                     // End of message
                     _status = STATUS.Searching;
                     message.Add(b);
+                    
+                    var epocTimeString = ConvertToEpocHexString(DateTime.Now);
+);
                     // Console.WriteLine($"{b.ToString("X2")}");
-                    Console.WriteLine($"{DateTime.Now.ToString("HH:mm:ss yyyyMMdd")} Message length: {message.Count}");
+                    Console.WriteLine($"{epocTimeString} Message length: {message.Count}");
                     message.ForEach(item => Console.Write($"{item.ToString("X2")} "));
                     Console.WriteLine();
 
                     if (_bw != null)
                     {
+                        _bw.Write(epocTimeString);
                         message.ForEach(item => _bw.Write(item));
                     }
 
@@ -139,6 +144,19 @@ namespace MBusReader.Code
             Console.WriteLine("Dispose ...!");
             _stream?.Dispose();
             _serialPort?.Dispose();
+        }
+        
+        private string ConvertToEpocHexString(DateTime dateTime)
+        {
+            TimeSpan t = dateTime- new DateTime(1970, 1, 1);
+            int secondsSinceEpoch = (int)t.TotalSeconds;
+              
+            byte[] epocByte = BitConverter.GetBytes(secondsSinceEpoch);
+            if (BitConverter.IsLittleEndian)
+                epocByte = epocByte.Reverse().ToArray();
+            var epocString = BitConverter.ToString(epocByte).Replace("-","");
+
+            return epocString;
         }
     }
 }

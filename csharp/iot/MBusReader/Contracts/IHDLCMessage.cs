@@ -12,8 +12,10 @@ namespace MBusReader.Contracts
 
     public interface IHDLCHeader
     {
-        string Hdlc_Length { get; set; }
-        
+        int Hdlc_Length { get; set; }
+        int DataType { get; set; }
+        int DataLen { get; set; }
+
     }
 
     public interface IHDLCData
