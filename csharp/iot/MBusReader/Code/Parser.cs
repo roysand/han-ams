@@ -62,11 +62,7 @@ namespace MessageParser.Code
             if (BitConverter.IsLittleEndian)
                 epocByte = epocByte.Reverse().ToArray();
             var epocString = BitConverter.ToString(epocByte);
-
-            foreach (var measurement in hdlcMessage.Data)
-            {
-                Console.WriteLine($"Epoc: {epocString} Message type: {measurement.Obis_Code} Value: {measurement.Value} Unit: {measurement.Unit}");
-            }
+            
             return _hdlcMessage;
         }
 
