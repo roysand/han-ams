@@ -55,7 +55,6 @@ namespace MessageParser.Code
                 hdlcData.Value = int.Parse(tmp, System.Globalization.NumberStyles.HexNumber);
             }
             
-            Console.WriteLine($"Parser: DataType={hdlcMessage.Header.DataType}, datalenth= {hdlcMessage.Header.DataLen}");
             TimeSpan t = DateTime.Now - new DateTime(1970, 1, 1);
             int secondsSinceEpoch = (int)t.TotalSeconds;
               
@@ -66,7 +65,7 @@ namespace MessageParser.Code
 
             foreach (var measurement in hdlcMessage.Data)
             {
-                Console.WriteLine($"Epoc: {ConvertToEpocHexString(DateTime.Now)} {epocByte} Message type: {measurement.Obis_Code} Value: {measurement.Value} Unit: {measurement.Unit}");
+                Console.WriteLine($"Epoc: {epocString} Message type: {measurement.Obis_Code} Value: {measurement.Value} Unit: {measurement.Unit}");
             }
             return _hdlcMessage;
         }
