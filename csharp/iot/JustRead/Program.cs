@@ -13,6 +13,7 @@ namespace JustRead
         {
             var fileName = $"data{Path.DirectorySeparatorChar}binary-{DateTime.Now.ToString("yyyy-MM-dd-HH-mm")}.dat";
             Console.WriteLine($"Filename: {fileName}");
+            Console.WriteLine("Starting reading data ...!");
             
             Stream stream = new FileStream(fileName,FileMode.Create);
             ISettingsSerial serialSettings = new SettingsSerial();
@@ -23,7 +24,8 @@ namespace JustRead
             
             IMBusReader mbusReader = new ReliableMBusReader(stream, serialSettings);
             // IMBusReader mbusReader = new MBusReader.Code.MBusReader(stream, serialSettings);
-            mbusReader.Run();
+            
+            mbusReader.Run(true);
 
             while (!Console.KeyAvailable)
             {

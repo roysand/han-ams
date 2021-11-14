@@ -18,6 +18,7 @@ namespace MBusReader.Code
         private ReliableSerialPort _serialPort;
         private STATUS _status = STATUS.Unknown;
         private List<byte> message = new List<byte>();
+        private bool PrintToScreen = false;
 
         public ReliableMBusReader()
         {
@@ -91,28 +92,34 @@ namespace MBusReader.Code
                     _status = STATUS.Searching;
                     message.Add(b);
                     
-                    var epocTimeString = ConvertToEpocHexString(DateTime.Now);
-
                     // Console.WriteLine($"{b.ToString("X2")}");
-                    Console.WriteLine($"{epocTimeString} Message length: {message.Count}");
-                    message.ForEach(item => Console.Write($"{item.ToString("X2")} "));
-                    Console.WriteLine();
+                    if (PrintToScreen)
+                    {
+                        message.ForEach(item => Console.Write($"{item.ToString("X2")} "));
+                    }
 
                     if (_bw != null)
                     {
-                        _bw.Write(epocTimeString.ToArray());
                         message.ForEach(item => _bw.Write(item));
                     }
 
                     IHDLCMessage hdlcMessage = new HDLCMessage();
                     var parser = new Parser(hdlcMessage);
                     hdlcMessage = parser.Parse(message);
+                    
+                    if (PrintToScreen && hdlcMessage.Data.Count > 0)
+                    {
+                        Console.Write($"Epoc {hdlcMessage.Header.EpocDateString}");
+                        foreach (var data in hdlcMessage.Data)
+                        {
+                            Console.WriteLine($" Value={data.Value} {data.Unit}");
+                        }
+                    }
                 }
                 else if (_status == STATUS.Data)
                 {
                     // Inside a message
                     message.Add(b);
-                    // Console.Write($"{b.ToString("X2")} ");
                 }
             }
         }
@@ -127,37 +134,34 @@ namespace MBusReader.Code
             if (_serialPort.IsOpen)
             {
                 _serialPort.DataReady -= DataReceivedHandler;
-                // _serialPort.Close();
             }
 
             return true;
         }
 
-        public void Run()
+        public void Run(bool printToScreen)
         {
-            Console.WriteLine("Starting reading data ...!");
-
+            PrintToScreen = printToScreen;
             _serialPort.DataReady += DataReceivedHandler;
         }
 
         public void Dispose()
         {
-            Console.WriteLine("Dispose ...!");
             _stream?.Dispose();
             _serialPort?.Dispose();
         }
         
-        private string ConvertToEpocHexString(DateTime dateTime)
-        {
-            TimeSpan t = dateTime- new DateTime(1970, 1, 1);
-            int secondsSinceEpoch = (int)t.TotalSeconds;
-              
-            byte[] epocByte = BitConverter.GetBytes(secondsSinceEpoch);
-            if (BitConverter.IsLittleEndian)
-                epocByte = epocByte.Reverse().ToArray();
-            var epocString = BitConverter.ToString(epocByte).Replace("-","");
-
-            return epocString;
-        }
+        // private string ConvertToEpocHexString(DateTime dateTime)
+        // {
+        //     TimeSpan t = dateTime- new DateTime(1970, 1, 1);
+        //     int secondsSinceEpoch = (int)t.TotalSeconds;
+        //       
+        //     byte[] epocByte = BitConverter.GetBytes(secondsSinceEpoch);
+        //     if (BitConverter.IsLittleEndian)
+        //         epocByte = epocByte.Reverse().ToArray();
+        //     var epocString = BitConverter.ToString(epocByte).Replace("-","");
+        //
+        //     return epocString;
+        // }
     }
 }

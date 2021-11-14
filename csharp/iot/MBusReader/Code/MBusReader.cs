@@ -150,7 +150,7 @@ namespace MBusReader.Code
             return true;
         }
 
-        public void Run()
+        public void Run(bool printToScreen)
         {
             Console.WriteLine("Starting reading data ...!");
 

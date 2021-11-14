@@ -6,7 +6,7 @@ namespace MBusReader.Contracts
 {
     public interface IMBusReader : IDisposable
     {
-        void Run();
+        void Run(bool printToScreen);
         Byte[] Pull();
         bool Close();
     }

@@ -26,7 +26,7 @@ namespace MessageParser.Code
         {
             _hdlcMessage = new HDLCMessage();
             
-            var pkt = BitConverter.ToString(data.ToArray()).Replace("-","");
+            // var pkt = BitConverter.ToString(data.ToArray()).Replace("-","");
             
             // Byte 17 is datatype and length (elements)
             // Console(WriteLine($"Parser: {pkt}");
@@ -55,15 +55,7 @@ namespace MessageParser.Code
                 
                 hdlcData.Value = int.Parse(tmp, System.Globalization.NumberStyles.HexNumber);
             }
-            
-            TimeSpan t = DateTime.Now - new DateTime(1970, 1, 1);
-            int secondsSinceEpoch = (int)t.TotalSeconds;
-              
-            byte[] epocByte = BitConverter.GetBytes(secondsSinceEpoch);
-            if (BitConverter.IsLittleEndian)
-                epocByte = epocByte.Reverse().ToArray();
-            var epocString = BitConverter.ToString(epocByte);
-            
+
             return hdlcMessage;
         }
 
