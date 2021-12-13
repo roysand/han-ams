@@ -24,8 +24,8 @@ while (1):
         a.decode(byte)
     time.sleep(0.01)
 
-    currentTime = datetime.datetime.now()
-    timeSpan = currentTime - startTime
-    if timeSpan.total_seconds() > 10:
-        ser.close()
-        exit(1)
+    # currentTime = datetime.datetime.now()
+    # timeSpan = currentTime - startTime
+    # if timeSpan.total_seconds() > 10:
+    #     ser.close()
+    #     exit(1)
