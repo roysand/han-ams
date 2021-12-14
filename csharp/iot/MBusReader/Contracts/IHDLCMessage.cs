@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Text;
 
 namespace MBusReader.Contracts
@@ -14,9 +15,9 @@ namespace MBusReader.Contracts
     {
         int Hdlc_Length { get; set; }
         int DataType { get; set; }
-        int DataLen { get; set; }
+        int ObjectCount { get; set; }
         int SecondsSinceEpoc{ get; set; }
-
+        DateTime Timestamp { get; set; }
     }
 
     public interface IHDLCData

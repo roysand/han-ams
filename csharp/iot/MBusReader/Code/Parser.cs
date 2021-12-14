@@ -9,6 +9,18 @@ namespace MessageParser.Code
 {
     public class Parser : IParser
     {
+        // Number of objects in known frames
+        private const int OBJECTS_2P5SEC = 1;
+        private const int OBJECTS_10SEC = 12;
+        private const int OBJECTS_1HOUR = 17;
+        
+        // Obis datatypes
+        private const byte TYPE_STRING = 0x0a;
+        private const byte TYPE_UINT32 = 0x06;
+        private const byte TYPE_INT16 = 0x10;
+        private const byte TYPE_OCTETS = 0x09;
+        private const byte TYPE_UINT16 = 0x12;
+        
         static private readonly int OBIS_CODE_START = 23;
         static private readonly int VALUE_START = OBIS_CODE_START + 7;
         private IHDLCMessage _hdlcMessage;
@@ -31,11 +43,13 @@ namespace MessageParser.Code
             // Byte 17 is datatype and length (elements)
             // Console(WriteLine($"Parser: {pkt}");
             IHDLCMessage hdlcMessage = new HDLCMessage();
-            hdlcMessage.Header.DataLen = data[18];
+            
+            hdlcMessage.Header.Timestamp = DateTime.Now;
+            hdlcMessage.Header.ObjectCount = data[18];
             hdlcMessage.Header.DataType = data[17];
             hdlcMessage.Header.SecondsSinceEpoc = ConvertSecondsToEpoc(DateTime.Now);
 
-            if (hdlcMessage.Header.DataLen != 1)
+            if (hdlcMessage.Header.ObjectCount != 1)
                 return hdlcMessage;
             
             var hdlcData = new HDLCData();
@@ -48,7 +62,8 @@ namespace MessageParser.Code
             
             if (hdlcData.Obis_Code == "1-0:1.7.0.255")
             {
-                hdlcData.Unit = "kW";
+                hdlcData.Name = "Effekt 1";
+                hdlcData.Unit = "W";
                 var tmp = Convert.ToHexString(data.Skip(VALUE_START).Take(4).ToArray());
                 if (String.IsNullOrEmpty(tmp))
                     return hdlcMessage;
@@ -56,6 +71,36 @@ namespace MessageParser.Code
                 hdlcData.Value = int.Parse(tmp, System.Globalization.NumberStyles.HexNumber);
             }
 
+            data = data.Skip(18).ToList();
+            
+            for(int i = 0;i <= hdlcMessage.Header.Hdlc_Length; i++)
+            {
+                var dataType = data[10];
+
+                if (dataType == TYPE_STRING)
+                {
+                    var size = Convert.ToHexString(data.Skip(10).Take(1).ToArray());
+                    var sizeNum = int.Parse(size, System.Globalization.NumberStyles.HexNumber);
+                    var value = data.Skip(11).Take(sizeNum).ToString();
+                    data = data.Skip(11 + sizeNum).ToList();
+                }
+                else if (dataType == TYPE_UINT32)
+                {
+                    var tmp = Convert.ToHexString(data.Skip(10).Take(4).ToArray());
+                    if (!String.IsNullOrEmpty(tmp))
+                    {
+                        var d = new HDLCData()
+                        {
+                            Name = "Effekt",
+                            Value = int.Parse(tmp, System.Globalization.NumberStyles.HexNumber),
+                            Unit = "W"
+                        };
+
+                        hdlcMessage.Data.Add(d);
+                    }
+                }
+            }
+            
             return hdlcMessage;
         }
 
