@@ -48,7 +48,7 @@ namespace MessageParser.Code
             
             if (hdlcData.Obis_Code == "1-0:1.7.0.255")
             {
-                hdlcData.Unit = "kW";
+                hdlcData.Unit = "W";
                 var tmp = Convert.ToHexString(data.Skip(VALUE_START).Take(4).ToArray());
                 if (String.IsNullOrEmpty(tmp))
                     return hdlcMessage;
