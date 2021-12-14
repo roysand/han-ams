@@ -2,11 +2,11 @@
 # skagmo.com, 2019
 # Needs crcmod (sudo pip install crcmod)
 
-import struct, crcmod
+import struct, crcmod, time
 
 # HDLC constants
-FLAG = '\x7e'
-ESCAPE = '\x7d'
+FLAG = b'\x7e'
+ESCAPE = b'\7d'
 
 # HDLC states
 WAITING = 0
@@ -113,6 +113,10 @@ class aidon:
 	# General HDLC decoder
 	def decode(self, c):
 		# Waiting for packet start
+		print(f"{c} {c == FLAG}")
+		if (ord(c) == FLAG):
+			time.sleep(1)
+
 		if (self.state == WAITING): 
 			if (c == FLAG):
 				self.state = DATA

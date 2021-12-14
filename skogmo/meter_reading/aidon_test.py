@@ -1,7 +1,8 @@
 #!/usr/bin/python
 
 import serial, time, sys
-from aidon_obis import *
+from aidon_obis_new import *
+from azure_service_bus import *
 from datetime import date
 import datetime
 
@@ -12,6 +13,7 @@ if len(sys.argv) != 2:
 
 def aidon_callback(fields):
     print(fields)
+    AzureServiceBus(fields)
 
 
 ser = serial.Serial(sys.argv[1], 2400, timeout=0.05, parity=serial.PARITY_NONE)
