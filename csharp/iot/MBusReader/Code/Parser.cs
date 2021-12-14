@@ -49,8 +49,8 @@ namespace MessageParser.Code
             hdlcMessage.Header.DataType = data[17];
             hdlcMessage.Header.SecondsSinceEpoc = ConvertSecondsToEpoc(DateTime.Now);
 
-            if (hdlcMessage.Header.ObjectCount != 1)
-                return hdlcMessage;
+            // if (hdlcMessage.Header.ObjectCount != 1)
+            //    return hdlcMessage;
             
             var hdlcData = new HDLCData();
             
@@ -101,6 +101,22 @@ namespace MessageParser.Code
                         data = data.Skip(22).ToList();
                     }
                 }
+                // else if (dataType == TYPE_INT16)
+                // {
+                //     var tmp = Convert.ToHexString(data.Skip(12).Take(2).ToArray());
+                //     if (!String.IsNullOrEmpty(tmp))
+                //     {
+                //         var d = new HDLCData()
+                //         {
+                //             Name = "Effekt",
+                //             Value = int.Parse(tmp, System.Globalization.NumberStyles.HexNumber),
+                //             Unit = "W"
+                //         };
+
+                //         hdlcMessage.Data.Add(d);
+                //         data = data.Skip(22).ToList();
+                //     }
+                // }
             }
             
             return hdlcMessage;

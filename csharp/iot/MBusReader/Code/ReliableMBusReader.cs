@@ -109,7 +109,7 @@ namespace MBusReader.Code
                     
                     if (PrintToScreen && hdlcMessage.Data.Count > 0)
                     {
-                        Console.Write($"Epoc {hdlcMessage.Header.SecondsSinceEpoc}");
+                        Console.Write($"Epoc {hdlcMessage.Header.SecondsSinceEpoc} Message len: {message.Count}");
                         foreach (var data in hdlcMessage.Data)
                         {
                             Console.WriteLine($" Name = {data.Name} Value={data.Value} {data.Unit}");
