@@ -75,18 +75,19 @@ namespace MessageParser.Code
             
             for(int i = 0;i <= hdlcMessage.Header.Hdlc_Length; i++)
             {
-                var dataType = data[10];
+                var dataType = data[11];
+                Console.WriteLine($"DataType = {dataType}");
 
                 if (dataType == TYPE_STRING)
                 {
-                    var size = Convert.ToHexString(data.Skip(10).Take(1).ToArray());
+                    var size = Convert.ToHexString(data.Skip(11).Take(1).ToArray());
                     var sizeNum = int.Parse(size, System.Globalization.NumberStyles.HexNumber);
-                    var value = data.Skip(11).Take(sizeNum).ToString();
-                    data = data.Skip(11 + sizeNum).ToList();
+                    var value = data.Skip(12).Take(sizeNum).ToString();
+                    data = data.Skip(12 + sizeNum).ToList();
                 }
                 else if (dataType == TYPE_UINT32)
                 {
-                    var tmp = Convert.ToHexString(data.Skip(10).Take(4).ToArray());
+                    var tmp = Convert.ToHexString(data.Skip(12).Take(4).ToArray());
                     if (!String.IsNullOrEmpty(tmp))
                     {
                         var d = new HDLCData()
@@ -97,6 +98,7 @@ namespace MessageParser.Code
                         };
 
                         hdlcMessage.Data.Add(d);
+                        data = data.Skip(22).ToList();
                     }
                 }
             }
