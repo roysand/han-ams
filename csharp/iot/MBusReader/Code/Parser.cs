@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using MBusReader.Code;
 using MBusReader.Contracts;
 using MessageParser.Contracts;
@@ -51,11 +52,10 @@ namespace MessageParser.Code
 
             // if (hdlcMessage.Header.ObjectCount != 1)
             //    return hdlcMessage;
-            
-            var strTmp = Encoding.Default.GetBytes(data);
+
+            var strTmp = data.ToString();
             var pos = strTmp.IndexOf("10170255");
             Console.WriteLine($"Pos={pos}, string={strTmp}");
-
 
             var hdlcData = new HDLCData();
             
