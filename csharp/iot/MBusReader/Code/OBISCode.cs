@@ -5,7 +5,7 @@ namespace MBusReader.Code
     public class OBISCode : IOBISCode
     {
         private string _obisCode;
-        private string _dataCode;
+        private string _objectCode;
         private string _unit;
         private string _name;
         private int _scaler;
@@ -20,8 +20,8 @@ namespace MBusReader.Code
 
         public string ObjectCode
         {
-            get => _dataCode;
-            set => _dataCode = value;
+            get => _objectCode;
+            set => _objectCode = value;
         }
 
         public string Unit

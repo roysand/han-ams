@@ -34,7 +34,7 @@ namespace MBusReader.Code
     {
         public string Name { get; set; }
         public string Description { get; set; }
-        public string Obis_Code { get; set; }
+        public string ObisCode { get; set; }
         public string Unit { get; set; }
         public float Value { get; set; }
 
@@ -47,7 +47,7 @@ namespace MBusReader.Code
         {
             Name = name;
             Description = description;
-            Obis_Code = obisCode;
+            ObisCode = obisCode;
             Unit = unit;
             Value = value;
         }

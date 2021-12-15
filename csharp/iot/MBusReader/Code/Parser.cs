@@ -75,7 +75,7 @@ namespace MessageParser.Code
             {
                 var hdlcData = new HDLCData()
                 {
-                    Obis_Code = obisCode.ObisCode,
+                    ObisCode = obisCode.ObisCode,
                     Name = obisCode.Name,
                     Unit = obisCode.Unit
                 };
@@ -83,13 +83,12 @@ namespace MessageParser.Code
                 if (obisCode.DataTypeName == "float")
                 {
                     var value = FindObject<float>(obisCode, messageAsString, data);
-                    Console.WriteLine($"Value = {value}");
                     hdlcData.Value = value;
                 }
-                else
+                else if (obisCode.DataTypeName == "string")
                 {
                     var value = FindObject<string>(obisCode, messageAsString, data);
-                    Console.WriteLine($"Value = {value}");
+                    hdlcData.Description = value;
                 }
 
                 hdlcMessage.Data.Add(hdlcData);
@@ -101,19 +100,17 @@ namespace MessageParser.Code
         private T FindObject<T>(IOBISCode obisCode, string messageAsString, List<byte> message)
         {
             var pos = messageAsString.IndexOf(obisCode.ObjectCode);
-            Console.Write($"Pos: {pos}  ObisCode: {obisCode.ObjectCode}  MessageAsString: {messageAsString}");
             if (pos > 0)
             {
                 var startPos = pos + obisCode.ObisCode.Length + 2;
-                Console.Write($"  startPos: {startPos}");
-                var tmp = Convert.ToHexString(message.Skip(startPos/2).Take(4).ToArray());
+                var value = Convert.ToHexString(message.Skip(startPos/2).Take(4).ToArray());
                 if (typeof(T) == typeof(float))
                 {
-                    var ret = int.Parse(tmp, System.Globalization.NumberStyles.HexNumber) * Math.Pow(10, obisCode.Scaler);
+                    var ret = int.Parse(value, System.Globalization.NumberStyles.HexNumber) * Math.Pow(10, obisCode.Scaler);
                     return (T) Convert.ChangeType(ret, typeof(T));
                 }
 
-                return (T) Convert.ChangeType(tmp, typeof(T));
+                return (T) Convert.ChangeType(value, typeof(T));
             }
 
             return default(T);

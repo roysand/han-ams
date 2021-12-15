@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using ExtendedSerialPort;
 using MBusReader.Contracts;
 using MessageParser;
@@ -109,6 +110,8 @@ namespace MBusReader.Code
                     
                     if (PrintToScreen && hdlcMessage.Data.Count > 0)
                     {
+                        Console.WriteLine(JsonSerializer.Serialize(hdlcMessage));
+                        
                         Console.Write($"Epoc {hdlcMessage.Header.SecondsSinceEpoc} Message len: {message.Count}");
                         foreach (var data in hdlcMessage.Data)
                         {

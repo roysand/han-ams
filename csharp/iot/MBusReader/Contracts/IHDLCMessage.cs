@@ -24,7 +24,7 @@ namespace MBusReader.Contracts
     {
         string Name { get; set; }
         string Description { get; set; }
-        string Obis_Code { get; set; }
+        string ObisCode { get; set; }
         string Unit { get; set; }
         float Value { get; set; }
     }
