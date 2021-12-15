@@ -17,8 +17,6 @@ namespace JustParse
             Console.WriteLine("Hello world JustParse!!");
 
             byte b;
-            byte dataType;
-            byte dataLen;
             Int16 packageCounter = 0;
             List<byte> bytes = new List<byte>();
             Parser parser = new Parser();
