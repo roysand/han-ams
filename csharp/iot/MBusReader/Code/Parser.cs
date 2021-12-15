@@ -88,6 +88,7 @@ namespace MessageParser.Code
         private string FindObject(string obisCode, string messageAsString, List<byte> message)
         {
             var pos = messageAsString.IndexOf(obisCode);
+            Console.Write($"Pos: {pos}  ");
             if (pos > 0)
             {
                 var startPos = pos + obisCode.Length;
