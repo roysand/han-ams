@@ -85,19 +85,21 @@ namespace MessageParser.Code
             return hdlcMessage;
         }
 
-        private string FindObject(string obisCode, string messageAsString, List<byte> message)
+        private <T> FindObject(string obisCode, string messageAsString, List<byte> message)
         {
             var pos = messageAsString.IndexOf(obisCode);
             Console.Write($"Pos: {pos}  ObisCode: {obisCode}  MessageAsString: {messageAsString}");
             if (pos > 0)
             {
                 var startPos = pos + obisCode.Length;
+                Console.Write($"  startPos: {startPos}");
+                var tmp = Convert.ToHexString(message.Skip((2+pos+obisCode.Length)/2).Take(4).ToArray());
                 // var len = int.Parse(messageAsString.Skip(startPos).Take(2).ToString(), System.Globalization.NumberStyles.HexNumber);
-                var len = messageAsString.Skip(startPos).Take(2).ToString();
-                Console.Write($" Len: {len}");
+                // var len = messageAsString.Skip(startPos).Take(2).ToString();
+                // Console.Write($" Len: {len}");
                 // var value = messageAsString.Skip(startPos + 4).Take(len).ToString();
 
-                return ""; //value;
+                return tmp; //value;
             }
 
             return String.Empty;
