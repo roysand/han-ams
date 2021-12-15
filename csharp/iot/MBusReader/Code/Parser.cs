@@ -74,37 +74,37 @@ namespace MessageParser.Code
 
             var messageAsString = string.Concat( data.SelectMany( b => new int[] { b >> 4, b & 0xF }).Select( b => (char)(55 + b + (((b-10)>>31)&-7))) );
 
-            for (int i = 0; i < hdlcMessage.Header.ObjectCount; i++)
-            {
+            // for (int i = 0; i < hdlcMessage.Header.ObjectCount; i++)
+            // {
                 // Find all objects in message
                 foreach (var obisCode in _obisCode)
                 {
                     if (obisCode.DataTypeName == "int")
                     {
-                        var value = FindObject<string>(obisCode, messageAsString, data);
+                        var value = FindObject<int>(obisCode, messageAsString, data);
                         Console.WriteLine($"Value = {value}");
                     }
                     else
                     {
-                        var value = FindObject<int>(obisCode, messageAsString, data);
+                        var value = FindObject<string>(obisCode, messageAsString, data);
                         Console.WriteLine($"Value = {value}");
                     }
                     
                 }
-            }
+            // }
 
             return hdlcMessage;
         }
 
         private T FindObject<T>(IOBISCode obisCode, string messageAsString, List<byte> message)
         {
-            var pos = messageAsString.IndexOf(obisCode.ObisCode);
-            Console.Write($"Pos: {pos}  ObisCode: {obisCode.ObisCode}  MessageAsString: {messageAsString}");
+            var pos = messageAsString.IndexOf(obisCode.ObjectCode);
+            Console.Write($"Pos: {pos}  ObisCode: {obisCode.ObjectCode}  MessageAsString: {messageAsString}");
             if (pos > 0)
             {
-                var startPos = pos + obisCode.ObisCode.Length;
+                var startPos = pos + obisCode.ObisCode.Length + 2;
                 Console.Write($"  startPos: {startPos}");
-                var tmp = Convert.ToHexString(message.Skip((2+pos+obisCode.ObisCode.Length)/2).Take(4).ToArray());
+                var tmp = Convert.ToHexString(message.Skip(startPos/2).Take(4).ToArray());
                 if (typeof(T) == typeof(int))
                 {
                     var ret = int.Parse(tmp, System.Globalization.NumberStyles.HexNumber);
