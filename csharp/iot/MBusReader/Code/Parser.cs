@@ -52,6 +52,11 @@ namespace MessageParser.Code
             // if (hdlcMessage.Header.ObjectCount != 1)
             //    return hdlcMessage;
             
+            var strTmp = Encoding.Default.GetBytes(data);
+            var pos = strTmp.IndexOf("10170255");
+            Console.WriteLine($"Pos={pos}, string={strTmp}");
+
+
             var hdlcData = new HDLCData();
             
             hdlcMessage.Data.Add(hdlcData);
