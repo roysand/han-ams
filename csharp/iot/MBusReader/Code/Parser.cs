@@ -74,24 +74,29 @@ namespace MessageParser.Code
 
             var messageAsString = string.Concat( data.SelectMany( b => new int[] { b >> 4, b & 0xF }).Select( b => (char)(55 + b + (((b-10)>>31)&-7))) );
 
-            // for (int i = 0; i < hdlcMessage.Header.ObjectCount; i++)
-            // {
-                // Find all objects in message
-                foreach (var obisCode in _obisCode)
+            foreach (var obisCode in _obisCode)
+            {
+                var hdlcData = new HDLCData()
                 {
-                    if (obisCode.DataTypeName == "int")
-                    {
-                        var value = FindObject<int>(obisCode, messageAsString, data);
-                        Console.WriteLine($"Value = {value}");
-                    }
-                    else
-                    {
-                        var value = FindObject<string>(obisCode, messageAsString, data);
-                        Console.WriteLine($"Value = {value}");
-                    }
-                    
+                    Obis_Code = obisCode.ObisCode,
+                    Name = obisCode.Name,
+                    Unit = obisCode.Unit
+                };
+                
+                if (obisCode.DataTypeName == "int")
+                {
+                    var value = FindObject<int>(obisCode, messageAsString, data);
+                    Console.WriteLine($"Value = {value}");
+                    hdlcData.Value = value;
                 }
-            // }
+                else
+                {
+                    var value = FindObject<string>(obisCode, messageAsString, data);
+                    Console.WriteLine($"Value = {value}");
+                }
+
+                hdlcMessage.Data.Add(hdlcData);
+            }
 
             return hdlcMessage;
         }
