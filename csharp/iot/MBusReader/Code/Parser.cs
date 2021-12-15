@@ -53,11 +53,27 @@ namespace MessageParser.Code
             // if (hdlcMessage.Header.ObjectCount != 1)
             //    return hdlcMessage;
 
-            var strTmp = data.ToString();
-            var pos = strTmp.IndexOf("10170255");
-            Console.WriteLine($"Pos={pos}, string={strTmp}");
+            var strTmp = String.Empty;
+            strTmp = string.Concat( data.SelectMany( b => new int[] { b >> 4, b & 0xF }).Select( b => (char)(55 + b + (((b-10)>>31)&-7))) );
 
             var hdlcData = new HDLCData();
+            var pos = strTmp.IndexOf("0100010700FF");
+            Console.Write($"Pos={pos}, string={strTmp}");
+            if (pos > 0)
+            {
+                var tmp = Convert.ToHexString(data.Skip((2+pos+"0100010700FF".Length)/2).Take(4).ToArray());
+                if (String.IsNullOrEmpty(tmp))
+                    return hdlcMessage;
+                // Console.WriteLine($"Value: {int.Parse(tmp, System.Globalization.NumberStyles.HexNumber)} W");
+                
+                hdlcData.Name = "ActivePower";
+                hdlcData.Unit = "W";
+                
+                hdlcData.Value = int.Parse(tmp, System.Globalization.NumberStyles.HexNumber);
+                hdlcMessage.Data.Add(hdlcData);
+            }
+
+            hdlcData = new HDLCData();
             
             hdlcMessage.Data.Add(hdlcData);
     
@@ -65,9 +81,9 @@ namespace MessageParser.Code
                                   + data[OBIS_CODE_START+2].ToString() +"." + data[OBIS_CODE_START+3].ToString() + "." 
                                   + data[OBIS_CODE_START+4].ToString() + "." + data[OBIS_CODE_START+5].ToString()  ;
             
-            if (hdlcData.Obis_Code == "1-0:1.7.0.255")
+            if (hdlcData.Obis_Code == "1-0:1.7.0.2552")
             {
-                hdlcData.Name = "Effekt 1";
+                hdlcData.Name = "ActivePower";
                 hdlcData.Unit = "W";
                 var tmp = Convert.ToHexString(data.Skip(VALUE_START).Take(4).ToArray());
                 if (String.IsNullOrEmpty(tmp))
