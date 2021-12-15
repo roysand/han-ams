@@ -7,5 +7,7 @@
         string Unit { get; set; }
         string Name { get; set; }
         int Scaler { get; set; }
+        int Size { get; set; }
+        string DataTypeName { get; set; }
     }
 }

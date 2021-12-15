@@ -9,6 +9,8 @@ namespace MBusReader.Code
         private string _unit;
         private string _name;
         private int _scaler;
+        private int _size;
+        private string _dataTypeName;
 
         public string ObisCode
         {
@@ -38,6 +40,18 @@ namespace MBusReader.Code
         {
             get => _scaler;
             set => _scaler = value;
+        }
+
+        public int Size
+        {
+            get => _size;
+            set => _size = value;
+        }
+
+        public string DataTypeName
+        {
+            get => _dataTypeName;
+            set => _dataTypeName = value;
         }
     }
 }

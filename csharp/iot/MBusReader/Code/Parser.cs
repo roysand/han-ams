@@ -43,7 +43,9 @@ namespace MessageParser.Code
                 ObjectCode = "0100010700FF",
                 Unit = "kW",
                 Scaler = -3,
-                Name = "Active power"
+                Name = "Active power", 
+                Size = 4, 
+                DataTypeName = "int"
             };
             
             _obisCode.Add(obisCode) ;
@@ -77,32 +79,46 @@ namespace MessageParser.Code
                 // Find all objects in message
                 foreach (var obisCode in _obisCode)
                 {
-                    var value = FindObject(obisCode.ObjectCode, messageAsString, data);
-                    Console.WriteLine($"Value = {value}");
+                    if (obisCode.DataTypeName == "int")
+                    {
+                        var value = FindObject<string>(obisCode, messageAsString, data);
+                        Console.WriteLine($"Value = {value}");
+                    }
+                    else
+                    {
+                        var value = FindObject<int>(obisCode, messageAsString, data);
+                        Console.WriteLine($"Value = {value}");
+                    }
+                    
                 }
             }
 
             return hdlcMessage;
         }
 
-        private <T> FindObject(string obisCode, string messageAsString, List<byte> message)
+        private T FindObject<T>(IOBISCode obisCode, string messageAsString, List<byte> message)
         {
-            var pos = messageAsString.IndexOf(obisCode);
-            Console.Write($"Pos: {pos}  ObisCode: {obisCode}  MessageAsString: {messageAsString}");
+            var pos = messageAsString.IndexOf(obisCode.ObisCode);
+            Console.Write($"Pos: {pos}  ObisCode: {obisCode.ObisCode}  MessageAsString: {messageAsString}");
             if (pos > 0)
             {
-                var startPos = pos + obisCode.Length;
+                var startPos = pos + obisCode.ObisCode.Length;
                 Console.Write($"  startPos: {startPos}");
-                var tmp = Convert.ToHexString(message.Skip((2+pos+obisCode.Length)/2).Take(4).ToArray());
+                var tmp = Convert.ToHexString(message.Skip((2+pos+obisCode.ObisCode.Length)/2).Take(4).ToArray());
+                if (typeof(T) == typeof(int))
+                {
+                    var ret = int.Parse(tmp, System.Globalization.NumberStyles.HexNumber);
+                    return (T) Convert.ChangeType(ret, typeof(T));
+                }
                 // var len = int.Parse(messageAsString.Skip(startPos).Take(2).ToString(), System.Globalization.NumberStyles.HexNumber);
                 // var len = messageAsString.Skip(startPos).Take(2).ToString();
                 // Console.Write($" Len: {len}");
                 // var value = messageAsString.Skip(startPos + 4).Take(len).ToString();
 
-                return tmp; //value;
+                return (T) Convert.ChangeType(tmp, typeof(T));
             }
 
-            return String.Empty;
+            return default(T);
         }
         //
         // var strTmp = String.Empty;
