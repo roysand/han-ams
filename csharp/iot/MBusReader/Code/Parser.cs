@@ -71,15 +71,15 @@ namespace MessageParser.Code
             data = data.Skip(18).ToList();
 
             var messageAsString = string.Concat( data.SelectMany( b => new int[] { b >> 4, b & 0xF }).Select( b => (char)(55 + b + (((b-10)>>31)&-7))) );
+
             for (int i = 0; i < hdlcMessage.Header.ObjectCount; i++)
             {
                 // Find all objects in message
                 foreach (var obisCode in _obisCode)
                 {
-                    var value = FindObject(obisCode.ObisCode, messageAsString, data);
+                    var value = FindObject(obisCode.ObjectCode, messageAsString, data);
                     Console.WriteLine($"Value = {value}");
                 }
-
             }
 
             return hdlcMessage;
@@ -88,14 +88,16 @@ namespace MessageParser.Code
         private string FindObject(string obisCode, string messageAsString, List<byte> message)
         {
             var pos = messageAsString.IndexOf(obisCode);
-            Console.Write($"Pos: {pos}  ");
+            Console.Write($"Pos: {pos}  ObisCode: {obisCode}  MessageAsString: {messageAsString}");
             if (pos > 0)
             {
                 var startPos = pos + obisCode.Length;
-                var len = int.Parse(messageAsString.Skip(startPos).Take(2).ToString());
-                var value = messageAsString.Skip(startPos + 4).Take(len).ToString();
+                // var len = int.Parse(messageAsString.Skip(startPos).Take(2).ToString(), System.Globalization.NumberStyles.HexNumber);
+                var len = messageAsString.Skip(startPos).Take(2).ToString();
+                Console.Write($" Len: {len}");
+                // var value = messageAsString.Skip(startPos + 4).Take(len).ToString();
 
-                return value;
+                return ""; //value;
             }
 
             return String.Empty;
