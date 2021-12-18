@@ -64,6 +64,7 @@ namespace MessageParser.Code
             hdlcMessage.Header.Timestamp = DateTime.Now;
             hdlcMessage.Header.ObjectCount = data[18];
             hdlcMessage.Header.DataType = data[17];
+            hdlcMessage.Header.Hdlc_Length = data.Count();
             hdlcMessage.Header.SecondsSinceEpoc = ConvertSecondsToEpoc(DateTime.Now);
 
 
