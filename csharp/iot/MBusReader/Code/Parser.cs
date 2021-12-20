@@ -100,17 +100,25 @@ namespace MessageParser.Code
         private T FindObject<T>(IOBISCode obisCode, string messageAsString, List<byte> message)
         {
             var pos = messageAsString.IndexOf(obisCode.ObjectCode);
+            var dataSize = obisCode.Size;
+            
             if (pos > 0)
             {
-                var startPos = pos + obisCode.ObisCode.Length + 2;
-                var value = Convert.ToHexString(message.Skip(startPos/2).Take(4).ToArray());
-                if (typeof(T) == typeof(float))
+                if (typeof(T) == typeof(string))
                 {
+                    var startPos = (pos + obisCode.ObisCode.Length + 4) / 2;
+                    dataSize = Convert.ToInt16(message.Skip((pos + obisCode.ObisCode.Length) / 2).Take(1));
+                    var value = Convert.ToHexString(message.Skip(startPos).Take(dataSize).ToArray());
+                    
+                    return (T) Convert.ChangeType(value, typeof(T));
+                }
+                else if (typeof(T) == typeof(float))
+                {
+                    var startPos = pos + obisCode.ObisCode.Length + 2;
+                    var value = Convert.ToHexString(message.Skip(startPos/2).Take(dataSize).ToArray());
                     var ret = int.Parse(value, System.Globalization.NumberStyles.HexNumber) * Math.Pow(10, obisCode.Scaler);
                     return (T) Convert.ChangeType(ret, typeof(T));
                 }
-
-                return (T) Convert.ChangeType(value, typeof(T));
             }
 
             return default(T);
