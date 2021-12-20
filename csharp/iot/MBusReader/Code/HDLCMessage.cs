@@ -4,7 +4,7 @@ using MBusReader.Contracts;
 
 namespace MBusReader.Code
 {
-    public class HDLCMessage<T> : IHDLCMessage<T>
+    public class HDLCMessage : IHDLCMessage
     {
         public IHDLCHeader Header { get; set; }
         public IList<IHDLCData> Data { get; set; }
@@ -30,20 +30,20 @@ namespace MBusReader.Code
         }
     }
     
-    public class HDLCData<T> : IHDLCData<T>
+    public class HDLCData : IHDLCData
     {
         public string Name { get; set; }
         public string Description { get; set; }
         public string ObisCode { get; set; }
         public string Unit { get; set; }
-        public T Value { get; set; }
+        public float Value { get; set; }
 
         public HDLCData()
         {
 
         }
 
-        public HDLCData(string name, string description, string obisCode, string unit, T value)
+        public HDLCData(string name, string description, string obisCode, string unit, float value)
         {
             Name = name;
             Description = description;

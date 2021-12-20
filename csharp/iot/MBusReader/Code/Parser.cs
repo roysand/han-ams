@@ -99,14 +99,14 @@ namespace MessageParser.Code
                 {
                     var value = FindObject<float>(obisCode, messageAsString, data);
                     hdlcData.Value = value;
+                    hdlcMessage.Data.Add(hdlcData);
                 }
                 else if (obisCode.DataTypeName == "string")
                 {
                     var value = FindObject<string>(obisCode, messageAsString, data);
                     hdlcData.Description = value;
+                    hdlcMessage.Data.Add(hdlcData);
                 }
-
-                hdlcMessage.Data.Add(hdlcData);
             }
 
             return hdlcMessage;
