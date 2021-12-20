@@ -49,7 +49,21 @@ namespace MessageParser.Code
             };
             
             _obisCode.Add(obisCode) ;
+
+            obisCode = new OBISCode()
+            {
+                ObisCode = "0-0:96.1.7.255",
+                ObjectCode = "0000600107FF",
+                Unit = "",
+                Scaler = 0,
+                Name = "Meter-Type", 
+                Size = -1, 
+                DataTypeName = "string"            
+            };
+
+            _obisCode.Add(obisCode);
         }
+        
 
         public IHDLCMessage Parse(List<byte> data)
         {
