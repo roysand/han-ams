@@ -106,6 +106,7 @@ namespace MessageParser.Code
                     var value = FindObject<string>(obisCode, messageAsString, data);
                     hdlcData.Description = value;
                     hdlcMessage.Data.Add(hdlcData);
+                    
                 }
             }
 
