@@ -110,7 +110,7 @@ namespace MBusReader.Code
                     
                     if (PrintToScreen && hdlcMessage.Data.Count > 0)
                     {
-                        Console.WriteLine(JsonSerializer.Serialize(hdlcMessage));
+                        Console.WriteLine('\n' + JsonSerializer.Serialize(hdlcMessage));
                         
                         Console.Write($"Epoc {hdlcMessage.Header.SecondsSinceEpoc} Message len: {message.Count}");
                         foreach (var data in hdlcMessage.Data)
