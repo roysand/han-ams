@@ -20,12 +20,12 @@ namespace MBusReader.Contracts
         DateTime Timestamp { get; set; }
     }
 
-    public interface IHDLCData
+    public interface IHDLCData<T>
     {
         string Name { get; set; }
         string Description { get; set; }
         string ObisCode { get; set; }
         string Unit { get; set; }
-        float Value { get; set; }
+        T Value { get; set; }
     }
 }

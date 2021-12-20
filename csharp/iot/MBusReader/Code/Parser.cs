@@ -112,6 +112,15 @@ namespace MessageParser.Code
             return hdlcMessage;
         }
 
+        private byte[] StringToByteArray(String hex)
+        {
+            int NumberChars = hex.Length;
+            byte[] bytes = new byte[NumberChars / 2];
+            for (int i = 0; i < NumberChars; i += 2)
+                bytes[i / 2] = Convert.ToByte(hex.Substring(i, 2), 16);
+            return bytes;
+        }
+
         private T FindObject<T>(IOBISCode obisCode, string messageAsString, List<byte> message)
         {
             var pos = messageAsString.IndexOf(obisCode.ObjectCode);
@@ -121,10 +130,15 @@ namespace MessageParser.Code
             {
                 if (typeof(T) == typeof(string))
                 {
-                    var startPos = (pos + obisCode.ObisCode.Length + 4) / 2;
-                    dataSize = Convert.ToInt16(message.Skip((pos + obisCode.ObisCode.Length) / 2).Take(1));
-                    var value = Convert.ToHexString(message.Skip(startPos).Take(dataSize).ToArray());
+                    var startPos = (pos + obisCode.ObisCode.Length + 2) / 2;
+                    var tmpHexValue = Convert.ToHexString(message.Skip((pos + obisCode.ObisCode.Length) / 2).Take(1).ToArray());
                     
+                    dataSize = int.Parse(tmpHexValue, System.Globalization.NumberStyles.HexNumber);
+
+                    tmpHexValue = Convert.ToHexString(message.Skip(startPos).Take(dataSize).ToArray());
+                    var value = Encoding.UTF8.GetString(StringToByteArray(tmpHexValue));
+                    Console.WriteLine($"String value: {value} : {tmpHexValue} ");
+
                     return (T) Convert.ChangeType(value, typeof(T));
                 }
                 else if (typeof(T) == typeof(float))
