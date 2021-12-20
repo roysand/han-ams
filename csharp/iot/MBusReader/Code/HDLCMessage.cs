@@ -40,7 +40,7 @@ namespace MBusReader.Code
 
         public HDLCData()
         {
-
+            Value = -1;
         }
 
         public HDLCData(string name, string description, string obisCode, string unit, float value)

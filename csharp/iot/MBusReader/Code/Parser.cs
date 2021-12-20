@@ -98,15 +98,20 @@ namespace MessageParser.Code
                 if (obisCode.DataTypeName == "float")
                 {
                     var value = FindObject<float>(obisCode, messageAsString, data);
-                    hdlcData.Value = value;
-                    hdlcMessage.Data.Add(hdlcData);
+                    if (value >= 0)
+                    {
+                        hdlcData.Value = value;
+                        hdlcMessage.Data.Add(hdlcData);
+                    }
                 }
                 else if (obisCode.DataTypeName == "string")
                 {
                     var value = FindObject<string>(obisCode, messageAsString, data);
-                    hdlcData.Description = value;
-                    hdlcMessage.Data.Add(hdlcData);
-                    
+                    if (!String.IsNullOrWhiteSpace(value))
+                    {
+                        hdlcData.Description = value;
+                        hdlcMessage.Data.Add(hdlcData);
+                    }
                 }
             }
 
@@ -138,7 +143,6 @@ namespace MessageParser.Code
 
                     tmpHexValue = Convert.ToHexString(message.Skip(startPos).Take(dataSize).ToArray());
                     var value = Encoding.UTF8.GetString(StringToByteArray(tmpHexValue));
-                    Console.WriteLine($"String value: {value} : {tmpHexValue} ");
 
                     return (T) Convert.ChangeType(value, typeof(T));
                 }
