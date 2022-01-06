@@ -67,8 +67,10 @@ namespace MessageParser.Code
 
         public IHDLCMessage Parse(List<byte> data)
         {
+            // TODO: Should not be needed!!
             if (data.Count < 40)
             {
+                Console.WriteLine("ERROR!! Message to short!!");
                 return new HDLCMessage();
             }
             
