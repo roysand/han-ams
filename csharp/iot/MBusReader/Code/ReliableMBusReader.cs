@@ -97,7 +97,7 @@ namespace MBusReader.Code
                     message.Add(b);
                     
                     var raw = new RawMessage();
-                    raw.Raw = string.Concat(Array.ConvertAll(message.ToArray(), x => x.ToString("X2")));
+                    raw.Raw = string.Concat(Array.ConvertAll(message.ToArray(), x => string.Format($"{x.ToString("X2")} ")));
                     await SendToQueue(raw);
                     
                     if (PrintToScreen)
