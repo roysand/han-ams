@@ -1,19 +1,19 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.30717.126
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31912.275
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MBusReader", "MBusReader\MBusReader.csproj", "{A00E9E52-1EFE-4F41-AE8E-858D44AC1247}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JustRead", "JustRead\JustRead.csproj", "{17DBB73C-F5F6-437A-ABA9-9AB697DECA62}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JustRead", "JustRead\JustRead.csproj", "{17DBB73C-F5F6-437A-ABA9-9AB697DECA62}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MessageParser", "MessageParser\MessageParser.csproj", "{3DD844D2-B411-4B65-84DE-AE9250618998}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MessageParser", "MessageParser\MessageParser.csproj", "{3DD844D2-B411-4B65-84DE-AE9250618998}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JustParse", "JustParse\JustParse.csproj", "{76ED0F88-4752-4D9C-A859-C077B854B5E1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JustParse", "JustParse\JustParse.csproj", "{76ED0F88-4752-4D9C-A859-C077B854B5E1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MessageService", "MessageService\MessageService.csproj", "{A5066648-5C36-4C98-AE19-0E69BFB6BBD7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MessageService", "MessageService\MessageService.csproj", "{A5066648-5C36-4C98-AE19-0E69BFB6BBD7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestSendMessage", "TestSendMessage\TestSendMessage.csproj", "{82320CA2-75E1-4E3D-BE7E-5BFB7331A413}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reader.Console", "Reader.Console\Reader.Console.csproj", "{CADC705B-061D-489E-8A41-D8189B2BBCF6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -41,10 +41,10 @@ Global
 		{A5066648-5C36-4C98-AE19-0E69BFB6BBD7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A5066648-5C36-4C98-AE19-0E69BFB6BBD7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A5066648-5C36-4C98-AE19-0E69BFB6BBD7}.Release|Any CPU.Build.0 = Release|Any CPU
-		{82320CA2-75E1-4E3D-BE7E-5BFB7331A413}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{82320CA2-75E1-4E3D-BE7E-5BFB7331A413}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{82320CA2-75E1-4E3D-BE7E-5BFB7331A413}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{82320CA2-75E1-4E3D-BE7E-5BFB7331A413}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CADC705B-061D-489E-8A41-D8189B2BBCF6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CADC705B-061D-489E-8A41-D8189B2BBCF6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CADC705B-061D-489E-8A41-D8189B2BBCF6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CADC705B-061D-489E-8A41-D8189B2BBCF6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
