@@ -11,6 +11,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MessageParser", "MessagePar
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JustParse", "JustParse\JustParse.csproj", "{76ED0F88-4752-4D9C-A859-C077B854B5E1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MessageService", "MessageService\MessageService.csproj", "{A5066648-5C36-4C98-AE19-0E69BFB6BBD7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestSendMessage", "TestSendMessage\TestSendMessage.csproj", "{82320CA2-75E1-4E3D-BE7E-5BFB7331A413}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +37,14 @@ Global
 		{76ED0F88-4752-4D9C-A859-C077B854B5E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{76ED0F88-4752-4D9C-A859-C077B854B5E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{76ED0F88-4752-4D9C-A859-C077B854B5E1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A5066648-5C36-4C98-AE19-0E69BFB6BBD7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A5066648-5C36-4C98-AE19-0E69BFB6BBD7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A5066648-5C36-4C98-AE19-0E69BFB6BBD7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A5066648-5C36-4C98-AE19-0E69BFB6BBD7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{82320CA2-75E1-4E3D-BE7E-5BFB7331A413}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{82320CA2-75E1-4E3D-BE7E-5BFB7331A413}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{82320CA2-75E1-4E3D-BE7E-5BFB7331A413}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{82320CA2-75E1-4E3D-BE7E-5BFB7331A413}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

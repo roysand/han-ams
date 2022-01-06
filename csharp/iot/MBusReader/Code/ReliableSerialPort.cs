@@ -49,7 +49,9 @@ namespace ExtendedSerialPort
                     Console.WriteLine($"OptimizedSerialPort exception! {exception.Message}");
                 }
                 kickoffRead();
-            }, null)); kickoffRead();
+            }, null)); 
+            
+            kickoffRead();
         }
         public delegate void DataReceivedEventHandler(object sender, DataReceivedArgs e);
         public event DataReceivedEventHandler DataReady;
