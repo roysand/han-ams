@@ -93,17 +93,20 @@ namespace MBusReader.Code
                     _status = STATUS.Searching;
                     message.Add(b);
                     
-                    // Console.WriteLine($"{b.ToString("X2")}");
+                    var raw = new RawMessage();
+                    raw.Raw = string.Concat(Array.ConvertAll(message.ToArray(), x => x.ToString("X2")));
+                    
                     if (PrintToScreen)
                     {
-                        message.ForEach(item => Console.Write($"{item.ToString("X2")} "));
+                        //message.ForEach(item => Console.Write($"{item.ToString("X2")} "));
+                        Console.WriteLine(raw.Raw);
                     }
 
                     if (_bw != null)
                     {
                         message.ForEach(item => _bw.Write(item));
                     }
-
+                    
                     IHDLCMessage hdlcMessage = new HDLCMessage();
                     var parser = new Parser();
                     hdlcMessage = parser.Parse(message.Skip(1).Take(message.Count-1).ToList());
