@@ -67,12 +67,12 @@ namespace MessageParser.Code
 
         public IHDLCMessage Parse(List<byte> data)
         {
+            if (data.Count < 40)
+            {
+                return new HDLCMessage();
+            }
+            
             _hdlcMessage = new HDLCMessage();
-
-            // var pkt = BitConverter.ToString(data.ToArray()).Replace("-","");
-
-            // Byte 17 is datatype and length (elements)
-            // Console(WriteLine($"Parser: {pkt}");
             IHDLCMessage hdlcMessage = new HDLCMessage();
 
             hdlcMessage.Header.Timestamp = DateTime.Now;
@@ -80,7 +80,6 @@ namespace MessageParser.Code
             hdlcMessage.Header.DataType = data[17];
             hdlcMessage.Header.Hdlc_Length = data.Count();
             hdlcMessage.Header.SecondsSinceEpoc = ConvertSecondsToEpoc(DateTime.Now);
-
 
             data = data.Skip(18).ToList();
 
