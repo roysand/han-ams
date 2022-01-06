@@ -131,6 +131,7 @@ namespace MBusReader.Code
         {
             IMessagePublisher publisher = new AzureServiceBusPublisher();
             await publisher.Publish(message);
+            Console.WriteLine("Send message to Queue");
         }
 
         public byte[] Pull()
