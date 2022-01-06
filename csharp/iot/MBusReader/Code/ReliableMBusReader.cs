@@ -4,10 +4,13 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.Json;
+using System.Threading.Tasks;
 using ExtendedSerialPort;
 using MBusReader.Contracts;
 using MessageParser;
 using MessageParser.Code;
+using MessageService.Contracts;
+using MessageService.Services;
 
 namespace MBusReader.Code
 {
@@ -67,7 +70,7 @@ namespace MBusReader.Code
         }
 
         // (delegate) void System.IO.Ports.SerialDataReceivedEventHandler(object sender, SerialDataReceivedEventArgs e
-        private void DataReceivedHandler(object sender, DataReceivedArgs e)
+        private async void DataReceivedHandler(object sender, DataReceivedArgs e)
         {
             // var serialPort = (SerialPort) sender;
             
@@ -95,10 +98,10 @@ namespace MBusReader.Code
                     
                     var raw = new RawMessage();
                     raw.Raw = string.Concat(Array.ConvertAll(message.ToArray(), x => x.ToString("X2")));
+                    await SendToQueue(raw);
                     
                     if (PrintToScreen)
                     {
-                        //message.ForEach(item => Console.Write($"{item.ToString("X2")} "));
                         Console.WriteLine(raw.Raw);
                     }
 
@@ -122,6 +125,12 @@ namespace MBusReader.Code
                     message.Add(b);
                 }
             }
+        }
+
+        private async Task SendToQueue(IRawMessage message)
+        {
+            IMessagePublisher publisher = new AzureServiceBusPublisher();
+            await publisher.Publish(message);
         }
 
         public byte[] Pull()
