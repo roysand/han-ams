@@ -11,7 +11,7 @@ namespace MessageService.Services
         private string ConnectionString =
             "Endpoint=sb://sandaas-iot.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=r3s1U4/lzrCM2kF8BaLOIinQVWbwnPUlYhd91PjRYdQ=";
         private string TopicName = "ams";
-        private string SubscriptionFilter = "raw";
+        private string SubscriptionFilter = "measurement_raw";
         
         private readonly ServiceBusSender _sender;
         private readonly ServiceBusClient _client;
