@@ -7,6 +7,7 @@ namespace MBusReader.Code
     {
         public DateTime TimeStamp { get; set; } = DateTime.Now;
         public Guid Id { get; set; } = Guid.NewGuid();
+        public string Location { get; set; }
         public string Raw { get; set; }
     }
 }

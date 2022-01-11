@@ -95,10 +95,16 @@ namespace MBusReader.Code
                     // End of message
                     _status = STATUS.Searching;
                     message.Add(b);
+
+                    var raw = new RawMessage()
+                    {
+                        Location = "Home",
+                        Id = Guid.NewGuid(),
+                        TimeStamp = DateTime.Now
+                    };
                     
-                    var raw = new RawMessage();
                     raw.Raw = string.Concat(Array.ConvertAll(message.ToArray(), x => string.Format($"{x.ToString("X2")} ")));
-                    // await SendToQueue(raw);
+                    await SendToQueue(raw);
                     
                     if (PrintToScreen)
                     {
