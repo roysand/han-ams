@@ -17,7 +17,8 @@ namespace AzureServiceBus
     public class ReadQueueSaveToDb
     {
         private readonly ILogger<ReadQueueSaveToDb> _logger;
-        private readonly string QueueConnectionString = "Endpoint=sb://sandaas-iot.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=r3s1U4/lzrCM2kF8BaLOIinQVWbwnPUlYhd91PjRYdQ=";
+        // TODO Add to configuration file
+        private readonly string QueueConnectionString = "";
 
         public ReadQueueSaveToDb(ILogger<ReadQueueSaveToDb> log)
         {
@@ -31,7 +32,8 @@ namespace AzureServiceBus
             try
             {
                 var raw = JsonSerializer.Deserialize<RawMessage>(mySbMsg);
-                var connectionString = "Server=tcp:sandaasiot.database.windows.net,1433;Initial Catalog=sandaas_iot;Persist Security Info=False;User ID=sandaasiot;Password=RpKWI=WR7U9#uDw>q.4K;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
+                // TODO: Add to configuration file
+                var connectionString = "";
                 Console.WriteLine($"Message len: {mySbMsg.Length} Message: {mySbMsg}");
                 using (SqlConnection conn = new SqlConnection(connectionString))
                 {
