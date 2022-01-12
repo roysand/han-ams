@@ -45,7 +45,7 @@ namespace MessageParser.Code
                 Scaler = -3,
                 Name = "Active power", 
                 Size = 4, 
-                DataTypeName = "float"
+                DataTypeName = "decimal"
             };
             
             _obisCode.Add(obisCode) ;
@@ -96,9 +96,9 @@ namespace MessageParser.Code
                     Unit = obisCode.Unit
                 };
                 
-                if (obisCode.DataTypeName == "float")
+                if (obisCode.DataTypeName == "decimal")
                 {
-                    var value = FindObject<float>(obisCode, messageAsString, data);
+                    var value = FindObject<decimal>(obisCode, messageAsString, data);
                     if (value >= 0)
                     {
                         hdlcData.Value = value;
@@ -147,7 +147,7 @@ namespace MessageParser.Code
 
                     return (T) Convert.ChangeType(value, typeof(T));
                 }
-                else if (typeof(T) == typeof(float))
+                else if (typeof(T) == typeof(decimal))
                 {
                     var startPos = pos + obisCode.ObisCode.Length + 2;
                     var value = Convert.ToHexString(message.Skip(startPos/2).Take(dataSize).ToArray());

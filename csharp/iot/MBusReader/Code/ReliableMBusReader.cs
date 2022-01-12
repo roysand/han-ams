@@ -98,6 +98,7 @@ namespace MBusReader.Code
 
                     var raw = new RawMessage()
                     {
+                       // TODO: Remove constant HOME
                         Location = "Home",
                         Id = Guid.NewGuid(),
                         TimeStamp = DateTime.Now
@@ -117,9 +118,9 @@ namespace MBusReader.Code
                         message.ForEach(item => _bw.Write(item));
                     }
                     
-                    IHDLCMessage hdlcMessage = new HDLCMessage();
+//                     IHDLCMessage hdlcMessage = new HDLCMessage();
                     var parser = new Parser();
-                    hdlcMessage = parser.Parse(message.Skip(1).Take(message.Count-1).ToList());
+                    var hdlcMessage = parser.Parse(message.Skip(1).Take(message.Count-1).ToList());
                     
                     if (PrintToScreen && hdlcMessage.Data.Count > 0)
                     {

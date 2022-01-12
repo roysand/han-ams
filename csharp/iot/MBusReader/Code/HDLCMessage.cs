@@ -36,14 +36,14 @@ namespace MBusReader.Code
         public string Description { get; set; }
         public string ObisCode { get; set; }
         public string Unit { get; set; }
-        public float Value { get; set; }
+        public decimal Value { get; set; }
 
         public HDLCData()
         {
             Value = -1;
         }
 
-        public HDLCData(string name, string description, string obisCode, string unit, float value)
+        public HDLCData(string name, string description, string obisCode, string unit, decimal value)
         {
             Name = name;
             Description = description;

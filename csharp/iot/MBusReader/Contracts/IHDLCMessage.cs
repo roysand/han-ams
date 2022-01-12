@@ -26,6 +26,6 @@ namespace MBusReader.Contracts
         string Description { get; set; }
         string ObisCode { get; set; }
         string Unit { get; set; }
-        float Value { get; set; }
+        decimal Value { get; set; }
     }
 }

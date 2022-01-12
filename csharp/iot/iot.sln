@@ -13,7 +13,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JustParse", "JustParse\Just
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MessageService", "MessageService\MessageService.csproj", "{A5066648-5C36-4C98-AE19-0E69BFB6BBD7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reader.Console", "Reader.Console\Reader.Console.csproj", "{CADC705B-061D-489E-8A41-D8189B2BBCF6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Reader.Console", "Reader.Console\Reader.Console.csproj", "{CADC705B-061D-489E-8A41-D8189B2BBCF6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AzureServiceBus", "AzureServiceBus\AzureServiceBus.csproj", "{5168F735-AA2F-49D1-B05D-955B5EF6F00A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +47,10 @@ Global
 		{CADC705B-061D-489E-8A41-D8189B2BBCF6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CADC705B-061D-489E-8A41-D8189B2BBCF6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CADC705B-061D-489E-8A41-D8189B2BBCF6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5168F735-AA2F-49D1-B05D-955B5EF6F00A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5168F735-AA2F-49D1-B05D-955B5EF6F00A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5168F735-AA2F-49D1-B05D-955B5EF6F00A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5168F735-AA2F-49D1-B05D-955B5EF6F00A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
