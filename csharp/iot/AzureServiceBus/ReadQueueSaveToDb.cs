@@ -9,7 +9,7 @@ using MBusReader.Code;
 using MBusReader.Contracts;
 using MessageParser.Code;
 using Microsoft.Azure.WebJobs;
-using Microsoft.Azure.WebJobs.Host;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
 namespace AzureServiceBus
@@ -17,9 +17,12 @@ namespace AzureServiceBus
     public class ReadQueueSaveToDb
     {
         private readonly ILogger<ReadQueueSaveToDb> _logger;
-        public ReadQueueSaveToDb(ILogger<ReadQueueSaveToDb> log)
+        private readonly IConfiguration _configuration;
+
+        public ReadQueueSaveToDb(ILogger<ReadQueueSaveToDb> log, IConfiguration configuration)
         {
             _logger = log;
+            _configuration = configuration;
         }
 
         [FunctionName("ReadQueueSaveToDb")]
@@ -29,9 +32,9 @@ namespace AzureServiceBus
             try
             {
                 var raw = JsonSerializer.Deserialize<RawMessage>(mySbMsg);
-                // TODO: Add to configuration file
-                var connectionString = "";
-                Console.WriteLine($"Message len: {mySbMsg.Length} Message: {mySbMsg}");
+                var connectionString = System.Environment.GetEnvironmentVariable($"ConnectionStrings:SQLAZURECONNSTR_AMS",EnvironmentVariableTarget.Process);
+                connectionString = _configuration.GetConnectionString("SQLAZURECONNSTR_AMS");
+
                 using (SqlConnection conn = new SqlConnection(connectionString))
                 {
                     conn.Open();
@@ -92,9 +95,6 @@ namespace AzureServiceBus
             {
                 if (data.Value != -1)
                 {
-                    //cmd.Parameters.Add(new SqlParameter("@ValueNum", data.Value.ToString().Replace(",",".")));
-                    //cmd.Parameters.AddWithValue("@ValueNum", data.Value);
-                   // data.Value = 12.124M;
                     cmd.Parameters.Add("@ValueNum", SqlDbType.Float);
                     cmd.Parameters["@ValueNum"].Value = data.Value;
                 }
