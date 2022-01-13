@@ -17,9 +17,6 @@ namespace AzureServiceBus
     public class ReadQueueSaveToDb
     {
         private readonly ILogger<ReadQueueSaveToDb> _logger;
-        // TODO Add to configuration file
-        private readonly string QueueConnectionString = "";
-
         public ReadQueueSaveToDb(ILogger<ReadQueueSaveToDb> log)
         {
             _logger = log;

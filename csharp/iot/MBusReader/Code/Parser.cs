@@ -67,53 +67,60 @@ namespace MessageParser.Code
 
         public IHDLCMessage Parse(List<byte> data)
         {
-            // TODO: Should not be needed!!
-            if (data.Count < 40)
-            {
-                Console.WriteLine("ERROR!! Message to short!!");
-                return new HDLCMessage();
-            }
-            
-            _hdlcMessage = new HDLCMessage();
             IHDLCMessage hdlcMessage = new HDLCMessage();
 
-            hdlcMessage.Header.Timestamp = DateTime.Now;
-            hdlcMessage.Header.ObjectCount = data[18];
-            hdlcMessage.Header.DataType = data[17];
-            hdlcMessage.Header.Hdlc_Length = data.Count();
-            hdlcMessage.Header.SecondsSinceEpoc = ConvertSecondsToEpoc(DateTime.Now);
-
-            data = data.Skip(18).ToList();
-
-            var messageAsString = string.Concat( data.SelectMany( b => new int[] { b >> 4, b & 0xF }).Select( b => (char)(55 + b + (((b-10)>>31)&-7))) );
-
-            foreach (var obisCode in _obisCode)
+            try
             {
-                var hdlcData = new HDLCData()
+                // TODO: Should not be needed!!
+                if (data.Count < 40)
                 {
-                    ObisCode = obisCode.ObisCode,
-                    Name = obisCode.Name,
-                    Unit = obisCode.Unit
-                };
+                    Console.WriteLine("ERROR!! Message to short!!");
+                    return new HDLCMessage();
+                }
                 
-                if (obisCode.DataTypeName == "decimal")
+                hdlcMessage.Header.Timestamp = DateTime.Now;
+                hdlcMessage.Header.ObjectCount = data[18];
+                hdlcMessage.Header.DataType = data[17];
+                hdlcMessage.Header.Hdlc_Length = data.Count();
+                hdlcMessage.Header.SecondsSinceEpoc = ConvertSecondsToEpoc(DateTime.Now);
+
+                data = data.Skip(18).ToList();
+
+                var messageAsString = string.Concat( data.SelectMany( b => new int[] { b >> 4, b & 0xF }).Select( b => (char)(55 + b + (((b-10)>>31)&-7))) );
+
+                foreach (var obisCode in _obisCode)
                 {
-                    var value = FindObject<decimal>(obisCode, messageAsString, data);
-                    if (value >= 0)
+                    var hdlcData = new HDLCData()
                     {
-                        hdlcData.Value = value;
-                        hdlcMessage.Data.Add(hdlcData);
+                        ObisCode = obisCode.ObisCode,
+                        Name = obisCode.Name,
+                        Unit = obisCode.Unit
+                    };
+                
+                    if (obisCode.DataTypeName == "decimal")
+                    {
+                        var value = FindObject<decimal>(obisCode, messageAsString, data);
+                        if (value >= 0)
+                        {
+                            hdlcData.Value = value;
+                            hdlcMessage.Data.Add(hdlcData);
+                        }
+                    }
+                    else if (obisCode.DataTypeName == "string")
+                    {
+                        var value = FindObject<string>(obisCode, messageAsString, data);
+                        if (!String.IsNullOrWhiteSpace(value))
+                        {
+                            hdlcData.Description = value;
+                            hdlcMessage.Data.Add(hdlcData);
+                        }
                     }
                 }
-                else if (obisCode.DataTypeName == "string")
-                {
-                    var value = FindObject<string>(obisCode, messageAsString, data);
-                    if (!String.IsNullOrWhiteSpace(value))
-                    {
-                        hdlcData.Description = value;
-                        hdlcMessage.Data.Add(hdlcData);
-                    }
-                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                return new HDLCMessage();
             }
 
             return hdlcMessage;
