@@ -69,13 +69,8 @@ namespace MBusReader.Code
             _stream = _serialPort.BaseStream;
         }
 
-        // (delegate) void System.IO.Ports.SerialDataReceivedEventHandler(object sender, SerialDataReceivedEventArgs e
         private async void DataReceivedHandler(object sender, DataReceivedArgs e)
         {
-            // var serialPort = (SerialPort) sender;
-            
-            // serialPort.Read(data, 0, data.Length);
-
             foreach (var b in e.Data)
             {
                 if ((b == 0x7E) && (_status == STATUS.Searching))
@@ -84,7 +79,6 @@ namespace MBusReader.Code
                     _status = STATUS.Data;
                     message.Clear();
                     message.Add(b);
-                    // Console.Write($"{b.ToString("X2")} ");
                 }
                 else if ((b == 0x7E) && _status == STATUS.Data && message.Count == 1 && message[0] == 0x7E)
                 {

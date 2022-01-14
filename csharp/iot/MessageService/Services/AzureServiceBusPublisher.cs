@@ -8,6 +8,7 @@ namespace MessageService.Services
 { 
     public class AzureServiceBusPublisher : IMessagePublisher
     {
+        // TODO: Remove connectionstrin from code!! IMPORTANT
         private string ConnectionString =
             "Endpoint=sb://sandaas-iot.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=r3s1U4/lzrCM2kF8BaLOIinQVWbwnPUlYhd91PjRYdQ=";
         private string TopicName = "ams";
