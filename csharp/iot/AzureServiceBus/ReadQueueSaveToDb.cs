@@ -67,76 +67,12 @@ namespace AzureServiceBus
                 }
                 
                 result += await _detailRepository.SaveChangesAsync(cancellationToken);
-
-                // var connectionString = _configuration.GetConnectionString("SQLAZURECONNSTR_AMS");
-                //
-                // using (SqlConnection conn = new SqlConnection(connectionString))
-                // {
-                //     conn.Open();
-                //     // var rows = await SaveToRawTable(raw, conn);
-                //     var hdlcMessage1 = ParseMessage(raw.Raw);
-                //
-                //     foreach (var data in hdlcMessage1.Data)
-                //     {
-                //         var rows = await SaveToDetailTable(conn, data, raw);
-                //     }
-                //
-                //     if (hdlcMessage.Data.Count > 0)
-                //     {
-                //         Console.WriteLine(JsonSerializer.Serialize(hdlcMessage));
-                //     }
-                // }
             }
             catch(Exception ex)
             {
                 _logger.LogError(ex.Message); 
                 Console.WriteLine(ex.Message);
             }
-        }
-
-        private async Task<int> SaveToRawTable(RawData raw, SqlConnection conn)
-        {
-            int rows;
-
-            var sql = "Insert Into dbo.raw (MeasurementId, TimeStamp, Location, Raw, IsNew) " +
-            $"Values('{raw.MeasurementId}', '{raw.TimeStamp.ToString("yyyy-MM-dd HH:mm:ss.fffff")}', '{raw.Location}', '{ raw.Raw}', 1)";
-
-            using (SqlCommand cmd = new SqlCommand(sql, conn))
-            {
-                rows = await cmd.ExecuteNonQueryAsync();
-            }
-
-            return rows;
-        }
-
-        private async Task<int> SaveToDetailTable(SqlConnection conn, IHDLCData data, RawData rawMessage)
-        {
-            int rows;
-
-            var sql = "Insert Into dbo.Detail(Id,MeasurementId, TimeStamp, Location, Name, ObisCode, Unit, ValueStr, ValueNum) " +
-                $"Values ('{Guid.NewGuid()}', '{rawMessage.MeasurementId}', '{rawMessage.TimeStamp.ToString("yyyy-MM-dd HH:mm:ss.fffff")}', '{rawMessage.Location}', '{data.Name}', '{data.ObisCode}', '{data.Unit}'";
-
-            if (data.Value != -1)
-            {
-                sql += $",null, @ValueNum)";
-            }
-            else
-            {
-                sql += $",'{data.Name}',-1)";
-            }
-            Console.WriteLine(sql);
-
-            using (SqlCommand cmd = new SqlCommand(sql, conn))
-            {
-                if (data.Value != -1)
-                {
-                    cmd.Parameters.Add("@ValueNum", SqlDbType.Float);
-                    cmd.Parameters["@ValueNum"].Value = data.Value;
-                }
-                rows = await cmd.ExecuteNonQueryAsync();
-            }
-
-            return rows;
         }
 
         private IHDLCMessage ParseMessage(string messageAsRawString)

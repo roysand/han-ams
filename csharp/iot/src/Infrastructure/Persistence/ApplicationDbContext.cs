@@ -13,13 +13,7 @@ namespace Infrastructure.Persistence
         public ApplicationDbContext(IConfiguration configuration)
         {
             _configuration = configuration;
-        }
-        
-        // public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options, IConfiguration configuration)
-        //     : base(options)
-        // {
-        //     _configuration = configuration;
-        // }        
+        }     
 
         public virtual DbSet<RawData> RawSet { get; set; }
         public virtual DbSet<Detail> DetailSet { get; set; }
