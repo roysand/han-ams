@@ -1,4 +1,7 @@
-﻿using Microsoft.Azure.Functions.Extensions.DependencyInjection;
+﻿using Application.Common.Interfaces;
+using Infrastructure;
+using Infrastructure.Persistence;
+using Microsoft.Azure.Functions.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -20,5 +23,6 @@ public class Startup : FunctionsStartup
 
         IConfiguration configuration = configBuilder.Build();
         builder.Services.AddSingleton(configuration);
+        builder.Services.AddInfrastructure(configuration);
     }
 }

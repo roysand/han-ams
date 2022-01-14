@@ -4,7 +4,10 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Text.Json;
+using System.Threading;
 using System.Threading.Tasks;
+using Application.Common.Interfaces;
+using Domain.Entities;
 using MBusReader.Code;
 using MBusReader.Contracts;
 using MessageParser.Code;
@@ -18,39 +21,71 @@ namespace AzureServiceBus
     {
         private readonly ILogger<ReadQueueSaveToDb> _logger;
         private readonly IConfiguration _configuration;
+        private readonly IRawRepository<RawData> _rawRepository;
+        private readonly IDetailRepository<Detail> _detailRepository;
 
-        public ReadQueueSaveToDb(ILogger<ReadQueueSaveToDb> log, IConfiguration configuration)
+        public ReadQueueSaveToDb(ILogger<ReadQueueSaveToDb> log
+            , IConfiguration configuration
+            , IRawRepository<RawData> rawRepository
+            , IDetailRepository<Detail> detailRepository) 
         {
             _logger = log;
             _configuration = configuration;
+            _rawRepository = rawRepository;
+            _detailRepository = detailRepository;
         }
 
         [FunctionName("ReadQueueSaveToDb")]
         public async Task Run(
-        [ServiceBusTrigger("ams", "raw", Connection = "QueueConnection")] string mySbMsg)
+        [ServiceBusTrigger("ams", "raw", Connection = "QueueConnection")] string mySbMsg
+            ,CancellationToken cancellationToken)
         {
             try
             {
-                var raw = JsonSerializer.Deserialize<RawMessage>(mySbMsg);
-                var connectionString = System.Environment.GetEnvironmentVariable($"ConnectionStrings:SQLAZURECONNSTR_AMS",EnvironmentVariableTarget.Process);
-                connectionString = _configuration.GetConnectionString("SQLAZURECONNSTR_AMS");
-
-                using (SqlConnection conn = new SqlConnection(connectionString))
+                var raw = JsonSerializer.Deserialize<RawData>(mySbMsg);
+                _rawRepository.Add(raw);
+                var result = await _rawRepository.SaveChangesAsync(cancellationToken);
+                
+                var hdlcMessage = ParseMessage(raw.Raw);
+                foreach (var data in hdlcMessage.Data)
                 {
-                    conn.Open();
-                    var rows = await SaveToRawTable(raw, conn);
-                    var hdlcMessage = ParseMessage(raw.Raw);
-
-                    foreach (var data in hdlcMessage.Data)
+                    var detail = new Detail()
                     {
-                        rows = await SaveToDetailTable(conn, data, raw);
-                    }
-
-                    if (hdlcMessage.Data.Count > 0)
-                    {
-                        Console.WriteLine(JsonSerializer.Serialize(hdlcMessage));
-                    }
+                        MeasurementId = raw.MeasurementId,
+                        TimeStamp = raw.TimeStamp,
+                        Location = raw.Location,
+                        ObisCode = data.ObisCode,
+                        Unit = data.Unit,
+                        Name = data.Name,
+                        ValueStr = data.Name,
+                        ValueNum = data.Value
+                    };
+                    
+                    _detailRepository.Add(detail);
+                    
+                    Console.WriteLine(JsonSerializer.Serialize(detail));
                 }
+                
+                result += await _detailRepository.SaveChangesAsync(cancellationToken);
+
+                // var connectionString = _configuration.GetConnectionString("SQLAZURECONNSTR_AMS");
+                //
+                // using (SqlConnection conn = new SqlConnection(connectionString))
+                // {
+                //     conn.Open();
+                //     // var rows = await SaveToRawTable(raw, conn);
+                //     var hdlcMessage1 = ParseMessage(raw.Raw);
+                //
+                //     foreach (var data in hdlcMessage1.Data)
+                //     {
+                //         var rows = await SaveToDetailTable(conn, data, raw);
+                //     }
+                //
+                //     if (hdlcMessage.Data.Count > 0)
+                //     {
+                //         Console.WriteLine(JsonSerializer.Serialize(hdlcMessage));
+                //     }
+                // }
             }
             catch(Exception ex)
             {
@@ -59,12 +94,12 @@ namespace AzureServiceBus
             }
         }
 
-        private async Task<int> SaveToRawTable(RawMessage raw, SqlConnection conn)
+        private async Task<int> SaveToRawTable(RawData raw, SqlConnection conn)
         {
             int rows;
 
             var sql = "Insert Into dbo.raw (MeasurementId, TimeStamp, Location, Raw, IsNew) " +
-            $"Values('{raw.Id}', '{raw.TimeStamp.ToString("yyyy-MM-dd HH:mm:ss.fffff")}', '{raw.Location}', '{ raw.Raw}', 1)";
+            $"Values('{raw.MeasurementId}', '{raw.TimeStamp.ToString("yyyy-MM-dd HH:mm:ss.fffff")}', '{raw.Location}', '{ raw.Raw}', 1)";
 
             using (SqlCommand cmd = new SqlCommand(sql, conn))
             {
@@ -74,12 +109,12 @@ namespace AzureServiceBus
             return rows;
         }
 
-        private async Task<int> SaveToDetailTable(SqlConnection conn, IHDLCData data, IRawMessage rawMessage)
+        private async Task<int> SaveToDetailTable(SqlConnection conn, IHDLCData data, RawData rawMessage)
         {
             int rows;
 
-            var sql = "Insert Into dbo.Detail(MeasurementId, TimeStamp, Location, Name, ObisCode, Unit, ValueStr, ValueNum) " +
-                $"Values ('{rawMessage.Id}', '{rawMessage.TimeStamp.ToString("yyyy-MM-dd HH:mm:ss.fffff")}', '{rawMessage.Location}', '{data.Name}', '{data.ObisCode}', '{data.Unit}'";
+            var sql = "Insert Into dbo.Detail(Id,MeasurementId, TimeStamp, Location, Name, ObisCode, Unit, ValueStr, ValueNum) " +
+                $"Values ('{Guid.NewGuid()}', '{rawMessage.MeasurementId}', '{rawMessage.TimeStamp.ToString("yyyy-MM-dd HH:mm:ss.fffff")}', '{rawMessage.Location}', '{data.Name}', '{data.ObisCode}', '{data.Unit}'";
 
             if (data.Value != -1)
             {
