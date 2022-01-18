@@ -29,7 +29,7 @@ namespace AzureServiceBus
             _statRepository = statRepository;
         }
 
-        [FunctionName("HTTPStatistics")]
+        [FunctionName("stat")]
         public async Task<IActionResult> Run(
             [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req,
             ILogger log, CancellationToken cancellationToken)
