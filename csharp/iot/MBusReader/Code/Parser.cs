@@ -119,6 +119,7 @@ namespace MessageParser.Code
             }
             catch (Exception ex)
             {
+                // TODO: Write to Error Queue
                 Console.WriteLine(ex);
                 return new HDLCMessage();
             }

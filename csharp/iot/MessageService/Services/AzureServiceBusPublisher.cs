@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System;
+using System.Text;
 using System.Threading.Tasks;
 using Azure.Messaging.ServiceBus;
 using MessageService.Contracts;
@@ -37,16 +38,32 @@ namespace MessageService.Services
 
         public async Task Publish<T>(T obj)
         {
-            var objAsText = JsonConvert.SerializeObject(obj);
-            var message = new ServiceBusMessage(Encoding.UTF8.GetBytes(objAsText));
-            message.To = SubscriptionFilter;
-            await _sender.SendMessageAsync(message);
+            try
+            {
+                var objAsText = JsonConvert.SerializeObject(obj);
+                var message = new ServiceBusMessage(Encoding.UTF8.GetBytes(objAsText));
+                message.To = SubscriptionFilter;
+                await _sender.SendMessageAsync(message);
+            }
+            catch (Exception ex)
+            {
+                // TODO: Send to Error Queue
+                Console.WriteLine(ex);
+            }
         }
 
         public async Task Publish(string raw)
         {
-            var message = new ServiceBusMessage(Encoding.UTF8.GetBytes(raw));
-            await _sender.SendMessageAsync(message);
+            try
+            {
+                var message = new ServiceBusMessage(Encoding.UTF8.GetBytes(raw));
+                await _sender.SendMessageAsync(message);
+            }
+            catch (Exception ex)
+            {
+                // TODO: Send to Error Queue
+                Console.WriteLine(ex);
+            }
         }
     }
 }

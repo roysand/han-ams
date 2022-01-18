@@ -53,6 +53,7 @@ namespace MBusReader.Code
             _status = STATUS.Searching;
             if (_stream != null)
             {
+                // TODO: Remove write to logfile!
                 Console.WriteLine("Write to file");
                 _bw = new BinaryWriter(_stream);
             }

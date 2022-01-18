@@ -16,6 +16,7 @@ namespace Infrastructure
             services.AddTransient<ApplicationDbContext>();
             services.AddTransient<IRawRepository<RawData>, RawRepository>();
             services.AddTransient<IDetailRepository<Detail>, DetailRepository>();
+            services.AddTransient<IStatRepository<Detail>, StatRepository>();
             
             return services;
         }
