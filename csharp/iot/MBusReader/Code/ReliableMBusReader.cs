@@ -108,10 +108,10 @@ namespace MBusReader.Code
                         Console.WriteLine(raw.Raw);
                     }
 
-                    if (_bw != null)
-                    {
-                        message.ForEach(item => _bw.Write(item));
-                    }
+                    // if (_bw != null)
+                    // {
+                    //     message.ForEach(item => _bw.Write(item));
+                    // }
                     
 //                     IHDLCMessage hdlcMessage = new HDLCMessage();
                     var parser = new Parser();
