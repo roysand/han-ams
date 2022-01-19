@@ -72,61 +72,69 @@ namespace MBusReader.Code
 
         private async void DataReceivedHandler(object sender, DataReceivedArgs e)
         {
-            foreach (var b in e.Data)
+            // TODO: Look closer to this!
+            try
             {
-                if ((b == 0x7E) && (_status == STATUS.Searching))
+                foreach (var b in e.Data)
                 {
-                    // Beginning of a new message
-                    _status = STATUS.Data;
-                    message.Clear();
-                    message.Add(b);
-                }
-                else if ((b == 0x7E) && _status == STATUS.Data && message.Count == 1 && message[0] == 0x7E)
-                {
-                    Console.WriteLine("Skipping end of frame");
-                }
-                else if ((b == 0x7E) && _status == STATUS.Data)
-                {
-                    // End of message
-                    _status = STATUS.Searching;
-                    message.Add(b);
-
-                    var raw = new RawMessage()
+                    if ((b == 0x7E) && (_status == STATUS.Searching))
                     {
-                       // TODO: Remove constant HOME
-                        Location = "Home",
-                        Id = Guid.NewGuid(),
-                        TimeStamp = DateTime.Now
-                    };
-                    
-                    raw.Raw = string.Concat(Array.ConvertAll(message.ToArray(), x => string.Format($"{x.ToString("X2")} ")));
-                    raw.Raw = raw.Raw.Remove(raw.Raw.Length - 1, 1);
-                    await SendToQueue(raw);
-                    
-                    if (PrintToScreen)
-                    {
-                        Console.WriteLine(raw.Raw);
+                        // Beginning of a new message
+                        _status = STATUS.Data;
+                        message.Clear();
+                        message.Add(b);
                     }
+                    else if ((b == 0x7E) && _status == STATUS.Data && message.Count == 1 && message[0] == 0x7E)
+                    {
+                        Console.WriteLine("Skipping end of frame");
+                    }
+                    else if ((b == 0x7E) && _status == STATUS.Data)
+                    {
+                        // End of message
+                        _status = STATUS.Searching;
+                        message.Add(b);
 
-                    // if (_bw != null)
-                    // {
-                    //     message.ForEach(item => _bw.Write(item));
-                    // }
+                        var raw = new RawMessage()
+                        {
+                            // TODO: Remove constant HOME
+                            Location = "Home",
+                            Id = Guid.NewGuid(),
+                            TimeStamp = DateTime.Now
+                        };
+                    
+                        raw.Raw = string.Concat(Array.ConvertAll(message.ToArray(), x => string.Format($"{x.ToString("X2")} ")));
+                        raw.Raw = raw.Raw.Remove(raw.Raw.Length - 1, 1);
+                        await SendToQueue(raw);
+                    
+                        if (PrintToScreen)
+                        {
+                            Console.WriteLine(raw.Raw);
+                        }
+
+                        // if (_bw != null)
+                        // {
+                        //     message.ForEach(item => _bw.Write(item));
+                        // }
                     
 //                     IHDLCMessage hdlcMessage = new HDLCMessage();
-                    var parser = new Parser();
-                    var hdlcMessage = parser.Parse(message.Skip(1).Take(message.Count-1).ToList());
+                        var parser = new Parser();
+                        var hdlcMessage = parser.Parse(message.Skip(1).Take(message.Count-1).ToList());
                     
-                    if (PrintToScreen && hdlcMessage.Data.Count > 0)
+                        if (PrintToScreen && hdlcMessage.Data.Count > 0)
+                        {
+                            Console.WriteLine('\n' + JsonSerializer.Serialize(hdlcMessage));
+                        }
+                    }
+                    else if (_status == STATUS.Data)
                     {
-                        Console.WriteLine('\n' + JsonSerializer.Serialize(hdlcMessage));
+                        // Inside a message
+                        message.Add(b);
                     }
                 }
-                else if (_status == STATUS.Data)
-                {
-                    // Inside a message
-                    message.Add(b);
-                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
             }
         }
 
