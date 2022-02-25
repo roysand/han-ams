@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Domain.Entities;
 using MBusReader.Code;
 using MBusReader.Contracts;
 using MessageParser.Contracts;
@@ -39,6 +40,7 @@ namespace MessageParser.Code
 
             var obisCode = new OBISCode()
             {
+                ObisCodeId = ObisCodeId.PowerUsed,
                 ObisCode = "1-0:1.7.0.255",
                 ObjectCode = "0100010700FF",
                 Unit = "kW",
@@ -52,6 +54,7 @@ namespace MessageParser.Code
 
             obisCode = new OBISCode()
             {
+                ObisCodeId = ObisCodeId.MeterType,
                 ObisCode = "0-0:96.1.7.255",
                 ObjectCode = "0000600107FF",
                 Unit = "",
@@ -92,6 +95,7 @@ namespace MessageParser.Code
                 {
                     var hdlcData = new HDLCData()
                     {
+                        ObisCodeId = obisCode.ObisCodeId,
                         ObisCode = obisCode.ObisCode,
                         Name = obisCode.Name,
                         Unit = obisCode.Unit

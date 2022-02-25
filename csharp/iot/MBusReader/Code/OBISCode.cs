@@ -1,9 +1,11 @@
-﻿using MBusReader.Contracts;
+﻿using Domain.Entities;
+using MBusReader.Contracts;
 
 namespace MBusReader.Code
 {
     public class OBISCode : IOBISCode
     {
+        private ObisCodeId _obisCodeId;
         private string _obisCode;
         private string _objectCode;
         private string _unit;
@@ -12,6 +14,12 @@ namespace MBusReader.Code
         private int _size;
         private string _dataTypeName;
 
+        public ObisCodeId ObisCodeId
+        {
+            get => _obisCodeId;
+            set => _obisCodeId = value;
+        }
+        
         public string ObisCode
         {
             get => _obisCode;
