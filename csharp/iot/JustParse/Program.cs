@@ -8,7 +8,7 @@ namespace JustParse
 {
     class Progam
     {
-        private static string FileName = @"C:\shared\repo\han-ams\csharp\iot\JustRead\data\binary-2021-10-22-11-01.dat";
+        private static string FileName = @"C:\shared\repo\han-ams\csharp\iot\JustRead\data\binary-2021-11-16-22-59.dat";
         // private static string FileName = @"C:\shared\repo\han-ams\csharp\iot\JustRead\data\binary-2021-11-14-22-49.dat";
         private static byte Control = 0X7E;
         
@@ -46,7 +46,7 @@ namespace JustParse
                             }
                             
                             var result = parser.Parse(bytes);
-                            if (result.Data.Count > 0)
+                            if (result.Data.Count > 2)
                             {
                                 Console.Write($"({packageCounter}) - EpocTime: {result.Header.SecondsSinceEpoc} -");
                                 
@@ -56,9 +56,9 @@ namespace JustParse
                                 }
                             
                                 Console.WriteLine();
+                                packageCounter++;
                             }
                             
-                            packageCounter++;
                             
                             if (packageCounter > 1500)
                                 return;

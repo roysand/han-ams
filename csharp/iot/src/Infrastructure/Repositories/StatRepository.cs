@@ -56,7 +56,7 @@ namespace Infrastructure.Repositories
                 Value = powerByHourByDay.Sum(s => s.Value),
                 Description = "Daily sum",
                 Unit = "kW",
-                HoursTotal = powerByHourByDay
+                HoursTotal = powerByHourByDay.OrderBy(o => o.Date).ToList()
             };
         }
     }

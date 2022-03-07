@@ -48,8 +48,6 @@ namespace AzureServiceBus
 
             var result = await _statRepository.DailyTotal(DateTime.Now, cancellationToken);
             return new OkObjectResult(result);
-            
-            return new OkObjectResult(responseMessage);
         }
     }
 }
