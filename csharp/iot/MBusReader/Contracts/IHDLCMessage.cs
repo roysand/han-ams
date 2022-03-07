@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Text;
+using Domain.Entities;
 
 namespace MBusReader.Contracts
 {
@@ -25,6 +26,7 @@ namespace MBusReader.Contracts
         string Name { get; set; }
         string Description { get; set; }
         string ObisCode { get; set; }
+        ObisCodeId ObisCodeId { get; set; }
         string Unit { get; set; }
         decimal Value { get; set; }
     }

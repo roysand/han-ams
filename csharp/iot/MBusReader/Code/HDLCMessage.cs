@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Domain.Entities;
 using MBusReader.Contracts;
 
 namespace MBusReader.Code
@@ -35,6 +36,7 @@ namespace MBusReader.Code
         public string Name { get; set; }
         public string Description { get; set; }
         public string ObisCode { get; set; }
+        public ObisCodeId ObisCodeId { get; set; }
         public string Unit { get; set; }
         public decimal Value { get; set; }
 
@@ -43,11 +45,12 @@ namespace MBusReader.Code
             Value = -1;
         }
 
-        public HDLCData(string name, string description, string obisCode, string unit, decimal value)
+        public HDLCData(string name, string description, string obisCode, ObisCodeId obisCodeId, string unit, decimal value)
         {
             Name = name;
             Description = description;
             ObisCode = obisCode;
+            ObisCodeId = obisCodeId;
             Unit = unit;
             Value = value;
         }

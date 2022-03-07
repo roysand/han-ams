@@ -55,6 +55,7 @@ namespace AzureServiceBus
                         TimeStamp = raw.TimeStamp,
                         Location = raw.Location,
                         ObisCode = data.ObisCode,
+                        ObisCodeId = data.ObisCodeId,
                         Unit = data.Unit,
                         Name = data.Name,
                         ValueStr = data.Name,

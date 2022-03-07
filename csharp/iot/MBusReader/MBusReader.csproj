@@ -10,6 +10,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\MessageService\MessageService.csproj" />
+    <ProjectReference Include="..\src\Domain\Domain.csproj" />
   </ItemGroup>
 
 </Project>
