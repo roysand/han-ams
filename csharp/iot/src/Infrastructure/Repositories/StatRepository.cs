@@ -39,7 +39,7 @@ namespace Infrastructure.Repositories
             //     .AverageAsync(cancellationToken);
 
             var powerByHourByDay = await (from detail in _context.DetailSet
-                where detail.ObisCode == "1-0:1.7.0.255" && detail.TimeStamp.Date == DateTime.Now.Date
+                where detail.ObisCodeId == ObisCodeId.PowerUsed && detail.TimeStamp.Date == DateTime.Now.Date
                 group detail by new { date = detail.TimeStamp.Date, hour = detail.TimeStamp.Hour }
                 into g
                 select new HourTotalVm()

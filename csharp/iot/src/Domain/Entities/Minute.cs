@@ -8,6 +8,7 @@ namespace Domain.Entities
         public string Location { get; set; }
         public string Unit { get; set; }
         public decimal ValueNum { get; set; }
+        public Int16 Count { get; set; }
 
         public Minute()
         {

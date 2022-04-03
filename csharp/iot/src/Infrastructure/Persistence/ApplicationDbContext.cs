@@ -17,6 +17,8 @@ namespace Infrastructure.Persistence
 
         public virtual DbSet<RawData> RawSet { get; set; }
         public virtual DbSet<Detail> DetailSet { get; set; }
+        public virtual DbSet<Minute> MinuteSet { get; set; }
+        public virtual DbSet<Hour> HourSet { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
