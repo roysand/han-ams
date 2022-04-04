@@ -50,6 +50,20 @@ namespace Infrastructure.Persistence
                 entity.ToTable("detail");
                 entity.Property(e => e.ValueNum).HasPrecision(12,5);
             });
+
+            modelBuilder.Entity<Minute>(entity =>
+            {
+                entity.HasNoKey();
+                entity.ToTable(("Minute"));
+                entity.Property(e => e.ValueNum).HasPrecision(12, 5);
+            });
+            
+            modelBuilder.Entity<Hour>(entity =>
+            {
+                entity.HasNoKey();
+                entity.ToTable(("Hour"));
+                entity.Property(e => e.ValueNum).HasPrecision(12, 5);
+            });
             
             base.OnModelCreating(modelBuilder);
         }

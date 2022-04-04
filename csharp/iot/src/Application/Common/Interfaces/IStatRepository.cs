@@ -8,6 +8,6 @@ namespace Application.Common.Interfaces
     public interface IStatRepository<T> : IRepository<T>
     {
         Task<DailyTotalVm> DailyTotal(DateTime date, CancellationToken cancellationToken);
-
+        Task GeneratePowerUsageStatistics(CancellationToken cancellationToken);
     }
 }

@@ -28,7 +28,7 @@ public class TimerGeneratedStatistics
         CancellationToken cancellationToken)
     {
         log.LogInformation($"C# Timer trigger function executed at: {DateTime.UtcNow}");
-        var result = await _statRepository.DailyTotal(DateTime.Now, cancellationToken);
+        await _statRepository.GeneratePowerUsageStatistics(cancellationToken);
         log.LogInformation("Finished!");
     }
 }
