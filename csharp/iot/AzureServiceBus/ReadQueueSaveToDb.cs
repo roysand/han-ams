@@ -11,6 +11,7 @@ using Domain.Entities;
 using MBusReader.Code;
 using MBusReader.Contracts;
 using MessageParser.Code;
+using Microsoft.Azure.ServiceBus.Core;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -37,37 +38,39 @@ namespace AzureServiceBus
 
         [FunctionName("ReadQueueSaveToDb")]
         public async Task Run(
-        [ServiceBusTrigger("ams", "raw", Connection = "QueueConnection")] string mySbMsg
+        [ServiceBusTrigger("ams", "raw", Connection = "QueueConnection")] string[] mySbMsg
             ,CancellationToken cancellationToken)
         {
             try
             {
-                var raw = JsonSerializer.Deserialize<RawData>(mySbMsg);
-                _rawRepository.Add(raw);
-                var result = await _rawRepository.SaveChangesAsync(cancellationToken);
-                
-                var hdlcMessage = ParseMessage(raw.Raw);
-                foreach (var data in hdlcMessage.Data)
+                foreach (var msg in mySbMsg)
                 {
-                    var detail = new Detail()
+                    var raw = JsonSerializer.Deserialize<RawData>(msg);
+                    _rawRepository.Add(raw);
+                    var result = await _rawRepository.SaveChangesAsync(cancellationToken);
+                    
+                    var hdlcMessage = ParseMessage(raw.Raw);
+                    foreach (var data in hdlcMessage.Data)
                     {
-                        MeasurementId = raw.MeasurementId,
-                        TimeStamp = raw.TimeStamp,
-                        Location = raw.Location,
-                        ObisCode = data.ObisCode,
-                        ObisCodeId = data.ObisCodeId,
-                        Unit = data.Unit,
-                        Name = data.Name,
-                        ValueStr = data.Name,
-                        ValueNum = data.Value
-                    };
-                    
-                    _detailRepository.Add(detail);
-                    
-                    Console.WriteLine(JsonSerializer.Serialize(detail));
+                        var detail = new Detail()
+                        {
+                            MeasurementId = raw.MeasurementId,
+                            TimeStamp = raw.TimeStamp,
+                            Location = raw.Location,
+                            ObisCode = data.ObisCode,
+                            ObisCodeId = data.ObisCodeId,
+                            Unit = data.Unit,
+                            Name = data.Name,
+                            ValueStr = data.Name,
+                            ValueNum = data.Value
+                        };
+                        
+                        _detailRepository.Add(detail);
+                        
+                        Console.WriteLine(JsonSerializer.Serialize(detail));
+                    }
+                    result += await _detailRepository.SaveChangesAsync(cancellationToken);
                 }
-                
-                result += await _detailRepository.SaveChangesAsync(cancellationToken);
             }
             catch(Exception ex)
             {

@@ -10,5 +10,14 @@
                 "excludedTypes": "Request"
             }
         }
+    },
+    "extensions": {
+        "serviceBus": {
+            "batchOptions": {
+                "maxMessageCount": 48,
+                "operationTimeout": "00:02:00",
+                "autoComplete": true
+            }
+        }
     }
 }
