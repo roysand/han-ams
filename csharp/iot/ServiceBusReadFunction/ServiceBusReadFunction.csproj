@@ -22,6 +22,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\MBusReader\MBusReader.csproj" />
     <ProjectReference Include="..\src\Infrastructure\Infrastructure.csproj" />
   </ItemGroup>
 </Project>
