@@ -25,7 +25,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domain", "src\Domain\Domain
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure", "src\Infrastructure\Infrastructure.csproj", "{7738F03D-CAF2-4A8E-8299-D3F6EB9EF3D2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TimerGeneratedStatistics", "TimerGeneratedStatistics\TimerGeneratedStatistics.csproj", "{4CF995BA-42FD-4B89-92A0-736215EAADE1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TimerGeneratedStatistics", "TimerGeneratedStatistics\TimerGeneratedStatistics.csproj", "{4CF995BA-42FD-4B89-92A0-736215EAADE1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServiceBusReadFunction", "ServiceBusReadFunction\ServiceBusReadFunction.csproj", "{7D9F2EE4-79B4-43F1-BA05-7D4F1184614B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -77,6 +79,10 @@ Global
 		{4CF995BA-42FD-4B89-92A0-736215EAADE1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4CF995BA-42FD-4B89-92A0-736215EAADE1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4CF995BA-42FD-4B89-92A0-736215EAADE1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7D9F2EE4-79B4-43F1-BA05-7D4F1184614B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7D9F2EE4-79B4-43F1-BA05-7D4F1184614B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7D9F2EE4-79B4-43F1-BA05-7D4F1184614B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7D9F2EE4-79B4-43F1-BA05-7D4F1184614B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
