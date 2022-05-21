@@ -25,8 +25,8 @@ namespace Infrastructure.Persistence
             var sqlTimeout = 600;
             if (!optionsBuilder.IsConfigured)
             {
-                var connectinString = _configuration.GetConnectionString("SQLAZURECONNSTR_AMS");
-                optionsBuilder.UseSqlServer(connectinString,
+                var connectionString = _configuration.GetConnectionString("SQLAZURECONNSTR_AMS");
+                optionsBuilder.UseSqlServer(connectionString,
                         opts => opts.CommandTimeout(sqlTimeout))
                     .EnableSensitiveDataLogging(true)
                     .EnableDetailedErrors(true);
