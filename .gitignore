@@ -134,6 +134,7 @@ dmypy.json
 # User specific
 **/.idea/**/workspace.xml
 **/.idea/**/tasks.xml
+**/.idea/**/misc.xml
 **/.idea/shelf/*
 **/.idea/dictionaries
 **/.idea/httpRequests/
@@ -212,6 +213,7 @@ x64/
 *.log
 *.svclog
 *.scc
+*.bak
 
 # Visual C++ cache files
 ipch/
