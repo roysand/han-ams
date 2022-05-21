@@ -5,12 +5,13 @@ using Microsoft.Extensions.Logging;
 
 namespace ServiceBusReadFunction
 {
-    public class Function1
+    public class ServiceBusReadFunction
     {
-        [FunctionName("Function1")]
-        public void Run([TimerTrigger("0 */5 * * * *")]TimerInfo myTimer, ILogger log)
+        [FunctionName("ServiceBusReadFunction")]
+        public void Run([TimerTrigger("*/30 * * * * *")]TimerInfo myTimer, ILogger log)
         {
             log.LogInformation($"C# Timer trigger function executed at: {DateTime.Now}");
+            //var client = new 
         }
     }
 }

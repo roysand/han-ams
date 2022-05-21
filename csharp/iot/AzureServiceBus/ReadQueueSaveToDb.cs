@@ -32,7 +32,7 @@ namespace AzureServiceBus
         {
             _logger = log;
             _configuration = configuration;
-            _rawRepository = rawRepository;
+            _rawRepository = rawRepository;     
             _detailRepository = detailRepository;
         }
 
