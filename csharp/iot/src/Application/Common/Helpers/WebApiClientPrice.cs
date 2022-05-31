@@ -12,7 +12,7 @@ namespace Application.Common.Helpers
         {
             _configuration = configuration;
         }
-        
-        
+
+        public string Url { get; set; }
     }
 }
