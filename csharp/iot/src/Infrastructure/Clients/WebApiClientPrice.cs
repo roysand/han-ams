@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Net.Http;
-using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using Application.Common.Interfaces;
 using Microsoft.Extensions.Configuration;
 
-namespace Application.Common.Helpers
+namespace Infrastructure.Clients
 {
     public class WebApiClientPrice : HttpClient, IWebApiClientPrice
     {

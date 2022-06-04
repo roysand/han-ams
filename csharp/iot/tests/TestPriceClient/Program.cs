@@ -1,8 +1,8 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
-using System.Text;
 using System.Xml.Serialization;
 using Application.Common.Helpers;
+using Infrastructure.Clients;
 using Microsoft.Extensions.Configuration;
 
 Console.WriteLine("Hello, World!");
@@ -23,6 +23,14 @@ using (TextReader reader = new StringReader(content))
 }
 
 Console.WriteLine(result.ToString());
+var price = result.CreatePrice();
+
+var priceWithDetail = result.CreatePriceDetail();
+Console.WriteLine(price.ToString());
+
+Console.WriteLine($"Currency: {result.TimeSeries.currency_Unitname} Measure unit: {result.TimeSeries.price_Measure_Unitname}");
+
+
 Console.WriteLine($"Currency: {result.TimeSeries.currency_Unitname} Measure unit: {result.TimeSeries.price_Measure_Unitname}");
 var startDate = DateTime.Parse(result.periodtimeInterval.start).ToLocalTime();
 var endDate = DateTime.Parse(result.periodtimeInterval.end).ToLocalTime();

@@ -3,6 +3,7 @@ using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using System;
+using Microsoft.EntityFrameworkCore.ChangeTracking.Internal;
 
 namespace Infrastructure.Persistence
 {
@@ -19,6 +20,9 @@ namespace Infrastructure.Persistence
         public virtual DbSet<Detail> DetailSet { get; set; }
         public virtual DbSet<Minute> MinuteSet { get; set; }
         public virtual DbSet<Hour> HourSet { get; set; }
+        
+        public virtual DbSet<Price> PriceSet { get; set; }
+        public virtual DbSet<PriceDetail> PriceDetailSet { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -63,6 +67,22 @@ namespace Infrastructure.Persistence
                 entity.HasNoKey();
                 entity.ToTable(("Hour"));
                 entity.Property(e => e.ValueNum).HasPrecision(12, 5);
+            });
+
+            modelBuilder.Entity<Price>(entity =>
+            {
+                entity.HasKey((key => key.Id));
+                entity.ToTable("price");
+                entity.Property(p => p.Currency).HasMaxLength(5);
+                entity.Property(p => p.Unit).HasMaxLength(5);
+            });
+
+            modelBuilder.Entity<PriceDetail>(entity =>
+            {
+                entity.HasKey(key => key.Id);
+                entity.ToTable("PriceDetail");
+                entity.Property(p => p.PricePK).HasColumnName("price_pk");
+                entity.Property(e => e.Price).HasPrecision(12, 5);
             });
             
             base.OnModelCreating(modelBuilder);
