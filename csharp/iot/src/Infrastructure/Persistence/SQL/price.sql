@@ -1,3 +1,7 @@
+IF OBJECT_ID(N'dbo.price', N'U') IS NOT NULL
+    DROP TABLE [dbo].[price];
+GO
+
 create table dbo.price
 (
     Id  uniqueIdentifier not null,

@@ -11,7 +11,7 @@ namespace Domain.Entities
 
         public PriceDetail()
         {
-            
+            Id = Guid.NewGuid();
         }
     }
 }

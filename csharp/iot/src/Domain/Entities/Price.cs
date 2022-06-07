@@ -20,6 +20,7 @@ namespace Domain.Entities
         public Price()
         {
             PriceDetailList = new List<PriceDetail>();
+            Id = Guid.NewGuid();
         }
 
         public Price(Guid id, DateTime pricePeriod, string location, string currency, string unit, decimal average, decimal max, decimal min)

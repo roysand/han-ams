@@ -80,7 +80,7 @@ namespace Infrastructure.Persistence
             modelBuilder.Entity<PriceDetail>(entity =>
             {
                 entity.HasKey(key => key.Id);
-                entity.ToTable("PriceDetail");
+                entity.ToTable("price_detail");
                 entity.Property(p => p.PricePK).HasColumnName("price_pk");
                 entity.Property(e => e.Price).HasPrecision(12, 5);
             });

@@ -17,6 +17,8 @@ namespace Infrastructure
             services.AddTransient<IRawRepository<RawData>, RawRepository>();
             services.AddTransient<IDetailRepository<Detail>, DetailRepository>();
             services.AddTransient<IStatRepository<Detail>, StatRepository>();
+            services.AddTransient<IPriceRepository<Price>, PriceRepository>();
+            services.AddTransient<IPriceDetailRepository<PriceDetail>, PriceDetailRepository>();
             
             return services;
         }
