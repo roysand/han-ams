@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using System.Reflection.Metadata;
 using System.Security.Principal;
+using Domain.Common;
 
 namespace Domain.Entities
 {
-    public class Price
+    public class Price : AuditableEntity
     {
-        public Guid Id { get; set; }
+        public Guid PriceId { get; set; }
         public DateTime PricePeriod { get; set; }
         public string Location { get; set; }
         public string Currency { get; set; }
@@ -15,17 +16,18 @@ namespace Domain.Entities
         public decimal Average { get; set; }
         public decimal Max { get; set; }
         public decimal Min { get; set; }
+
         public List<PriceDetail> PriceDetailList { get; private set; }
 
         public Price()
         {
             PriceDetailList = new List<PriceDetail>();
-            Id = Guid.NewGuid();
+            PriceId = Guid.NewGuid();
         }
 
-        public Price(Guid id, DateTime pricePeriod, string location, string currency, string unit, decimal average, decimal max, decimal min)
+        public Price(Guid priceId, DateTime pricePeriod, string location, string currency, string unit, decimal average, decimal max, decimal min)
         {
-            Id = id;
+            PriceId = priceId;
             PricePeriod = pricePeriod;
             Location = location;
             Currency = currency;

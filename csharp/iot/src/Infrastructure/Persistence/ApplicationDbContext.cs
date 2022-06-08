@@ -3,6 +3,9 @@ using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using System;
+using System.Threading;
+using System.Threading.Tasks;
+using Domain.Common;
 using Microsoft.EntityFrameworkCore.ChangeTracking.Internal;
 
 namespace Infrastructure.Persistence
@@ -39,6 +42,26 @@ namespace Infrastructure.Persistence
             optionsBuilder.LogTo(Console.WriteLine);
             base.OnConfiguring(optionsBuilder);
         }
+        
+        public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken)
+        {
+            foreach (Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry<AuditableEntity> entry in ChangeTracker.Entries<AuditableEntity>())
+            {
+                switch (entry.State)
+                {
+                    case EntityState.Added:
+                        entry.Entity.Modified = DateTime.Now;
+                        break;
+            
+                    case EntityState.Modified:
+                        entry.Entity.Modified = DateTime.Now;
+                        break;
+                }
+            }
+            var result = await base.SaveChangesAsync(cancellationToken);
+
+            return result;
+        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -71,18 +94,20 @@ namespace Infrastructure.Persistence
 
             modelBuilder.Entity<Price>(entity =>
             {
-                entity.HasKey((key => key.Id));
+                entity.HasKey((key => key.PriceId));
                 entity.ToTable("price");
-                entity.Property(p => p.Currency).HasMaxLength(5);
-                entity.Property(p => p.Unit).HasMaxLength(5);
+                entity.Property(p => p.Currency).HasMaxLength(5).IsUnicode(false);
+                entity.Property(p => p.Unit).HasMaxLength(5).IsUnicode(false);
+
+                entity.HasMany(p => p.PriceDetailList)
+                    .WithOne(e => e.Price);
             });
 
             modelBuilder.Entity<PriceDetail>(entity =>
             {
-                entity.HasKey(key => key.Id);
+                entity.HasKey(key => key.PriceDetailId);
                 entity.ToTable("price_detail");
-                entity.Property(p => p.PricePK).HasColumnName("price_pk");
-                entity.Property(e => e.Price).HasPrecision(12, 5);
+                entity.Property(e => e.Amount).HasPrecision(12, 5);
             });
             
             base.OnModelCreating(modelBuilder);

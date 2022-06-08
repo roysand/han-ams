@@ -1,7 +1,14 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
+using Application.Common.Helpers;
 using Application.Common.Interfaces;
+using Domain.Entities;
 using Microsoft.Extensions.Configuration;
 
 namespace Infrastructure.Clients
@@ -9,27 +16,64 @@ namespace Infrastructure.Clients
     public class WebApiClientPrice : HttpClient, IWebApiClientPrice
     {
         private readonly IConfiguration _configuration;
+        private readonly IPriceRepository<Price> _priceRepository;
 
-        public WebApiClientPrice(IConfiguration configuration)
+        public WebApiClientPrice(IConfiguration configuration, IPriceRepository<Price> priceRepository)
         {
             _configuration = configuration;
-            Url =
-                "https://transparency.entsoe.eu/api?documentType=A44&in_Domain=10YNO-2--------T&out_Domain=10YNO-2--------T&periodStart={0}&periodEnd={1}&securityToken=6f932556-996f-45e9-b73a-4cb0159ef564";
+            _priceRepository = priceRepository;
+            UrlOrig = _configuration["DayAHeadUrl"];
+            // "https://transparency.entsoe.eu/api?documentType=A44&in_Domain=10YNO-2--------T&out_Domain=10YNO-2--------T&periodStart={0}&periodEnd={1}&securityToken=6f932556-996f-45e9-b73a-4cb0159ef564";
         }
 
-        public string Url { get; set; }
-        public async Task<HttpResponseMessage> GetPriceDayAhead()
-        {
-            int daysToAdd = 0;
+        public string UrlOrig { get; set; }
 
-            if (DateTime.Now.Hour > 13 && DateTime.Now.Minute > 15)
-            {
-                daysToAdd = 1;
-            }
-            Url = string.Format(Url,
-                DateTime.Now.Date.AddDays(daysToAdd).ToString("yyyyMMdd" + "0000"), DateTime.Now.Date.AddDays(1).ToString("yyyyMMdd" + "2300"));
+        public async Task<ICollection<Price>> GetPriceDayAhead()
+        {
+            var startDate = DateTime.Now;
+            var result = new List<Price>();
+            HttpResponseMessage responseMessage = null;
+            string content = string.Empty;
+            Publication_MarketDocument parsedResult = null;
+            Price price = null;
+            string url = string.Empty;
             
-            var result = await this.GetAsync(Url);
+            
+            if (DateTime.Now.Hour > 13) // && DateTime.Now.Minute > 15)
+            {
+                var lastPrice = _priceRepository.FindMaxPricePeriod();
+                if (lastPrice == null)
+                {
+                    startDate = new DateTime(2022, 1, 1);
+                }
+                else
+                {
+                    startDate = lastPrice.PricePeriod.AddDays(1);
+                }
+
+                var deltaDays = (DateTime.Now.AddDays(1) - startDate).Days;
+                for (int i = 0; i <= deltaDays; i++)
+                {
+                    url = string.Format(UrlOrig,
+                        startDate.AddDays(i).ToString("yyyyMMdd" + "0000"), startDate.AddDays(i).ToString("yyyyMMdd" + "2300"));
+
+                    responseMessage = await this.GetAsync(url);
+                    content = await responseMessage.Content.ReadAsStringAsync();
+                    
+                    using (TextReader reader = new StringReader(content))
+                    {
+                        var serializer = new XmlSerializer(typeof(Publication_MarketDocument));
+                        parsedResult = (Publication_MarketDocument)serializer.Deserialize(reader);
+                    }
+
+
+                    price = parsedResult.CreatePriceDetail();
+                    result.Add(price);
+                    
+                    Console.WriteLine($"{i}   {startDate.AddDays(i)} {price.PricePeriod}");
+                }
+            }
+
             return result;
         }
     }

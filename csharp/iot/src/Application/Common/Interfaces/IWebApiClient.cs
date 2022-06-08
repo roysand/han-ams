@@ -2,6 +2,6 @@
 {
     public interface IWebApiClient
     {
-        string Url { get; set; }
+        string UrlOrig { get; set; }
     }
 }
