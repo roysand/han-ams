@@ -28,6 +28,13 @@ var priceRepository = app.Services.GetService<IPriceRepository<Price>>();
 var client = new WebApiClientPrice(configuration, priceRepository);
 
 var response = await client.GetPriceDayAhead();
+
+foreach (var price in response)
+{
+    priceRepository.Add(price);
+    await priceRepository.SaveChangesAsync(new CancellationToken());
+}
+
 return;
 //
 // var content = await response.Content.ReadAsStringAsync();

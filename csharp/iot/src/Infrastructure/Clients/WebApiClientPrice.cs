@@ -38,20 +38,19 @@ namespace Infrastructure.Clients
             Price price = null;
             string url = string.Empty;
             
-            
-            if (DateTime.Now.Hour > 13) // && DateTime.Now.Minute > 15)
+            var lastPrice = _priceRepository.FindMaxPricePeriod();
+            if (lastPrice == null)
             {
-                var lastPrice = _priceRepository.FindMaxPricePeriod();
-                if (lastPrice == null)
-                {
-                    startDate = new DateTime(2022, 1, 1);
-                }
-                else
-                {
-                    startDate = lastPrice.PricePeriod.AddDays(1);
-                }
-
-                var deltaDays = (DateTime.Now.AddDays(1) - startDate).Days;
+                startDate = new DateTime(2022, 1, 1);
+            }
+            else
+            {
+                startDate = lastPrice.PricePeriod.AddDays(1);
+            }
+            
+            if ((DateTime.Now.Hour > 13) || (DateTime.Now - startDate).Days > 1) // && DateTime.Now.Minute > 15)
+            { 
+                var deltaDays = Math.Min(30, (DateTime.Now.AddDays(1) - startDate).Days);
                 for (int i = 0; i <= deltaDays; i++)
                 {
                     url = string.Format(UrlOrig,
@@ -59,18 +58,22 @@ namespace Infrastructure.Clients
 
                     responseMessage = await this.GetAsync(url);
                     content = await responseMessage.Content.ReadAsStringAsync();
-                    
-                    using (TextReader reader = new StringReader(content))
+
+                    try
                     {
-                        var serializer = new XmlSerializer(typeof(Publication_MarketDocument));
-                        parsedResult = (Publication_MarketDocument)serializer.Deserialize(reader);
-                    }
-
-
-                    price = parsedResult.CreatePriceDetail();
-                    result.Add(price);
+                        using (TextReader reader = new StringReader(content))
+                        {
+                            var serializer = new XmlSerializer(typeof(Publication_MarketDocument));
+                            parsedResult = (Publication_MarketDocument)serializer.Deserialize(reader);
+                        }
                     
-                    Console.WriteLine($"{i}   {startDate.AddDays(i)} {price.PricePeriod}");
+                        price = parsedResult.CreatePriceDetail();
+                        result.Add(price);
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine(e);
+                    }
                 }
             }
 
