@@ -12,7 +12,9 @@ create table dbo.price
     Unit varchar(5) not null,
     Average decimal(19, 5)  null,
     Max decimal(19, 5)  null,
-    Min decimal(19, 5) not null
+    Min decimal(19, 5) not null,
+    InDomain varchar(20) not null,
+    OutDomain varchar(20) not null
 )
     go
 

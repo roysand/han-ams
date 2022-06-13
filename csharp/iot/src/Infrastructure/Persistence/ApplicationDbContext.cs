@@ -98,6 +98,8 @@ namespace Infrastructure.Persistence
                 entity.ToTable("price");
                 entity.Property(p => p.Currency).HasMaxLength(5).IsUnicode(false);
                 entity.Property(p => p.Unit).HasMaxLength(5).IsUnicode(false);
+                entity.Property(p => p.InDomain).HasMaxLength(20).IsUnicode(false);
+                entity.Property(p => p.OutDomain).HasMaxLength(20).IsUnicode(false);
 
                 entity.HasMany(p => p.PriceDetailList)
                     .WithOne(e => e.Price);

@@ -10,6 +10,7 @@ using Application.Common.Helpers;
 using Application.Common.Interfaces;
 using Domain.Entities;
 using Microsoft.Extensions.Configuration;
+using Microsoft.VisualBasic.CompilerServices;
 
 namespace Infrastructure.Clients
 {
@@ -23,10 +24,22 @@ namespace Infrastructure.Clients
             _configuration = configuration;
             _priceRepository = priceRepository;
             UrlOrig = _configuration["DayAHeadUrl"];
-            // "https://transparency.entsoe.eu/api?documentType=A44&in_Domain=10YNO-2--------T&out_Domain=10YNO-2--------T&periodStart={0}&periodEnd={1}&securityToken=6f932556-996f-45e9-b73a-4cb0159ef564";
+            InDomain = _configuration["InDomain"];
+            OutDomain = _configuration["OutDomain"];
+            QueryParam = new System.Collections.Specialized.NameValueCollection()
+            {
+                { "in_domain", InDomain},
+                {"out_domain", OutDomain},
+                {"periodStart", "2022010100"},
+                {"periodEnd", "202201012300"},
+                {"securityToken","6f932556-996f-45e9-b73a-4cb0159ef564"}
+            };
         }
 
         public string UrlOrig { get; set; }
+        public string InDomain { get; set; }
+        public string OutDomain { get; set; }
+        public System.Collections.Specialized.NameValueCollection QueryParam { get; set; }
 
         public async Task<ICollection<Price>> GetPriceDayAhead()
         {
@@ -50,11 +63,14 @@ namespace Infrastructure.Clients
             
             if ((DateTime.Now.Hour > 13) || (DateTime.Now - startDate).Days > 1) // && DateTime.Now.Minute > 15)
             { 
-                var deltaDays = Math.Min(30, (DateTime.Now.AddDays(1) - startDate).Days);
+                var deltaDays = Math.Min(365, (DateTime.Now.AddDays(1) - startDate).Days);
                 for (int i = 0; i <= deltaDays; i++)
                 {
-                    url = string.Format(UrlOrig,
-                        startDate.AddDays(i).ToString("yyyyMMdd" + "0000"), startDate.AddDays(i).ToString("yyyyMMdd" + "2300"));
+                    QueryParam.Set("periodStart", startDate.AddDays(i).ToString("yyyyMMdd" + "0000"));
+                    QueryParam.Set("periodEnd", startDate.AddDays(i).ToString("yyyyMMdd" + "2300"));
+                    url = HttpParams.Add(UrlOrig, QueryParam);
+                    // url = string.Format(UrlOrig,
+                    //    startDate.AddDays(i).ToString("yyyyMMdd" + "0000"), startDate.AddDays(i).ToString("yyyyMMdd" + "2300"));
 
                     responseMessage = await this.GetAsync(url);
                     content = await responseMessage.Content.ReadAsStringAsync();

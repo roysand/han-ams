@@ -14,6 +14,8 @@ namespace Application.Common.Helpers
                 Currency = data.TimeSeries.currency_Unitname,
                 Unit = data.TimeSeries.price_Measure_Unitname,
                 PricePeriod = Convert.ToDateTime(DateTime.Parse(data.periodtimeInterval.start).ToLocalTime().ToString("yyyy-MM-dd")),
+                InDomain = data.TimeSeries.in_DomainmRID.Value,
+                OutDomain = data.TimeSeries.out_DomainmRID.Value,
                 Location = "HOME"
             };
 
