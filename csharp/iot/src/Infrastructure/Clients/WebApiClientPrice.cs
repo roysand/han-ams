@@ -23,7 +23,7 @@ namespace Infrastructure.Clients
         {
             _configuration = configuration;
             _priceRepository = priceRepository;
-            UrlOrig = _configuration["DayAHeadUrl"];
+            UrlBase = _configuration["DayAHeadUrl"];
             InDomain = _configuration["InDomain"];
             OutDomain = _configuration["OutDomain"];
             QueryParam = new System.Collections.Specialized.NameValueCollection()
@@ -36,7 +36,7 @@ namespace Infrastructure.Clients
             };
         }
 
-        public string UrlOrig { get; set; }
+        public string UrlBase { get; set; }
         public string InDomain { get; set; }
         public string OutDomain { get; set; }
         public System.Collections.Specialized.NameValueCollection QueryParam { get; set; }
@@ -68,7 +68,7 @@ namespace Infrastructure.Clients
                 {
                     QueryParam.Set("periodStart", startDate.AddDays(i).ToString("yyyyMMdd" + "0000"));
                     QueryParam.Set("periodEnd", startDate.AddDays(i).ToString("yyyyMMdd" + "2300"));
-                    url = HttpParams.Add(UrlOrig, QueryParam);
+                    url = HttpParams.Add(UrlBase, QueryParam);
 
                     responseMessage = await this.GetAsync(url);
                     content = await responseMessage.Content.ReadAsStringAsync();
