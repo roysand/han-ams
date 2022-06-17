@@ -27,46 +27,15 @@ Console.WriteLine("Hello, World!");
 var priceRepository = app.Services.GetService<IPriceRepository<Price>>();
 var client = new WebApiClientPrice(configuration, priceRepository);
 
-var response = await client.GetPriceDayAhead();
+var prices = await client.GetPriceDayAhead();
 
-foreach (var price in response)
+foreach (var price in prices)
 {
     priceRepository.Add(price);
     await priceRepository.SaveChangesAsync(new CancellationToken());
 }
 
 return;
-//
-// var content = await response.Content.ReadAsStringAsync();
-//
-// var serializer = new XmlSerializer(typeof(Publication_MarketDocument));
-// Publication_MarketDocument result;
-//
-// using (TextReader reader = new StringReader(content))
-// {
-//     result = (Publication_MarketDocument)serializer.Deserialize(reader);
-// }
-//
-// Console.WriteLine(result.ToString());
-// var price = result.CreatePrice();
-//
-// var priceWithDetail = result.CreatePriceDetail();
-// Console.WriteLine(price.ToString());
-//
-// Console.WriteLine($"Currency: {result.TimeSeries.currency_Unitname} Measure unit: {result.TimeSeries.price_Measure_Unitname}");
-//
-//
-// Console.WriteLine($"Currency: {result.TimeSeries.currency_Unitname} Measure unit: {result.TimeSeries.price_Measure_Unitname}");
-// var startDate = DateTime.Parse(result.periodtimeInterval.start).ToLocalTime();
-// var endDate = DateTime.Parse(result.periodtimeInterval.end).ToLocalTime();
-//
-// Console.WriteLine($"StartDate: {startDate} EndDate: {endDate}");
-// Console.WriteLine(content);
-//
-//
-// priceRepository.Add(priceWithDetail);
-//
-// await priceRepository.SaveChangesAsync(new CancellationToken());
 
 static IHostBuilder CreateHostBuilder(string[] args, IConfiguration configuration)
 {

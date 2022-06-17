@@ -61,7 +61,7 @@ namespace Infrastructure.Clients
                 startDate = lastPrice.PricePeriod.AddDays(1);
             }
             
-            if ((DateTime.Now.Hour > 13) || (DateTime.Now - startDate).Days > 1) // && DateTime.Now.Minute > 15)
+            if ((DateTime.Now.Hour > 13) || (DateTime.Now - startDate).Days > 1)
             { 
                 var deltaDays = Math.Min(365, (DateTime.Now.AddDays(1) - startDate).Days);
                 for (int i = 0; i <= deltaDays; i++)
@@ -69,8 +69,6 @@ namespace Infrastructure.Clients
                     QueryParam.Set("periodStart", startDate.AddDays(i).ToString("yyyyMMdd" + "0000"));
                     QueryParam.Set("periodEnd", startDate.AddDays(i).ToString("yyyyMMdd" + "2300"));
                     url = HttpParams.Add(UrlOrig, QueryParam);
-                    // url = string.Format(UrlOrig,
-                    //    startDate.AddDays(i).ToString("yyyyMMdd" + "0000"), startDate.AddDays(i).ToString("yyyyMMdd" + "2300"));
 
                     responseMessage = await this.GetAsync(url);
                     content = await responseMessage.Content.ReadAsStringAsync();
