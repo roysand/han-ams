@@ -33,6 +33,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{FD51443F
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestPriceClient", "tests\TestPriceClient\TestPriceClient.csproj", "{CA33948F-F3FA-48EE-9A06-D4604CB0B34D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestExchangeRateClient", "tests\TestExchangeRateClient\TestExchangeRateClient.csproj", "{720DFBB2-5A48-4A36-BC88-7DC02AE76E0A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -91,6 +93,10 @@ Global
 		{CA33948F-F3FA-48EE-9A06-D4604CB0B34D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CA33948F-F3FA-48EE-9A06-D4604CB0B34D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CA33948F-F3FA-48EE-9A06-D4604CB0B34D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{720DFBB2-5A48-4A36-BC88-7DC02AE76E0A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{720DFBB2-5A48-4A36-BC88-7DC02AE76E0A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{720DFBB2-5A48-4A36-BC88-7DC02AE76E0A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{720DFBB2-5A48-4A36-BC88-7DC02AE76E0A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -100,6 +106,7 @@ Global
 		{53851C96-D85E-4D98-817A-49FF68709155} = {D6D83CB8-7535-45DF-8326-C8D6148B2F5E}
 		{7738F03D-CAF2-4A8E-8299-D3F6EB9EF3D2} = {D6D83CB8-7535-45DF-8326-C8D6148B2F5E}
 		{CA33948F-F3FA-48EE-9A06-D4604CB0B34D} = {FD51443F-7FEF-465F-9065-5D317F92CBD5}
+		{720DFBB2-5A48-4A36-BC88-7DC02AE76E0A} = {FD51443F-7FEF-465F-9065-5D317F92CBD5}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F1106D1D-ADEA-4720-B01B-C796AE4C1462}

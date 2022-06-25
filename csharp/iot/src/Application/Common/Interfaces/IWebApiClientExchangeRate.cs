@@ -5,8 +5,8 @@ using Domain.Entities;
 
 namespace Application.Common.Interfaces
 {
-    public interface IWebApiClientCurrency : IWebApiClient
+    public interface IWebApiClientExchangeRate : IWebApiClient
     {
-        Task<Currency> GetCurrency(DateTime date);
+        Task<ICollection<ExchengeRate>> DownloadExchangeRates();
     }
 }

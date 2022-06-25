@@ -26,7 +26,7 @@ namespace Infrastructure.Persistence
         
         public virtual DbSet<Price> PriceSet { get; set; }
         public virtual DbSet<PriceDetail> PriceDetailSet { get; set; }
-        public virtual DbSet<Currency> CurrencySet { get; set; }
+        public virtual DbSet<ExchengeRate> CurrencySet { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -113,9 +113,9 @@ namespace Infrastructure.Persistence
                 entity.Property(e => e.Amount).HasPrecision(12, 5);
             });
 
-            modelBuilder.Entity<Currency>(entity =>
+            modelBuilder.Entity<ExchengeRate>(entity =>
             {
-                entity.HasKey(key => key.CurrencyType);
+                entity.HasKey(key => key.ExchangeRateType);
                 entity.ToTable("currency");
                 entity.Property(p => p.ExchangeRate).HasPrecision(12, 5);
             });

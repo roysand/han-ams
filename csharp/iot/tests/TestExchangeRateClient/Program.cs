@@ -19,20 +19,11 @@ builder.ConfigureAppConfiguration(app => app.AddConfiguration(configuration));
 var app = builder.Build();
 
 Console.WriteLine("Hello, World!");
+var exchangeRateRepository = app.Services.GetService<IExchangeRateRepository<ExchengeRate>>();
+var client = new WebApiClientExchangeRate(configuration, exchangeRateRepository);
+var result = client.DownloadExchangeRates();
 
-var priceRepository = app.Services.GetService<IPriceRepository<Price>>();
-var client = new WebApiClientPrice(configuration, priceRepository);
-
-var prices = await client.GetPriceDayAhead();
-
-foreach (var price in prices)
-{
-    priceRepository.Add(price);
-    await priceRepository.SaveChangesAsync(new CancellationToken());
-}
-
-return;
-
+var exchangeRates = await client.DownloadExchangeRates();
 static IHostBuilder CreateHostBuilder(string[] args, IConfiguration configuration)
 {
     var hostBuilder = Host.CreateDefaultBuilder(args)

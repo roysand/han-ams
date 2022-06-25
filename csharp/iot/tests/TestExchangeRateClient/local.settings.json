@@ -1,0 +1,12 @@
+{
+    "IsEncrypted": false,
+    "ConnectionStrings": {
+        "SQLAZURECONNSTR_AMS" : "Server=tcp:sandaasiot.database.windows.net,1433;Initial Catalog=sandaas_iot;Persist Security Info=False;User ID=app_user;Password=t[rw8Y^V]g3ZTrwamv!;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30"
+    },
+    "Values" : {
+        "TopicName": "ams",
+        "SubscriptionName": "bas",
+        "AzureWebJobsStorage": "UseDevelopmentStorage=true",
+        "QueueConnection" : "Endpoint=sb://sandaas-iot.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=r3s1U4/lzrCM2kF8BaLOIinQVWbwnPUlYhd91PjRYdQ="
+    }
+}
