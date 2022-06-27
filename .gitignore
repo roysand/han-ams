@@ -214,6 +214,7 @@ x64/
 *.svclog
 *.scc
 *.bak
+local.settings.json
 
 # Visual C++ cache files
 ipch/

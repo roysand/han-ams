@@ -21,9 +21,17 @@ var app = builder.Build();
 Console.WriteLine("Hello, World!");
 var exchangeRateRepository = app.Services.GetService<IExchangeRateRepository<ExchengeRate>>();
 var client = new WebApiClientExchangeRate(configuration, exchangeRateRepository);
-var result = client.DownloadExchangeRates();
 
 var exchangeRates = await client.DownloadExchangeRates();
+
+foreach (var exchangeRate in exchangeRates)
+{
+    exchangeRateRepository.Add(exchangeRate);
+}
+
+await exchangeRateRepository.SaveChangesAsync(new CancellationToken());
+return;
+
 static IHostBuilder CreateHostBuilder(string[] args, IConfiguration configuration)
 {
     var hostBuilder = Host.CreateDefaultBuilder(args)

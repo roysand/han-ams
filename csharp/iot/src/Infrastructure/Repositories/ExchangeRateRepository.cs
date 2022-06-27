@@ -16,7 +16,7 @@ namespace Infrastructure.Repositories
 
         public async Task<ExchengeRate> FindAsync(DateTime date)
         {
-            var currency = await (from c in _context.CurrencySet
+            var currency = await (from c in _context.ExchangeRateSet
                 where c.ExchangeRatePeriod == date
                 select c).FirstOrDefaultAsync();
 
@@ -25,8 +25,8 @@ namespace Infrastructure.Repositories
 
         public async Task<ExchengeRate> FindNewestAsync()
         {
-            var currency = await (from c in _context.CurrencySet
-                where c.ExchangeRatePeriod == _context.CurrencySet.Select(u => u.ExchangeRatePeriod).Max()
+            var currency = await (from c in _context.ExchangeRateSet
+                where c.ExchangeRatePeriod == _context.ExchangeRateSet.Select(u => u.ExchangeRatePeriod).Max()
                 select c).FirstOrDefaultAsync();
 
             return currency;

@@ -6,7 +6,7 @@ create table dbo.exchange_rate
     ExchangeRateId uniqueidentifier  not null,
     ExchangeRatePeriod datetime2(3) not null, -- Date and hour
     ExchangeRate decimal(19, 5) not null,
-    ExchangeRateType smallint not null
+    ExchangeRateType int not null
 )
 go
 

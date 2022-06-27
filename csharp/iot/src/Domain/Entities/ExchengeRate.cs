@@ -9,7 +9,7 @@ namespace Domain.Entities
     
     public class ExchengeRate
     {
-        public Guid CurrencyRateId { get; set; }
+        public Guid ExchangeRateId { get;  }
         public DateTime ExchangeRatePeriod { get; set; }
         public ExchangeRateTypes ExchangeRateType { get; set; }
         public decimal ExchangeRate { get; set; }
@@ -17,6 +17,7 @@ namespace Domain.Entities
         public ExchengeRate()
         {
             ExchangeRateType = ExchangeRateTypes.EUR;
+            ExchangeRateId = Guid.NewGuid();
         }
     }
 }
