@@ -20,6 +20,10 @@ var app = builder.Build();
 
 Console.WriteLine("Hello, World!");
 var exchangeRateRepository = app.Services.GetService<IExchangeRateRepository<ExchengeRate>>();
+if (exchangeRateRepository == null)
+{
+    return;
+}
 var client = new WebApiClientExchangeRate(configuration, exchangeRateRepository);
 
 var exchangeRates = await client.DownloadExchangeRates();
@@ -29,7 +33,8 @@ foreach (var exchangeRate in exchangeRates)
     exchangeRateRepository.Add(exchangeRate);
 }
 
-await exchangeRateRepository.SaveChangesAsync(new CancellationToken());
+var count = await exchangeRateRepository.SaveChangesAsync(new CancellationToken());
+Console.WriteLine($"Exchange rates added to the database is {count}");
 return;
 
 static IHostBuilder CreateHostBuilder(string[] args, IConfiguration configuration)

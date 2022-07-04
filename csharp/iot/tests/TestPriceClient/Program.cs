@@ -21,6 +21,11 @@ var app = builder.Build();
 Console.WriteLine("Hello, World!");
 
 var priceRepository = app.Services.GetService<IPriceRepository<Price>>();
+if (priceRepository == null)
+{
+    return;
+}
+
 var client = new WebApiClientPrice(configuration, priceRepository);
 
 var prices = await client.GetPriceDayAhead();
@@ -28,8 +33,10 @@ var prices = await client.GetPriceDayAhead();
 foreach (var price in prices)
 {
     priceRepository.Add(price);
-    await priceRepository.SaveChangesAsync(new CancellationToken());
 }
+
+var count = await priceRepository.SaveChangesAsync(new CancellationToken());
+Console.WriteLine($"Prices added to database {count}");
 
 return;
 
