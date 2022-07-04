@@ -11,6 +11,8 @@
 
     <ItemGroup>
       <ProjectReference Include="..\MBusReader\MBusReader.csproj" />
+      <ProjectReference Include="..\src\Application\Application.csproj" />
+      <ProjectReference Include="..\src\Infrastructure\Infrastructure.csproj" />
     </ItemGroup>
 
 </Project>

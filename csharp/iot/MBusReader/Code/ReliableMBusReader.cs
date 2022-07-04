@@ -111,11 +111,6 @@ namespace MBusReader.Code
                             Console.WriteLine(raw.Raw);
                         }
 
-                        // if (_bw != null)
-                        // {
-                        //     message.ForEach(item => _bw.Write(item));
-                        // }
-                    
 //                     IHDLCMessage hdlcMessage = new HDLCMessage();
                         var parser = new Parser();
                         var hdlcMessage = parser.Parse(message.Skip(1).Take(message.Count-1).ToList());
