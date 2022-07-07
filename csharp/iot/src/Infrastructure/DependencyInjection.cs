@@ -22,6 +22,7 @@ namespace Infrastructure
             services.AddTransient<IPriceDetailRepository<PriceDetail>, PriceDetailRepository>();
             services.AddTransient<IExchangeRateRepository<ExchengeRate>, ExchangeRateRepository>();
             services.AddTransient<IWebApiClientExchangeRate, WebApiClientExchangeRate>();
+            services.AddTransient<IMqttManagedClient, MqttManagedClient>();
             
             return services;
         }

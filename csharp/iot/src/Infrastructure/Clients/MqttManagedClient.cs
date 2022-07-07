@@ -1,5 +1,8 @@
 using System;
+using System.Threading;
 using System.Threading.Tasks;
+using Application.Common.Interfaces;
+using Domain.Entities;
 using MQTTnet;
 using MQTTnet.Client;
 using MQTTnet.Extensions.ManagedClient;
@@ -8,8 +11,9 @@ using Newtonsoft.Json;
 
 namespace Infrastructure.Clients
 {
-    public class MqttManagedClient
+    public class MqttManagedClient : IMqttManagedClient
     {
+        private readonly IDetailRepository<Detail> _detailRepository;
         private string ClientId = Guid.NewGuid().ToString();
         private string URI = "iot-phil4787";
         private string User = "iot";
@@ -18,9 +22,10 @@ namespace Infrastructure.Clients
         private bool UseTLS = false;
         private IManagedMqttClient _client;
         private readonly MqttFactory _factory;
-      
-        public MqttManagedClient()
+        private int _counter = 0;
+        public MqttManagedClient(IDetailRepository<Detail> detailRepository)
         {
+            _detailRepository = detailRepository;
             _factory = new MqttFactory();
         }
         private async Task ConnectAsync()
@@ -57,13 +62,33 @@ namespace Infrastructure.Clients
                 return Task.CompletedTask;
             };
 
-            _client.ApplicationMessageReceivedAsync += e =>
+            _client.ApplicationMessageReceivedAsync += async e =>
             {
-                Console.WriteLine(("Received application message"));
                 var amsDate =
                     JsonConvert.DeserializeObject<AMSReaderData>(System.Text.Encoding.Default.GetString(e.ApplicationMessage.Payload));
                 Console.WriteLine($"{DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss.zzz")}{System.Text.Encoding.Default.GetString(e.ApplicationMessage.Payload)}");
-                return Task.CompletedTask;
+                var detail = new Detail()
+                {
+                    MeasurementId = Guid.NewGuid(),
+                    TimeStamp = amsDate.TimeStamp,
+                    ObisCode = "1-0:1.7.0.255",
+                    Name = "Active power",
+                    ValueStr = "Active power",
+                    ObisCodeId = ObisCodeId.PowerUsed,
+                    Unit = "kW",
+                    Location = "Pihl 4787",
+                    ValueNum = (decimal)amsDate.Data.P / 1000
+                };
+
+                _detailRepository.Add(detail);
+                _counter++;
+
+                if (_counter > 9)
+                {
+                    await _detailRepository.SaveChangesAsync(new CancellationToken());
+                    _counter = 0;
+                }
+                
             };
             
             await _client.StartAsync(managedOptions);
@@ -82,10 +107,6 @@ namespace Infrastructure.Clients
 
 
             await _client.SubscribeAsync(topic, (MqttQualityOfServiceLevel)qos);
-            // await Client.SubscribeAsync(new TopicFilterBuilder()
-            //     .WithTopic(topic)
-            //     .WithQualityOfServiceLevel((MQTTnet.Protocol.MqttQualityOfServiceLevel)qos)
-            //     .Build());
         }
 
         public async Task UnSubscribeAsync(string topic)
