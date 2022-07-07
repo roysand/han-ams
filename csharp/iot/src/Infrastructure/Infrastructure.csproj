@@ -7,6 +7,8 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="5.0.13" />
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="6.0.0" />
+    <PackageReference Include="MQTTnet" Version="4.0.1.184" />
+    <PackageReference Include="MQTTnet.Extensions.ManagedClient" Version="4.0.1.184" />
   </ItemGroup>
 
   <ItemGroup>
