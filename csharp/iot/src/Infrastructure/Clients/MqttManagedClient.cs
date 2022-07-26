@@ -87,6 +87,7 @@ namespace Infrastructure.Clients
 
                 if (_counter > 9)
                 {
+                    Console.WriteLine("Writing to database");
                     await _detailRepository.SaveChangesAsync(new CancellationToken());
                     _counter = 0;
                 }
