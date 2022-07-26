@@ -66,7 +66,9 @@ namespace Infrastructure.Clients
             {
                 var amsDate =
                     JsonConvert.DeserializeObject<AMSReaderData>(System.Text.Encoding.Default.GetString(e.ApplicationMessage.Payload));
-                Console.WriteLine($"{DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss.zzz")}{System.Text.Encoding.Default.GetString(e.ApplicationMessage.Payload)}");
+                Console.WriteLine(
+                    $"{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.zzz")}{System.Text.Encoding.Default.GetString(e.ApplicationMessage.Payload)}");
+                
                 var detail = new Detail()
                 {
                     MeasurementId = Guid.NewGuid(),
