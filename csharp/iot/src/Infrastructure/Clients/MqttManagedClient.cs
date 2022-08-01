@@ -64,34 +64,42 @@ namespace Infrastructure.Clients
 
             _client.ApplicationMessageReceivedAsync += async e =>
             {
-                var amsDate =
-                    JsonConvert.DeserializeObject<AMSReaderData>(System.Text.Encoding.Default.GetString(e.ApplicationMessage.Payload));
-                Console.WriteLine(
-                    $"{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.zzz")}{System.Text.Encoding.Default.GetString(e.ApplicationMessage.Payload)}");
+                try
+                {
+                    var amsDate =
+                        JsonConvert.DeserializeObject<AMSReaderData>(System.Text.Encoding.Default.GetString(e.ApplicationMessage.Payload));
+                    Console.WriteLine(
+                        $"{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.zzz")}{System.Text.Encoding.Default.GetString(e.ApplicationMessage.Payload)}");
                 
-                var detail = new Detail()
-                {
-                    MeasurementId = Guid.NewGuid(),
-                    TimeStamp = amsDate.TimeStamp,
-                    ObisCode = "1-0:1.7.0.255",
-                    Name = "Active power",
-                    ValueStr = "Active power",
-                    ObisCodeId = ObisCodeId.PowerUsed,
-                    Unit = "kW",
-                    Location = "Pihl 4787",
-                    ValueNum = (decimal)amsDate.Data.P / 1000
-                };
+                    var detail = new Detail()
+                    {
+                        MeasurementId = Guid.NewGuid(),
+                        TimeStamp = amsDate.TimeStamp,
+                        ObisCode = "1-0:1.7.0.255",
+                        Name = "Active power",
+                        ValueStr = "Active power",
+                        ObisCodeId = ObisCodeId.PowerUsed,
+                        Unit = "kW",
+                        Location = "Pihl 4787",
+                        ValueNum = (decimal)amsDate.Data.P / 1000
+                    };
 
-                _detailRepository.Add(detail);
-                _counter++;
+                    _detailRepository.Add(detail);
+                    _counter++;
 
-                if (_counter > 9)
-                {
-                    Console.WriteLine("Writing to database");
-                    await _detailRepository.SaveChangesAsync(new CancellationToken());
-                    _counter = 0;
+                    if (_counter > 9)
+                    {
+                        Console.WriteLine("Writing to database");
+                        await _detailRepository.SaveChangesAsync(new CancellationToken());
+                        _counter = 0;
+                    }
+                
                 }
-                
+                catch (Exception exception)
+                {
+                    Console.WriteLine(exception);
+                    //throw;
+                }
             };
             
             await _client.StartAsync(managedOptions);
