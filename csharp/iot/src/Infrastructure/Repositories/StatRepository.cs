@@ -96,31 +96,29 @@ namespace Infrastructure.Repositories
 
         public async Task<DailyTotalVm> DailyTotal(DateTime date, CancellationToken cancellationToken)
         {
-            // var data = await (from detail in _context.DetailSet
-            //         where detail.TimeStamp.Date == date.Date && detail.ValueNum != -1
-            //         select detail.ValueNum)
-            //     .AverageAsync(cancellationToken);
-
-            var powerByHourByDay = await (from detail in _context.DetailSet
-                where detail.ObisCodeId == ObisCodeId.PowerUsed && detail.TimeStamp.Date == DateTime.Now.Date
-                group detail by new { date = detail.TimeStamp.Date, hour = detail.TimeStamp.Hour }
-                into g
+            var now = DateTime.Now.Date;
+            var powerByHourByDay = await (from hour in _context.HourSet
+                where hour.TimeStamp.Date == now
                 select new HourTotalVm()
                 {
-                    Date = new DateTime(g.Key.date.Year, g.Key.date.Month, g.Key.date.Day,g.Key.hour,0,0),
-                    Value = g.Average(x => x.ValueNum),
-                    Description = "Hour Total",
+                    Date = hour.TimeStamp.Date,
+                    Value = hour.ValueNum,
+                    Location = hour.Location,
+                    Description = "Hour total",
                     Unit = "kW"
-                }).ToListAsync(cancellationToken);
+                }).OrderBy(o => o.Location).ToListAsync(cancellationToken);
             
-            return new DailyTotalVm()
+            var result = new DailyTotalVm()
             {
                 Date = date,
                 Value = powerByHourByDay.Sum(s => s.Value),
                 Description = "Daily sum",
                 Unit = "kW",
-                HoursTotal = powerByHourByDay.OrderBy(o => o.Date).ToList()
+                //HoursTotal = powerByHourByDay.OrderBy(o => o.Date).ToList()
             };
+            
+            
+            return result;
         }
 
         public async Task GeneratePowerUsageStatistics(CancellationToken cancellationToken)
