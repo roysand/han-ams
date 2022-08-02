@@ -38,7 +38,7 @@ namespace AzureServiceBus
 
         [FunctionName("ReadQueueSaveToDb")]
         public async Task Run(
-        [ServiceBusTrigger("ams1", "raw", Connection = "QueueConnection")] string[] mySbMsg
+        [ServiceBusTrigger("ams", "raw", Connection = "QueueConnection")] string[] mySbMsg
             ,CancellationToken cancellationToken)
         {
             try

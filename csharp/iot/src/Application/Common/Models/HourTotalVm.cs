@@ -6,24 +6,22 @@ namespace Application.Common.Models
     public class HourTotalVm
     {
         public DateTime Date { get; set; }
-        public decimal Value { get; set; }
         public string Location { get; set; }
-        public string Description { get; set; }
-        public string Unit { get; set; }
+        public decimal ValueDaySoFar { get; set; }
+
+        public IList<HourTotalDataVm> Data { get; }
         
         public HourTotalVm()
         {
+            Data = new List<HourTotalDataVm>();
         }
     }
-
-    public class HourData
+    
+    public class HourTotalDataVm
     {
-        public string Location { get; set; }
-        public IList<HourTotalVm> HourTotal { get; set; }
-
-        public HourData()
-        {
-            
-        }
+        public DateTime Date { get; set; }
+        public decimal Value { get; set; }
+        public string Description { get; set; }
+        public string Unit { get; set; }   
     }
 }

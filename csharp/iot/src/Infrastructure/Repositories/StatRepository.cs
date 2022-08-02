@@ -96,17 +96,20 @@ namespace Infrastructure.Repositories
 
         public async Task<DailyTotalVm> DailyTotal(DateTime date, CancellationToken cancellationToken)
         {
+            // Azure database use time zone UTC!!
             var now = DateTime.Now.Date;
+            
             var powerByHourByDay = await (from hour in _context.HourSet
                 where hour.TimeStamp.Date == now
-                select new HourTotalVm()
+                
+                select new HourTotalDto()
                 {
-                    Date = hour.TimeStamp.Date,
+                    Date = hour.TimeStamp,
                     Value = hour.ValueNum,
                     Location = hour.Location,
                     Description = "Hour total",
                     Unit = "kW"
-                }).OrderBy(o => o.Location).ToListAsync(cancellationToken);
+                }).OrderBy(o => o.Location).ThenBy(o => o.Date).ToListAsync(cancellationToken);
             
             var result = new DailyTotalVm()
             {
@@ -114,10 +117,45 @@ namespace Infrastructure.Repositories
                 Value = powerByHourByDay.Sum(s => s.Value),
                 Description = "Daily sum",
                 Unit = "kW",
-                //HoursTotal = powerByHourByDay.OrderBy(o => o.Date).ToList()
+                // HourData = powerByHourByDay.OrderBy(o => o.Date).ToList()
             };
-            
-            
+
+            string prevLocation = "";
+            HourTotalVm hourTotal = null;
+
+            foreach (var power in powerByHourByDay)
+            {
+                if (prevLocation == power.Location)
+                {
+                    hourTotal.Data.Add(new HourTotalDataVm()
+                    {
+                        Date = power.Date,
+                        Value = power.Value,
+                        Description = power.Description,
+                        Unit = power.Unit
+                    });
+                }
+                else
+                {
+                    hourTotal = new HourTotalVm()
+                    {
+                        Location = power.Location,
+                        Date = power.Date,
+                        ValueDaySoFar = powerByHourByDay.Where(w => w.Location == power.Location).Sum(s => s.Value)
+                    };
+
+                    hourTotal.Data.Add(new HourTotalDataVm()
+                    {
+                        Date = power.Date,
+                        Value = power.Value,
+                        Description = power.Description,
+                        Unit = power.Unit
+                    });
+                    
+                    result.HourData.Add(hourTotal);
+                    prevLocation = power.Location;
+                }
+            }
             return result;
         }
 
