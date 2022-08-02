@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -120,7 +121,14 @@ namespace Infrastructure.Repositories
                 // HourData = powerByHourByDay.OrderBy(o => o.Date).ToList()
             };
 
+            result.HourData = CalculatePowerPrCompletedHour(powerByHourByDay);
+            return result;
+        }
+
+        private  List<HourTotalVm> CalculatePowerPrCompletedHour(List<HourTotalDto> powerByHourByDay)
+        {
             string prevLocation = "";
+            var result = new List<HourTotalVm>();
             HourTotalVm hourTotal = null;
 
             foreach (var power in powerByHourByDay)
@@ -151,11 +159,12 @@ namespace Infrastructure.Repositories
                         Description = power.Description,
                         Unit = power.Unit
                     });
-                    
-                    result.HourData.Add(hourTotal);
+
+                    result.Add(hourTotal);
                     prevLocation = power.Location;
                 }
             }
+
             return result;
         }
 
