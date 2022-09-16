@@ -61,7 +61,7 @@ namespace Infrastructure.Clients
                 startDate = lastPrice.PricePeriod.AddDays(1);
             }
             
-            if ((DateTime.Now.Hour > 13) || (DateTime.Now - startDate).Days > 1)
+            if ((DateTime.Now.Hour > 13) && (DateTime.Now.Date > startDate.Date))
             { 
                 var deltaDays = Math.Min(365, (DateTime.Now.AddDays(1) - startDate).Days);
                 for (int i = 0; i <= deltaDays; i++)
@@ -70,11 +70,11 @@ namespace Infrastructure.Clients
                     QueryParam.Set("periodEnd", startDate.AddDays(i).ToString("yyyyMMdd" + "2300"));
                     url = HttpParams.Add(UrlBase, QueryParam);
 
-                    responseMessage = await this.GetAsync(url);
-                    content = await responseMessage.Content.ReadAsStringAsync();
-
-                    try
+                   try
                     {
+                        responseMessage = await this.GetAsync(url);
+                        content = await responseMessage.Content.ReadAsStringAsync();
+
                         using (TextReader reader = new StringReader(content))
                         {
                             var serializer = new XmlSerializer(typeof(Publication_MarketDocument));
