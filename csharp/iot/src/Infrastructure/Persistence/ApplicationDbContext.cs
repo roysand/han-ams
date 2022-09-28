@@ -101,6 +101,9 @@ namespace Infrastructure.Persistence
                 entity.Property(p => p.Unit).HasMaxLength(5).IsUnicode(false);
                 entity.Property(p => p.InDomain).HasMaxLength(20).IsUnicode(false);
                 entity.Property(p => p.OutDomain).HasMaxLength(20).IsUnicode(false);
+                entity.Property(p => p.Average).HasPrecision(12, 5);
+                entity.Property(p => p.Max).HasPrecision(12, 5);
+                entity.Property(p => p.Min).HasPrecision(12, 5);
 
                 entity.HasMany(p => p.PriceDetailList)
                     .WithOne(e => e.Price);

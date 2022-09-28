@@ -22,10 +22,9 @@ create index IX_Price_Id
     on price (PriceId)
 go
 
-create index IX_Price_PricePeriod
+create unique index IX_Price_PricePeriod
     on price (PricePeriod)
 go
-
 
 IF OBJECT_ID(N'dbo.price_detail', N'U') IS NOT NULL
     DROP TABLE [dbo].[price_detail];
