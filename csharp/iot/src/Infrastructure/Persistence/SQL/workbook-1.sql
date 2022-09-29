@@ -2399,7 +2399,7 @@ select p.PriceId, p.priceperiod, er.ExchangeRate
     else er.ExchangeRate end as ExchangeRateToUse
 from price p
 left outer join exchange_rate er on er.ExchangeRatePeriod = p.PricePeriod
-order by p.PricePeriod asc
+order by p.PricePeriod desc
 ;-- -. . -..- - / . -. - .-. -.--
 truncate table minute
 ;-- -. . -..- - / . -. - .-. -.--
