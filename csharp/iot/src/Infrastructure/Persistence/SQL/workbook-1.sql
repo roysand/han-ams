@@ -2347,13 +2347,13 @@ join dbo.price_detail pd on pd.priceid = p.priceid
 where p.PricePeriod > '2022-08-05'
 order by p.PricePeriod, pd.PricePeriod
 ;-- -. . -..- - / . -. - .-. -.--
-select * from hour h where date(h.TimeStamp) = '2022-08-11'
+select * from hour h where date(h.TimeStamp) = '2022-09-29'
 ;-- -. . -..- - / . -. - .-. -.--
-select * from hour h where datepart(day,h.TimeStamp) = '2022-08-11'
+select * from hour h where datepart(day,h.TimeStamp) = '2022-09-29'
 ;-- -. . -..- - / . -. - .-. -.--
 select datepart(day,getdate())
 ;-- -. . -..- - / . -. - .-. -.--
-select * from hour h where convert(date,h.TimeStamp) = '2022-08-11'
+select * from hour h where convert(date,h.TimeStamp) = '2022-10-01' order by h.Location, h.TimeStamp
 ;-- -. . -..- - / . -. - .-. -.--
 select * from hour h where convert(date,h.TimeStamp) = '2022-08-11' and h.Location = 'Pihl 4787'
 ;-- -. . -..- - / . -. - .-. -.--
