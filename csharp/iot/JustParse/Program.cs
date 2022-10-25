@@ -8,8 +8,8 @@ namespace JustParse
 {
     class Progam
     {
-        private static string FileName = @"C:\shared\repo\han-ams\csharp\iot\JustRead\data\binary-2021-11-16-22-59.dat";
-        // private static string FileName = @"C:\shared\repo\han-ams\csharp\iot\JustRead\data\binary-2021-11-14-22-49.dat";
+        // private static string FileName = @"C:\shared\repo\han-ams\csharp\iot\JustRead\data\binary-2021-11-16-22-59.dat";
+        private static string FileName = @"/Users/roy/repo/han-ams/csharp/iot/JustRead/data/binary-2022-01-05-20-22.dat";
         private static byte Control = 0X7E;
         
         static void Main(string[] args)

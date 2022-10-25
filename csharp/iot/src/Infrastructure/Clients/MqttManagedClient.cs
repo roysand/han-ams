@@ -15,7 +15,7 @@ namespace Infrastructure.Clients
     {
         private readonly IDetailRepository<Detail> _detailRepository;
         private string ClientId = Guid.NewGuid().ToString();
-        private string URI = "iot-phil4787";
+        private string URI = "iot-ams";
         private string User = "iot";
         private string Password = "i3hYtte";
         private int Port = 1883;
