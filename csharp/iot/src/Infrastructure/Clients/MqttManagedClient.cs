@@ -14,8 +14,8 @@ namespace Infrastructure.Clients
     public class MqttManagedClient : IMqttManagedClient
     {
         private readonly IDetailRepository<Detail> _detailRepository;
-        private string ClientId = Guid.NewGuid().ToString();
-        private string URI = "iot-ams";
+        private string ClientId = "AMS Pihl-4787"; //Guid.NewGuid().ToString();
+        private string URI = "iot-phil4787";
         private string User = "iot";
         private string Password = "i3hYtte";
         private int Port = 1883;

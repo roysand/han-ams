@@ -61,7 +61,7 @@ namespace Infrastructure.Clients
                 startDate = lastPrice.PricePeriod.AddDays(1);
             }
             
-            if ((DateTime.Now.Hour > 13) && (DateTime.Now.Date >= startDate.Date))
+            if (DateTime.Now.Date >= startDate.Date)
             { 
                 var deltaDays = Math.Min(365, (DateTime.Now.AddDays(1) - startDate).Days);
                 for (int i = 0; i <= deltaDays; i++)
