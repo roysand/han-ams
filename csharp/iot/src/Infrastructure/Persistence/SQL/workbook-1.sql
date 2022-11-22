@@ -2288,9 +2288,9 @@ select max(p.PricePeriod) from price p
 ;-- -. . -..- - / . -. - .-. -.--
 select count(*) from detail
 ;-- -. . -..- - / . -. - .-. -.--
-delete from raw  where TimeStamp < '2022-07-15'
+delete from raw  where TimeStamp < '2022-08-15'
 ;-- -. . -..- - / . -. - .-. -.--
-delete from detail where TimeStamp < '2022-07-15'
+delete from detail where TimeStamp < '2022-11-08'
 ;-- -. . -..- - / . -. - .-. -.--
 select max(d.timestamp) from detail d
 ;-- -. . -..- - / . -. - .-. -.--
@@ -2373,9 +2373,18 @@ order by 1,2,3
 select cast(h.timeStamp as date) date,h.location ,sum(valueNum)  powerDay, count(*)
 from hour h
 where cast(h.TimeStamp as date) != cast(getdate() as date)
-    and h.TimeStamp > '2022-10-01' and h.Location = 'Pihl 4787'
+    and h.TimeStamp >= '2022-10-01' and h.Location = 'Pihl 4787'
 group by h.location, cast(h.TimeStamp as date)
 order by 1 desc
+
+select top 100 cast(h.timeStamp as date) date,h.location ,sum(valueNum)  powerDay, count(*)
+from hour h
+where cast(h.TimeStamp as date) != cast(getdate() as date)
+ and h.Location = 'Home'
+group by h.location, cast(h.TimeStamp as date)
+order by 1 desc
+
+
 ;-- -. . -..- - / . -. - .-. -.--
 select top 100 d.* from detail d where d.location = 'Pihl 4787' order by d.TimeStamp desc
 ;-- -. . -..- - / . -. - .-. -.--
@@ -2402,7 +2411,7 @@ from price p
 left outer join exchange_rate er on er.ExchangeRatePeriod = p.PricePeriod
 order by p.PricePeriod desc
 ;-- -. . -..- - / . -. - .-. -.--
-truncate table minute
+-- truncate table minute
 ;-- -. . -..- - / . -. - .-. -.--
 select count(*) from minute
 ;-- -. . -..- - / . -. - .-. -.--
@@ -2418,9 +2427,9 @@ select top 100 * from dbo.minute m order by m.TimeStamp desc
 ;-- -. . -..- - / . -. - .-. -.--
 select top 100 * from dbo.minute m where m.Location = 'Pihl 4787' order by m.TimeStamp desc
 ;-- -. . -..- - / . -. - .-. -.--
-select top 1000 * from dbo.minute m where m.Location = 'Pihl 4787' order by m.TimeStamp desc
+select top 100 * from dbo.minute m where m.Location = 'Pihl 4787' order by m.TimeStamp desc
 ;-- -. . -..- - / . -. - .-. -.--
-select top 1000 * from dbo.hour m where m.Location = 'Pihl 4787' order by m.TimeStamp desc
+select top 100 * from dbo.hour m where m.Location = 'Pihl 4787' order by m.TimeStamp desc
 ;-- -. . -..- - / . -. - .-. -.--
 select top 100 * from dbo.hour m  order by m.TimeStamp desc
 ;-- -. . -..- - / . -. - .-. -.--
@@ -2509,3 +2518,20 @@ select * from price p
          order by p.PricePeriod desc
 
 select e.* from dbo.exchange_rate e order by e.ExchangeRatePeriod desc
+
+
+select p.PriceId, p.priceperiod, p.average, er.ExchangeRate
+, case
+    when er.ExchangeRate is null then (
+            select top 1
+                    e.ExchangeRate
+            from exchange_rate e
+            where
+                e.ExchangeRatePeriod < p.PricePeriod
+            order by e.ExchangeRatePeriod desc
+        )
+    else er.ExchangeRate end as ExchangeRateToUse
+from price p
+left outer join exchange_rate er on er.ExchangeRatePeriod = p.PricePeriod
+--where cast(p.PricePeriod as date) = cast(getdate() as date)
+order by p.PricePeriod desc
