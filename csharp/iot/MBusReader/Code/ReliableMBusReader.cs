@@ -23,6 +23,8 @@ namespace MBusReader.Code
         private STATUS _status = STATUS.Unknown;
         private List<byte> message = new List<byte>();
         private bool PrintToScreen = false;
+        
+        IMessagePublisher publisher = new AzureServiceBusPublisher();
 
         public ReliableMBusReader()
         {
@@ -50,6 +52,8 @@ namespace MBusReader.Code
 
         private void Init()
         {
+            publisher = new AzureServiceBusPublisher();
+
             _status = STATUS.Searching;
             if (_stream != null)
             {
@@ -135,7 +139,6 @@ namespace MBusReader.Code
 
         private async Task SendToQueue(IRawMessage message)
         {
-            IMessagePublisher publisher = new AzureServiceBusPublisher();
             await publisher.Publish(message);
         }
 
