@@ -134,6 +134,7 @@ dmypy.json
 # User specific
 **/.idea/**/workspace.xml
 **/.idea/**/tasks.xml
+**/.idea/**/misc.xml
 **/.idea/shelf/*
 **/.idea/dictionaries
 **/.idea/httpRequests/
@@ -152,7 +153,7 @@ dmypy.json
 **/.idea/**/contentModel.xml
 **/.idea/**/modules.xml
 **/.idea/**/indexLayout.xml
-
+**/.idea/**/sqldialects.xml
 *.suo
 *.user
 .vs/
@@ -212,6 +213,8 @@ x64/
 *.log
 *.svclog
 *.scc
+*.bak
+local.settings.json
 
 # Visual C++ cache files
 ipch/
@@ -256,7 +259,6 @@ csx/
 AppPackages/
 
 # Others
-sql/
 *.Cache
 ClientBin/
 [Ss]tyle[Cc]op.*
@@ -300,3 +302,4 @@ $RECYCLE.BIN/
 .DS_Store
 
 _NCrunch*
+csharp/iot/tests/TestPriceClient/local.settings.json

@@ -1,5 +1,6 @@
 ﻿using Application.Common.Interfaces;
 using Domain.Entities;
+using Infrastructure.Clients;
 using Infrastructure.Persistence;
 using Infrastructure.Repositories;
 using Microsoft.Extensions.Configuration;
@@ -17,6 +18,11 @@ namespace Infrastructure
             services.AddTransient<IRawRepository<RawData>, RawRepository>();
             services.AddTransient<IDetailRepository<Detail>, DetailRepository>();
             services.AddTransient<IStatRepository<Detail>, StatRepository>();
+            services.AddTransient<IPriceRepository<Price>, PriceRepository>();
+            services.AddTransient<IPriceDetailRepository<PriceDetail>, PriceDetailRepository>();
+            services.AddTransient<IExchangeRateRepository<ExchengeRate>, ExchangeRateRepository>();
+            services.AddTransient<IWebApiClientExchangeRate, WebApiClientExchangeRate>();
+            services.AddTransient<IMqttManagedClient, MqttManagedClient>();
             
             return services;
         }

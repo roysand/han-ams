@@ -23,6 +23,8 @@ namespace MBusReader.Code
         private STATUS _status = STATUS.Unknown;
         private List<byte> message = new List<byte>();
         private bool PrintToScreen = false;
+        
+        IMessagePublisher publisher = new AzureServiceBusPublisher();
 
         public ReliableMBusReader()
         {
@@ -50,6 +52,8 @@ namespace MBusReader.Code
 
         private void Init()
         {
+            publisher = new AzureServiceBusPublisher();
+
             _status = STATUS.Searching;
             if (_stream != null)
             {
@@ -113,11 +117,6 @@ namespace MBusReader.Code
                         
                         await SendToQueue(raw);
 
-                        // if (_bw != null)
-                        // {
-                        //     message.ForEach(item => _bw.Write(item));
-                        // }
-                    
 //                     IHDLCMessage hdlcMessage = new HDLCMessage();
                         var parser = new Parser();
                         var hdlcMessage = parser.Parse(message.Skip(1).Take(message.Count-1).ToList());
@@ -142,7 +141,6 @@ namespace MBusReader.Code
 
         private async Task SendToQueue(IRawMessage message)
         {
-            IMessagePublisher publisher = new AzureServiceBusPublisher();
             await publisher.Publish(message);
         }
 

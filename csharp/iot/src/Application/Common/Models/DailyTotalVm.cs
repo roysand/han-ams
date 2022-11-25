@@ -8,14 +8,15 @@ namespace Application.Common.Models
     {
         public DateTime Date { get; set; }
         public decimal Value { get; set; }
+
         public string Description { get; set; }
         public string Unit { get; set; }
 
-        public IList<HourTotalVm> HoursTotal { get; set; }
+        public IList<HourTotalVm> HourData { get; set; }
 
         public DailyTotalVm()
         {
-            HoursTotal = new List<HourTotalVm>();
+            HourData = new List<HourTotalVm>();
         }
     }
 }
