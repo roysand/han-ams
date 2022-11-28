@@ -108,12 +108,14 @@ namespace MBusReader.Code
                     
                         raw.Raw = string.Concat(Array.ConvertAll(message.ToArray(), x => string.Format($"{x.ToString("X2")} ")));
                         raw.Raw = raw.Raw.Remove(raw.Raw.Length - 1, 1);
-                        await SendToQueue(raw);
+                        
                     
                         if (PrintToScreen)
                         {
                             Console.WriteLine(raw.Raw);
                         }
+                        
+                        await SendToQueue(raw);
 
 //                     IHDLCMessage hdlcMessage = new HDLCMessage();
                         var parser = new Parser();
