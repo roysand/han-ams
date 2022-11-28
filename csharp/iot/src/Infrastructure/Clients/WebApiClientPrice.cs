@@ -58,13 +58,13 @@ namespace Infrastructure.Clients
             }
             else
             {
-                startDate = lastPrice.PricePeriod.AddDays(1);
+                startDate = lastPrice.PricePeriod.AddDays(0);
             }
             
             if (DateTime.Now.Date >= startDate.Date)
             { 
                 var deltaDays = Math.Min(365, (DateTime.Now.AddDays(1) - startDate).Days);
-                for (int i = 0; i <= deltaDays; i++)
+                for (int i = 1; i <= deltaDays; i++)
                 {
                     QueryParam.Set("periodStart", startDate.AddDays(i).ToString("yyyyMMdd" + "0000"));
                     QueryParam.Set("periodEnd", startDate.AddDays(i).ToString("yyyyMMdd" + "2300"));
