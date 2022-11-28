@@ -23,8 +23,9 @@ public static class ClientSubscribeSamples
         using (var mqttClient = mqttFactory.CreateMqttClient())
         {
             var mqttClientOptions = new MqttClientOptionsBuilder()
-                .WithTcpServer("iot-phil4787")
-                .WithCredentials("iot","i3hYtte")
+                .WithTcpServer("822b669a3fd14b2f818fd40ea11bbaaa.s2.eu.hivemq.cloud")
+                .WithCredentials("iot_sandaas","i3hYtten")
+                .WithTls()
                 .Build();
 
             // Setup message handling before connecting so that queued messages
@@ -32,8 +33,9 @@ public static class ClientSubscribeSamples
             // received messages get lost.
             mqttClient.ApplicationMessageReceivedAsync += e =>
             {
-                Console.WriteLine("Received application message.");
+                Console.WriteLine($"{DateTime.Now} - Received application message.");
                 e.DumpToConsole();
+                Console.WriteLine($"{DateTime.Now} - {System.Text.Encoding.Default.GetString(e.ApplicationMessage.Payload)}");
 
                 return Task.CompletedTask;
             };
@@ -50,6 +52,7 @@ public static class ClientSubscribeSamples
 
             Console.WriteLine("Press enter to exit.");
             Console.ReadLine();
+            Console.WriteLine(".... stopping");
         }
     }
 
@@ -64,8 +67,9 @@ public static class ClientSubscribeSamples
         using (var mqttClient = mqttFactory.CreateMqttClient())
         {
             var mqttClientOptions = new MqttClientOptionsBuilder()
-                .WithTcpServer("iot-phil4787")
-                .WithCredentials("iot","i3hYtte")
+                .WithTcpServer("822b669a3fd14b2f818fd40ea11bbaaa.s2.eu.hivemq.cloud")
+                .WithCredentials("iot_sandaas","i3hYtten")
+                .WithTls()
                 .Build();
 
             await mqttClient.ConnectAsync(mqttClientOptions, CancellationToken.None);

@@ -7,11 +7,6 @@
       <UserSecretsId>61fb1145-716e-40ce-afa2-70ebbdf7af36</UserSecretsId>
   </PropertyGroup>
 
-    <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
-      <DefineConstants>TRACE
-</DefineConstants>
-    </PropertyGroup>
-
     <ItemGroup>
         <PackageReference Include="App.Metrics.AspNetCore.Health.Endpoints" Version="3.2.0" />
         <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="6.0.1" />
@@ -21,12 +16,6 @@
     <ItemGroup>
       <ProjectReference Include="..\src\Application\Application.csproj" />
       <ProjectReference Include="..\src\Infrastructure\Infrastructure.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <None Include="local.settings.json">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
     </ItemGroup>
 
 </Project>

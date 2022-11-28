@@ -7,6 +7,7 @@ using Infrastructure.Clients;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using TestMqttBroker;
 
 Console.WriteLine("Hello, TestMqttBroker!");
 var configuration = new ConfigurationBuilder()
@@ -19,15 +20,16 @@ var builder = CreateHostBuilder(args, configuration);
 builder.ConfigureAppConfiguration(app => app.AddConfiguration(configuration));
 var app = builder.Build();
 
-await TestMqttBroker.ClientSubscribeSamples.Subscribe_Topic();
+// await TestMqttBroker.ClientSubscribeSamples.Subscribe_Topic();
 
 var detailRepository = app.Services.GetService<IDetailRepository<Domain.Entities.Detail>>();
 var client = new MqttManagedClient(detailRepository);
 
-await client.SubscribeAsync("iot/ams", 1);
+await ClientSubscribeSamples.Handle_Received_Application_Message();
+//await client.SubscribeAsync("iot/ams", 1);
 
-Console.ReadKey();
-await client.Disconnect();
+// Console.ReadKey();
+// await client.Disconnect();
 
 static IHostBuilder CreateHostBuilder(string[] args, IConfiguration configuration)
 {
@@ -38,7 +40,6 @@ static IHostBuilder CreateHostBuilder(string[] args, IConfiguration configuratio
         })
         .ConfigureServices((context, services) =>
         {
-            // services.AddSingleton<ITemplatePostCodesRepository<TemplatePostCodes>, TemplatePostCodesRepository<TemplatePostCodes>>();
             services.AddInfrastructure(configuration);
         });
 
