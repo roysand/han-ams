@@ -12,7 +12,9 @@ namespace Application.Common.Models
         public string Description { get; set; }
         public string Unit { get; set; }
 
+        public IList<CurrentHour> CurrentHour { get; set; }
         public IList<HourTotalVm> HourData { get; set; }
+        public IList<PriceVm> Prices { get; set; }
 
         public DailyTotalVm()
         {
