@@ -32,7 +32,7 @@ namespace ServiceBusReadFunction
         }
         
         [FunctionName("ServiceBusReadFunction")]
-        public async Task Run([TimerTrigger("*/30 * * * * *")]TimerInfo myTimer, ILogger log
+        public async Task Run([TimerTrigger("*/15 * * * * *")]TimerInfo myTimer, ILogger log
             ,CancellationToken cancellationToken)
         {
             var topic = _configuration.GetValue<string>("ApplicationSettings:topic");
