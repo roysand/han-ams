@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 using MessageParser.Code;
 
@@ -8,8 +9,8 @@ namespace JustParse
 {
     class Progam
     {
-        // private static string FileName = @"C:\shared\repo\han-ams\csharp\iot\JustRead\data\binary-2021-11-16-22-59.dat";
-        private static string FileName = @"/Users/roy/repo/han-ams/csharp/iot/JustRead/data/binary-2022-01-05-20-22.dat";
+         private static string FileName = @"C:\shared\repo\han-ams\csharp\iot\JustRead\data\binary-2021-10-22-21-57.dat";
+        //private static string FileName = @"/Users/roy/repo/han-ams/csharp/iot/JustRead/data/binary-2022-01-05-20-22.dat";
         private static byte Control = 0X7E;
         
         static void Main(string[] args)
@@ -45,20 +46,26 @@ namespace JustParse
                                 b = br.ReadByte();
                             }
                             
-                            var result = parser.Parse(bytes);
-                            if (result.Data.Count > 2)
+                            // Console.WriteLine($"Package length: {bytes.Count}");
+                            if (bytes.Count() > 280)
                             {
-                                Console.Write($"({packageCounter}) - EpocTime: {result.Header.SecondsSinceEpoc} -");
-                                
-                                foreach (var measurement in result.Data)
+
+
+                                var result = parser.Parse(bytes);
+                                if (result.Data.Count > 2)
                                 {
-                                    Console.Write($"MeasureType={measurement.Name} Value = {measurement.Value}");
+                                    Console.Write($"({packageCounter}) - EpocTime: {result.Header.SecondsSinceEpoc} -");
+                                
+                                    foreach (var measurement in result.Data)
+                                    {
+                                        Console.Write($"MeasureType={measurement.Name} Description: {measurement.Description}  {measurement.ObisCodeId} Value = {measurement.Value}    ");
+                                    }
+                            
+                                    Console.WriteLine();
+                                    packageCounter++;
                                 }
-                            
-                                Console.WriteLine();
-                                packageCounter++;
+                                
                             }
-                            
                             
                             if (packageCounter > 1500)
                                 return;
