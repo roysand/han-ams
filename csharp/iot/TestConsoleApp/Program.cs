@@ -1,9 +1,22 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
+using Application;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
 Console.WriteLine("Hello, World!");
+
+var configBuilder = new ConfigurationBuilder()
+    // .SetBasePath(Directory.GetCurrentDirectory())
+    .AddEnvironmentVariables()
+    .AddJsonFile("local.settings.json", optional:true, reloadOnChange: true)
+    .AddJsonFile("appsettings.Development.json", optional: true, reloadOnChange: true)
+    .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+    .AddUserSecrets<Program>();
+
+IConfiguration configuration = configBuilder.Build();
+
 
 IHostBuilder CreateHostBuilder(string[] args) =>
     Host.CreateDefaultBuilder(args)
@@ -11,19 +24,27 @@ IHostBuilder CreateHostBuilder(string[] args) =>
         {
             services.AddTransient<ITestInterface, TestClass>();
             services.AddHostedService<Worker>();
+            services.AddApplication(configuration);
         });
 
 var app = CreateHostBuilder(args).Build();
 app.Run();
 
         
-internal class Worker : IHostedService
+internal class Worker : BackgroundService
 {
     public Worker(ITestInterface testClass)
     {
         testClass.Foo();
     }
-    
+
+    protected override Task ExecuteAsync(CancellationToken stoppingToken)
+    {
+        StartAsync(stoppingToken);
+        stoppingToken.
+        return Task.CompletedTask;
+    }
+
     public Task StartAsync(CancellationToken cancellationToken)
     {
         Console.WriteLine("Hosted worker starts ...");
