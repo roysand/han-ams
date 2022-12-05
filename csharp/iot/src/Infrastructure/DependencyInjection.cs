@@ -10,8 +10,7 @@ namespace Infrastructure
 {
     public static class DependencyInjection
     {
-        public static IServiceCollection AddInfrastructure(this IServiceCollection services,
-            IConfiguration configuration)
+        public static IServiceCollection AddInfrastructure(this IServiceCollection services)
         {
             services.AddTransient<IAppclicationDbContext,ApplicationDbContext>();
             services.AddTransient<ApplicationDbContext>();
@@ -23,6 +22,7 @@ namespace Infrastructure
             services.AddTransient<IExchangeRateRepository<ExchengeRate>, ExchangeRateRepository>();
             services.AddTransient<IWebApiClientExchangeRate, WebApiClientExchangeRate>();
             services.AddTransient<IMqttManagedClient, MqttManagedClient>();
+            services.AddSingleton<IConfig, Config.Config>();
             
             return services;
         }

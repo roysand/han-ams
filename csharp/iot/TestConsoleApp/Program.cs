@@ -41,7 +41,6 @@ internal class Worker : BackgroundService
     protected override Task ExecuteAsync(CancellationToken stoppingToken)
     {
         StartAsync(stoppingToken);
-        stoppingToken.
         return Task.CompletedTask;
     }
 

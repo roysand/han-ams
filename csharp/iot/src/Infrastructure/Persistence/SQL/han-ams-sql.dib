@@ -1,0 +1,72 @@
+{
+    "metadata": {
+        "kernelspec": {
+            "name": "SQL",
+            "display_name": "SQL",
+            "language": "sql"
+        },
+        "language_info": {
+            "name": "sql",
+            "version": ""
+        }
+    },
+    "nbformat_minor": 2,
+    "nbformat": 4,
+    "cells": [
+        {
+            "cell_type": "code",
+            "source": [
+                "-- Create a new database called 'ProgrammingSchool'\n",
+                "-- Connect to the 'master' database to run this snippet\n",
+                "USE master\n",
+                "GO\n",
+                "\n",
+                "-- Define database name\n",
+                "DECLARE @databasename VARCHAR(50)\n",
+                "SET @databasename = 'iot'\n",
+                "\n",
+                "-- Create the new database if it does not exist already\n",
+                "IF NOT EXISTS (\n",
+                "    SELECT [name]\n",
+                "        FROM sys.databases\n",
+                "        WHERE [name] = @databasename\n",
+                ")\n",
+                "\n",
+                "DECLARE @sql VARCHAR(MAX) = 'CREATE DATABASE ' + @databasename\n",
+                "EXECUTE(@sql)\n",
+                "GO\n",
+                "\n",
+                "DECLARE @tablename VARCHAR(50)\n",
+                "SET @tablename = 'detail'\n",
+                "\n",
+                "set @sql = \n",
+                "'create table ' + @detail +\n",
+                "'(\n",
+                "    Id            uniqueidentifier not null,\n",
+                "    MeasurementId uniqueidentifier not null,\n",
+                "    TimeStamp     datetime2(3)     not null,\n",
+                "    Location      varchar(50)      not null,\n",
+                "    Name          varchar(30) null,\n",
+                "    ObisCode      varchar(50) null,\n",
+                "    Unit          varchar(5) null,\n",
+                "    ValueStr      varchar(100) null,\n",
+                "    ValueNum      decimal(19, 5) null,\n",
+                "    ObisCodeId    tinyin null\n",
+                ")'\n",
+                "\n",
+                "\n",
+                "go\n",
+                "\n",
+                "create index IX_Detail_TimeStamp\n",
+                "    on detail (TimeStamp)\n",
+                "go"
+            ],
+            "metadata": {
+                "azdata_cell_guid": "8ff89219-17ca-4a2f-af5c-e001d031ac2c",
+                "language": "sql"
+            },
+            "outputs": [],
+            "execution_count": null
+        }
+    ]
+}

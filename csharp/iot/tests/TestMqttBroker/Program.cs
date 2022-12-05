@@ -23,7 +23,8 @@ var app = builder.Build();
 // await TestMqttBroker.ClientSubscribeSamples.Subscribe_Topic();
 
 var detailRepository = app.Services.GetService<IDetailRepository<Domain.Entities.Detail>>();
-var client = new MqttManagedClient(detailRepository);
+var config = app.Services.GetService<IConfig>();
+var client = new MqttManagedClient(detailRepository, config);
 
 await ClientSubscribeSamples.Handle_Received_Application_Message();
 //await client.SubscribeAsync("iot/ams", 1);
@@ -40,7 +41,7 @@ static IHostBuilder CreateHostBuilder(string[] args, IConfiguration configuratio
         })
         .ConfigureServices((context, services) =>
         {
-            services.AddInfrastructure(configuration);
+            services.AddInfrastructure();
         });
 
     return hostBuilder;

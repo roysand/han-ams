@@ -29,7 +29,7 @@ namespace Reader.Console
         {
             // services.AddHealthEndpoints();
             services.AddHostedService<Worker>();
-            services.AddInfrastructure(Configuration);
+            services.AddInfrastructure();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

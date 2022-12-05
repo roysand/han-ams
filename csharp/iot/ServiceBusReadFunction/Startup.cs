@@ -25,6 +25,6 @@ public class Startup : FunctionsStartup
 
         IConfiguration configuration = configBuilder.Build();
         builder.Services.AddSingleton(configuration);
-        builder.Services.AddInfrastructure(configuration);
+        builder.Services.AddInfrastructure();
     }
 }

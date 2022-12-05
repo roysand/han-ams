@@ -47,7 +47,7 @@ static IHostBuilder CreateHostBuilder(string[] args, IConfiguration configuratio
         .ConfigureServices((context, services) =>
         {
             // services.AddSingleton<ITemplatePostCodesRepository<TemplatePostCodes>, TemplatePostCodesRepository<TemplatePostCodes>>();
-            services.AddInfrastructure(configuration);
+            services.AddInfrastructure();
         });
 
     return hostBuilder;
