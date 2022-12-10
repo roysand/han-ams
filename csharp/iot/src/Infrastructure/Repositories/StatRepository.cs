@@ -160,8 +160,6 @@ namespace Infrastructure.Repositories
                     Location = g.Key.location
                 }).ToListAsync(cancellationToken);
 
-            var r = prices.Where(w => w.PricePeriod.Date == now.Date && w.PricePeriod.Hour == now.Hour).FirstOrDefault().PriceNOK;
-
             result.HourData = CalculatePowerPrCompletedHour(powerByHourByDay);
             result.Prices = prices;
             result.CurrentHour = currentHour;
