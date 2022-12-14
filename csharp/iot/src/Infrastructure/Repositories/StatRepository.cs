@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Net.WebSockets;
 using System.Threading;
@@ -99,10 +100,10 @@ namespace Infrastructure.Repositories
 
         public async Task<DailyTotalVm> DailyTotal(DateTime date, CancellationToken cancellationToken)
         {
-            var now = DateTime.Now; //.Date;
+            //var now = DateTime.Now; //.Date;
             
             var powerByHourByDay = await (from hour in _context.HourSet
-                where hour.TimeStamp.Date == now.Date
+                where hour.TimeStamp.Date == date.Date
                 
                 select new HourTotalDto()
                 {
@@ -128,7 +129,7 @@ namespace Infrastructure.Repositories
                     join exchangeRate in _context.ExchangeRateSet on price.PricePeriod equals exchangeRate
                         .ExchangeRatePeriod into pe
                     from subPe in pe.DefaultIfEmpty()
-                    where price.PricePeriod >= now.Date
+                    where price.PricePeriod >= date.Date
 
                     select new PriceVm()
                     {
@@ -153,8 +154,8 @@ namespace Infrastructure.Repositories
                 .OrderBy(o => o.PricePeriod).ToListAsync(cancellationToken);
 
             var currentHour = await (from minute in _context.MinuteSet
-                where minute.TimeStamp.Date == now.Date && minute.TimeStamp.Hour == now.Hour
-                group minute by new { location = minute.Location, date = now.Date, hour = now.Hour }
+                where minute.TimeStamp.Date == date.Date && minute.TimeStamp.Hour == date.Hour
+                group minute by new { location = minute.Location, date = date.Date, hour = date.Hour }
                 into g
                 select new CurrentHour()
                 {
@@ -240,8 +241,33 @@ namespace Infrastructure.Repositories
         {
             await _context.Database.ExecuteSqlRawAsync(GenMinuteStatistics_SQL, cancellationToken);
             await _context.Database.ExecuteSqlRawAsync(GenHourStatistics_SQL, cancellationToken);
-            
-            return;
+        }
+
+        public async Task<IList<DayVm>> GenerateDayStatistics(DateTime date, CancellationToken cancellationToken)
+        {
+            var result = new List<DayVm>();
+            var day = await this.DailyTotal(date, cancellationToken);
+            if (day == null)
+            {
+                return result;
+            }
+
+            foreach (var data in day.HourData)
+            {
+                var d = new DayVm()
+                {
+                    TimeStamp = data.Date.Date,
+                    Location = data.Location,
+                    Count = data.Data.Count,
+                    Unit = data.Data.First().Unit,
+                    ValueNum = data.ValueDaySoFar,
+                    PriceNOK = data.PriceNOK.HasValue ? data.PriceNOK.Value : 0
+                };
+
+                result.Add(d);
+            }
+
+            return result;
         }
     }
 }
