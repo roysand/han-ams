@@ -3,15 +3,18 @@ using System.Collections.Generic;
 
 namespace Application.Common.Models
 {
-    public class HourTotalVm
+    public class DayTotalVm
     {
         public DateTime Date { get; set; }
         public string Location { get; set; }
         public decimal ValueDaySoFar { get; set; }
+        public decimal? PriceExTaxNOK { get; set; }
+        public decimal? PriceNOK { get; set; }
+
 
         public IList<HourTotalDataVm> Data { get; }
         
-        public HourTotalVm()
+        public DayTotalVm()
         {
             Data = new List<HourTotalDataVm>();
         }
@@ -22,6 +25,8 @@ namespace Application.Common.Models
         public DateTime Date { get; set; }
         public decimal Value { get; set; }
         public string Description { get; set; }
-        public string Unit { get; set; }   
+        public string Unit { get; set; }
+        public decimal? PriceExTaxNOK {get; set; }
+        public decimal? PriceNOK { get; set; }
     }
 }

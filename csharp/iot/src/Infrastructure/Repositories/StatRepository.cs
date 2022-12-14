@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.WebSockets;
 using System.Threading;
 using System.Threading.Tasks;
 using Application.Common.Interfaces;
 using Application.Common.Models;
 using Domain.Entities;
+using Infrastructure.Helpers;
 using Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 
@@ -117,6 +119,7 @@ namespace Infrastructure.Repositories
                 Value = powerByHourByDay.Sum(s => s.Value),
                 Description = "Daily sum",
                 Unit = "kW",
+                Name = "Total"
                 // HourData = powerByHourByDay.OrderBy(o => o.Date).ToList()
             };
 
@@ -160,52 +163,73 @@ namespace Infrastructure.Repositories
                     Location = g.Key.location
                 }).ToListAsync(cancellationToken);
 
-            result.HourData = CalculatePowerPrCompletedHour(powerByHourByDay);
+            PriceVm priceCurrentHour = null;
+
+            if (currentHour != null)
+            {
+                priceCurrentHour = prices.Where(w => w.PricePeriod == currentHour.First<CurrentHour>().Date).FirstOrDefault();
+            }
+
+
+            if (priceCurrentHour != null)
+            {
+                currentHour.ForEach(w => w.PriceExTax = w.ValueNum * priceCurrentHour.PriceNOK.Value);
+            }
+
+            result.HourData = CalculatePowerPrCompletedHour(powerByHourByDay, prices);
             result.Prices = prices;
             result.CurrentHour = currentHour;
+            result.PriceExTaxNOK = result.HourData.Sum(s => s.PriceExTaxNOK.Value);
+            result.PriceNOK = result.HourData.Sum(s => TaxToolBox.CalculateTax(s.PriceExTaxNOK.Value));
+
             return result;
         }
 
-        private  List<HourTotalVm> CalculatePowerPrCompletedHour(List<HourTotalDto> powerByHourByDay)
+        private  List<DayTotalVm> CalculatePowerPrCompletedHour(List<HourTotalDto> powerByHourByDay, List<PriceVm> prices)
         {
             string prevLocation = "";
-            var result = new List<HourTotalVm>();
-            HourTotalVm hourTotal = null;
+            var result = new List<DayTotalVm>();
+            DayTotalVm dayTotal = null;
 
             foreach (var power in powerByHourByDay)
             {
                 if (prevLocation == power.Location)
                 {
-                    hourTotal.Data.Add(new HourTotalDataVm()
+                    dayTotal.Data.Add(new HourTotalDataVm()
                     {
                         Date = power.Date,
                         Value = power.Value,
                         Description = power.Description,
-                        Unit = power.Unit
+                        Unit = power.Unit,
+                        PriceExTaxNOK = power.Value * prices.Where(w => w.PricePeriod == power.Date.Date).FirstOrDefault().PriceNOK.Value,
+                        PriceNOK = TaxToolBox.CalculateTax(power.Value * prices.Where(w => w.PricePeriod == power.Date.Date).FirstOrDefault().PriceNOK.Value)
                     });
                 }
                 else
                 {
-                    hourTotal = new HourTotalVm()
+                    dayTotal = new DayTotalVm()
                     {
                         Location = power.Location,
                         Date = power.Date,
-                        ValueDaySoFar = powerByHourByDay.Where(w => w.Location == power.Location).Sum(s => s.Value)
+                        ValueDaySoFar = powerByHourByDay.Where(w => w.Location == power.Location).Sum(s => s.Value),
                     };
 
-                    hourTotal.Data.Add(new HourTotalDataVm()
+                    dayTotal.Data.Add(new HourTotalDataVm()
                     {
                         Date = power.Date,
                         Value = power.Value,
                         Description = power.Description,
-                        Unit = power.Unit
+                        Unit = power.Unit,
+                        PriceExTaxNOK = power.Value * prices.Where(w => w.PricePeriod == power.Date.Date).FirstOrDefault().PriceNOK.Value,
+                        PriceNOK = TaxToolBox.CalculateTax(power.Value * prices.Where(w => w.PricePeriod == power.Date.Date).FirstOrDefault().PriceNOK.Value)
                     });
 
-                    result.Add(hourTotal);
+                    result.Add(dayTotal);
                     prevLocation = power.Location;
                 }
             }
 
+            result.ForEach(w => w.PriceExTaxNOK = w.ValueDaySoFar * prices.Where(p => p.PricePeriod == w.Date.Date).FirstOrDefault().PriceNOK.Value);
             return result;
         }
 
