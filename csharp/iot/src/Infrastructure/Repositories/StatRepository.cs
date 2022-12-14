@@ -174,13 +174,14 @@ namespace Infrastructure.Repositories
             if (priceCurrentHour != null)
             {
                 currentHour.ForEach(w => w.PriceExTax = w.ValueNum * priceCurrentHour.PriceNOK.Value);
+                currentHour.ForEach(w => w.PriceNOK = TaxToolBox.CalculateTax(w.PriceExTax));
             }
 
             result.HourData = CalculatePowerPrCompletedHour(powerByHourByDay, prices);
             result.Prices = prices;
             result.CurrentHour = currentHour;
             result.PriceExTaxNOK = result.HourData.Sum(s => s.PriceExTaxNOK.Value);
-            result.PriceNOK = result.HourData.Sum(s => TaxToolBox.CalculateTax(s.PriceExTaxNOK.Value));
+            result.PriceNOK = TaxToolBox.CalculateTax(result.PriceExTaxNOK.Value);
 
             return result;
         }
@@ -195,15 +196,16 @@ namespace Infrastructure.Repositories
             {
                 if (prevLocation == power.Location)
                 {
-                    dayTotal.Data.Add(new HourTotalDataVm()
+                    var data = new HourTotalDataVm()
                     {
                         Date = power.Date,
                         Value = power.Value,
                         Description = power.Description,
                         Unit = power.Unit,
                         PriceExTaxNOK = power.Value * prices.Where(w => w.PricePeriod == power.Date.Date).FirstOrDefault().PriceNOK.Value,
-                        PriceNOK = TaxToolBox.CalculateTax(power.Value * prices.Where(w => w.PricePeriod == power.Date.Date).FirstOrDefault().PriceNOK.Value)
-                    });
+                    };
+                    data.PriceNOK = TaxToolBox.CalculateTax(data.PriceExTaxNOK.Value);
+                    dayTotal.Data.Add(data);
                 }
                 else
                 {
@@ -230,6 +232,7 @@ namespace Infrastructure.Repositories
             }
 
             result.ForEach(w => w.PriceExTaxNOK = w.ValueDaySoFar * prices.Where(p => p.PricePeriod == w.Date.Date).FirstOrDefault().PriceNOK.Value);
+            result.ForEach(w => w.PriceNOK = TaxToolBox.CalculateTax(w.PriceExTaxNOK.Value));
             return result;
         }
 

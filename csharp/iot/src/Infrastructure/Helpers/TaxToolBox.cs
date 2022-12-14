@@ -10,7 +10,7 @@ namespace Infrastructure.Helpers
     {
         public static decimal CalculateTax(decimal value)
         {
-            return value * 25 / 100;
+            return value * (decimal)1.25;
         }
     }
 }
