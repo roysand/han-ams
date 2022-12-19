@@ -32,23 +32,27 @@ namespace Infrastructure.Clients
         public string UrlBase { get; set; }
         public System.Collections.Specialized.NameValueCollection QueryParam { get; set; }
         
-        public async Task<ICollection<ExchengeRate>> DownloadExchangeRates()
+        public async Task<ICollection<ExchengeRate>> DownloadExchangeRates(DateTime? start)
         {
             var startDate = DateTime.Now;
+
             HttpResponseMessage responseMessage = null;
             var result = new List<ExchengeRate>();
 
-            ExchengeRate latestExchangeRate = await _exchangeRateRepository.FindNewestAsync();
-            if (latestExchangeRate == null)
+            if (start == null)
             {
-                startDate = new DateTime(2021, 12, 24);
+                ExchengeRate latestExchangeRate = await _exchangeRateRepository.FindNewestAsync();
+                if (latestExchangeRate != null)
+                {
+                    startDate = latestExchangeRate.ExchangeRatePeriod.AddDays(1);
+                }
             }
             else
             {
-                startDate = latestExchangeRate.ExchangeRatePeriod.AddDays(1);
+                startDate = start.Value;
             }
 
-            var deltaDays = Math.Min(365, (DateTime.Now.AddDays(1) - startDate).Days);
+            var deltaDays = Math.Min(365, ((end ?? startDate.AddDays(1)) - startDate).Days);
             
             QueryParam.Set("startPeriod", startDate.ToString("yyyy-MM-dd"));
             QueryParam.Set("endPeriod", startDate.AddDays(deltaDays).ToString("yyyy-MM-dd"));
@@ -90,6 +94,24 @@ namespace Infrastructure.Clients
                 Console.WriteLine(e);
             }
             
+            var missingDates = new List<ExchengeRate>();
+
+            // Norges bank does not calculate exchange rates every day!!
+            // Create missing exchange rates
+            for(var i = 0; i < result.Count - 1; i++)
+            {
+                if ((result[i + 1].ExchangeRatePeriod - result[i].ExchangeRatePeriod).TotalDays > 1)
+                {
+                    missingDates.Add(new ExchengeRate()
+                    {
+                        ExchangeRatePeriod = result[i].ExchangeRatePeriod.AddDays(1),
+                        ExchangeRate = result[i].ExchangeRate,
+                        ExchangeRateType = result[i].ExchangeRateType
+                    });
+                }
+            }
+
+            result.AddRange(missingDates);
             return result;
         }
     }

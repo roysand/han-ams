@@ -14,6 +14,20 @@ var configuration = new ConfigurationBuilder()
     .AddEnvironmentVariables()
     .Build();
 
+DateTime start = DateTime.Now, end = DateTime.Now;
+if (args.Length == 2)
+{
+    DateTime.TryParse(args[1], out start);
+    DateTime.TryParse(args[2], out end);
+}
+else
+{
+    Console.WriteLine("Missing commandline params. Need to dates 'yyyymmdd'");
+    Console.WriteLine("Using DateTime.Now");
+    start = end = DateTime.Now;
+    start = DateTime.Now.AddDays(-500);
+}
+
 var builder = CreateHostBuilder(args, configuration);
 builder.ConfigureAppConfiguration(app => app.AddConfiguration(configuration));
 var app = builder.Build();
@@ -26,7 +40,7 @@ if (exchangeRateRepository == null)
 }
 var client = new WebApiClientExchangeRate(configuration, exchangeRateRepository);
 
-var exchangeRates = await client.DownloadExchangeRates();
+var exchangeRates = (await client.DownloadExchangeRates(start, end));
 
 foreach (var exchangeRate in exchangeRates)
 {
