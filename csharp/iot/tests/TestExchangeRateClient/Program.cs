@@ -38,14 +38,12 @@ if (exchangeRateRepository == null)
 {
     return;
 }
-var client = new WebApiClientExchangeRate(configuration, exchangeRateRepository);
+
+var client = new WebApiClientExchangeRate(configuration);
 
 var exchangeRates = (await client.DownloadExchangeRates(start, end));
 
-foreach (var exchangeRate in exchangeRates)
-{
-    exchangeRateRepository.Add(exchangeRate);
-}
+exchangeRateRepository.AddRange(exchangeRates.ToList());
 
 var count = await exchangeRateRepository.SaveChangesAsync(new CancellationToken());
 Console.WriteLine($"Exchange rates added to the database is {count}");

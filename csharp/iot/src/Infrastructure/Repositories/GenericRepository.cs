@@ -49,5 +49,11 @@ namespace Infrastructure.Repositories
             var result = await _context.SaveChangesAsync(cancellationToken);
             return result;
         }
+
+        public virtual int AddRange(List<T> entities)
+        {
+            _context.AddRange(entities);
+            return entities.Count;
+        }
     }
 }
