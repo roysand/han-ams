@@ -14,20 +14,6 @@ var configuration = new ConfigurationBuilder()
     .AddEnvironmentVariables()
     .Build();
 
-DateTime start = DateTime.Now, end = DateTime.Now;
-if (args.Length == 2)
-{
-    DateTime.TryParse(args[1], out start);
-    DateTime.TryParse(args[2], out end);
-}
-else
-{
-    Console.WriteLine("Missing commandline params. Need to dates 'yyyymmdd'");
-    Console.WriteLine("Using DateTime.Now");
-    start = end = DateTime.Now;
-    start = DateTime.Now.AddDays(-500);
-}
-
 var builder = CreateHostBuilder(args, configuration);
 builder.ConfigureAppConfiguration(app => app.AddConfiguration(configuration));
 var app = builder.Build();
@@ -36,7 +22,33 @@ Console.WriteLine("Hello, World!");
 var exchangeRateRepository = app.Services.GetService<IExchangeRateRepository<ExchengeRate>>();
 if (exchangeRateRepository == null)
 {
+    Console.WriteLine("Exchange rate repository is not found, program quits!!");
     return;
+}
+
+DateTime start = DateTime.Now, end = DateTime.Now;
+if (args.Length == 2)
+{
+    DateTime.TryParse(args[0], out start);
+    DateTime.TryParse(args[1], out end);
+}
+else
+{
+    Console.WriteLine("Missing commandline params. Need to dates 'yyyymmdd'");
+    Console.WriteLine("Using data from database");
+
+    var exRate = await exchangeRateRepository.FindNewestAsync();
+    if (exRate == null)
+    {
+        start = DateTime.Now;
+        end = start.AddDays(1);
+
+    }
+    else
+    {
+        start = exRate.ExchangeRatePeriod.AddDays(1);
+        end = start.AddDays(1);
+    }
 }
 
 var client = new WebApiClientExchangeRate(configuration);

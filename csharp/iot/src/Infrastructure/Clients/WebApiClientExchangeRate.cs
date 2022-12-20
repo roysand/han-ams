@@ -34,7 +34,7 @@ namespace Infrastructure.Clients
 
             endDate ??= DateTime.Now.AddDays(1);
 
-            var deltaDays = Math.Min(365, (endDate.Value  - startDate).Days);
+            var deltaDays = Math.Min(720, (endDate.Value  - startDate).Days);
             
             QueryParam.Set("startPeriod", startDate.ToString("yyyy-MM-dd"));
             QueryParam.Set("endPeriod", startDate.AddDays(deltaDays).ToString("yyyy-MM-dd"));
