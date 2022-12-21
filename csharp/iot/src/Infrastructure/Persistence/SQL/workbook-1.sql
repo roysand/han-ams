@@ -2290,9 +2290,9 @@ select count(*) from detail
 ;-- -. . -..- - / . -. - .-. -.--
 delete from raw  where TimeStamp < '2022-08-15'
 ;-- -. . -..- - / . -. - .-. -.--
-delete from detail where TimeStamp < '2022-11-08'
+delete from detail where TimeStamp < '2022-11-20'
 ;-- -. . -..- - / . -. - .-. -.--
-select max(d.timestamp) from detail d
+select min(d.timestamp) from detail d
 ;-- -. . -..- - / . -. - .-. -.--
 select cast(h.timeStamp as date),sum(valueNum)  powerDay, count(*)
 from hour h
@@ -2535,3 +2535,16 @@ from price p
 left outer join exchange_rate er on er.ExchangeRatePeriod = p.PricePeriod
 --where cast(p.PricePeriod as date) = cast(getdate() as date)
 order by p.PricePeriod desc
+
+select h.Location,sum(h.ValueNum) Sumday, DAY(h.TimeStamp) date
+from dbo.hour h
+where MONTH(h.TimeStamp) = 11 and YEAR(h.TimeStamp) = 2022
+group by h.Location,DAY(h.TimeStamp)
+Order by 1,3
+
+select h.Location,sum(h.ValueNum) Sumday, MONTH(h.TimeStamp) date
+from hour h
+group by h.Location,MONTH(h.TimeStamp)
+Order by 1,3
+
+select * from dbo.raw

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using Application.Common.Models;
 using Domain.Entities;
 
 namespace Application.Common.Helpers

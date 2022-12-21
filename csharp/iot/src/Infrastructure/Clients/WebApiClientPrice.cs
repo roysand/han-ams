@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Xml.Serialization;
 using Application.Common.Helpers;
 using Application.Common.Interfaces;
+using Application.Common.Models;
 using Domain.Entities;
 using Microsoft.Extensions.Configuration;
 using Microsoft.VisualBasic.CompilerServices;

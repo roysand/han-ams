@@ -97,11 +97,10 @@ namespace Infrastructure.Repositories
 
         public async Task<DailyTotalVm> DailyTotal(DateTime date, CancellationToken cancellationToken)
         {
-            // Azure database use time zone UTC!!
-            var now = DateTime.Now.Date;
+            var now = DateTime.Now; //.Date;
             
             var powerByHourByDay = await (from hour in _context.HourSet
-                where hour.TimeStamp.Date == now
+                where hour.TimeStamp.Date == now.Date
                 
                 select new HourTotalDto()
                 {
@@ -121,7 +120,51 @@ namespace Infrastructure.Repositories
                 // HourData = powerByHourByDay.OrderBy(o => o.Date).ToList()
             };
 
+            var prices = await (from price in _context.PriceSet
+                    join priceDetail in _context.PriceDetailSet on price.PriceId equals priceDetail.Price.PriceId
+                    join exchangeRate in _context.ExchangeRateSet on price.PricePeriod equals exchangeRate
+                        .ExchangeRatePeriod into pe
+                    from subPe in pe.DefaultIfEmpty()
+                    where price.PricePeriod >= now.Date
+
+                    select new PriceVm()
+                    {
+                        PricePeriod = priceDetail.PricePeriod,
+                        ExchangeRate = (subPe.ExchangeRate== null
+                            ? (from ex in _context.ExchangeRateSet
+                                where ex.ExchangeRatePeriod < price.PricePeriod
+                                orderby ex.ExchangeRatePeriod descending
+                                select ex.ExchangeRate)
+                            .FirstOrDefault()
+                            : subPe.ExchangeRate),
+                        PriceEUR = priceDetail.Amount / 1000,
+                        PriceNOK = (priceDetail.Amount * (subPe.ExchangeRate == null
+                            ? (from ex in _context.ExchangeRateSet
+                                where ex.ExchangeRatePeriod < price.PricePeriod
+                                orderby ex.ExchangeRatePeriod descending
+                                select ex.ExchangeRate)
+                            .FirstOrDefault()
+                            : subPe.ExchangeRate)) / 1000
+                    }
+                )
+                .OrderBy(o => o.PricePeriod).ToListAsync(cancellationToken);
+
+            var currentHour = await (from minute in _context.MinuteSet
+                where minute.TimeStamp.Date == now.Date && minute.TimeStamp.Hour == now.Hour
+                group minute by new { location = minute.Location, date = now.Date, hour = now.Hour }
+                into g
+                select new CurrentHour()
+                {
+                    Date = new DateTime(g.Key.date.Year, g.Key.date.Month, g.Key.date.Day, g.Key.hour, 0, 0),
+                    ValueNum = g.Average(x => x.ValueNum) * ((decimal)g.Count() / (decimal)60),
+                    Location = g.Key.location
+                }).ToListAsync(cancellationToken);
+
+            var r = prices.Where(w => w.PricePeriod.Date == now.Date && w.PricePeriod.Hour == now.Hour).FirstOrDefault().PriceNOK;
+
             result.HourData = CalculatePowerPrCompletedHour(powerByHourByDay);
+            result.Prices = prices;
+            result.CurrentHour = currentHour;
             return result;
         }
 
