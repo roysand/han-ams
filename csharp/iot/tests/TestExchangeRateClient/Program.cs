@@ -40,8 +40,8 @@ else
     var exRate = await exchangeRateRepository.FindNewestAsync();
     if (exRate == null)
     {
-        start = DateTime.Now;
-        end = start.AddDays(1);
+        start = DateTime.Now.AddDays(-720);
+        end = DateTime.Now;
 
     }
     else
