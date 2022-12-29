@@ -20,7 +20,7 @@ namespace Reader.Console
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
-                    webBuilder.UseHealthEndpoints();
+                    // webBuilder.UseHealthEndpoints();
                     webBuilder.UseStartup<Startup>();
                     webBuilder.UseKestrel(options => options.AllowSynchronousIO = true);
                 });

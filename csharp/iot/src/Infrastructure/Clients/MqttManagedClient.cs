@@ -14,29 +14,32 @@ namespace Infrastructure.Clients
     public class MqttManagedClient : IMqttManagedClient
     {
         private readonly IDetailRepository<Detail> _detailRepository;
-        private string ClientId = "AMS HA-43"; //Guid.NewGuid().ToString();
-        private string URI = "822b669a3fd14b2f818fd40ea11bbaaa.s2.eu.hivemq.cloud";
-        private string User = "iot";
-        private string Password = "i3hYtten";
-        private int Port = 8883;
-        private bool UseTLS = true;
+        private readonly IConfig _config;
+        private string ClientId = System.Net.Dns.GetHostName(); //"AMS HA-43"; //Guid.NewGuid().ToString();
+        // private string URI = "822b669a3fd14b2f818fd40ea11bbaaa.s2.eu.hivemq.cloud";
+        // private string User = "iot";
+        // private string Password = "i3hYtten";
+        // private int Port = 8883;
+        //private bool UseTLS = true;
+        
         private IManagedMqttClient _client;
         private readonly MqttFactory _factory;
         private int _counter = 0;
-        public MqttManagedClient(IDetailRepository<Detail> detailRepository)
+        public MqttManagedClient(IDetailRepository<Detail> detailRepository, IConfig config)
         {
             _detailRepository = detailRepository;
+            _config = config;
             _factory = new MqttFactory();
         }
         private async Task ConnectAsync()
         {
             var messageBuilder = new MqttClientOptionsBuilder()
                 .WithClientId(ClientId)
-                .WithCredentials(User, Password)
-                .WithTcpServer(URI, Port)
+                .WithCredentials(_config.MqttConfig.MQTTUserName(), _config.MqttConfig.MQTTUserPassword())
+                .WithTcpServer(_config.MqttConfig.MQTTServerURI(), _config.MqttConfig.MQTTServerPortNr())
                 .WithCleanSession();
-
-            var options = UseTLS
+            
+            var options = _config.MqttConfig.MQTTUseTLS()
                 ? messageBuilder
                     .WithTls()
                     .Build()
@@ -66,24 +69,26 @@ namespace Infrastructure.Clients
             {
                 try
                 {
-                    // var amsDate =
-                    //     JsonConvert.DeserializeObject<AMSReaderData>(System.Text.Encoding.Default.GetString(e.ApplicationMessage.Payload));
+                    var amsDate =
+                        JsonConvert.DeserializeObject<AMSReaderData>(System.Text.Encoding.Default.GetString(e.ApplicationMessage.Payload));
                     Console.WriteLine(
                         $"{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.zzz")}{System.Text.Encoding.Default.GetString(e.ApplicationMessage.Payload)}");
                 
-                    // var detail = new Detail()
-                    // {
-                    //     MeasurementId = Guid.NewGuid(),
-                    //     TimeStamp = amsDate.TimeStamp,
-                    //     ObisCode = "1-0:1.7.0.255",
-                    //     Name = "Active power",
-                    //     ValueStr = "Active power",
-                    //     ObisCodeId = ObisCodeId.PowerUsed,
-                    //     Unit = "kW",
-                    //     Location = "Pihl 4787",
-                    //     ValueNum = (decimal)amsDate.Data.P / 1000
-                    // };
-                    //
+                    var detail = new Detail()
+                    {
+                        MeasurementId = Guid.NewGuid(),
+                        TimeStamp = amsDate.TimeStamp,
+                        ObisCode = "1-0:1.7.0.255",
+                        Name = "Active power",
+                        ValueStr = "Active power",
+                        ObisCodeId = ObisCodeId.PowerUsed,
+                        Unit = "kW",
+                        Location = _config.ApplicationSettingsConfig.Location(),
+                        ValueNum = (decimal)amsDate.Data.P / 1000
+                    };
+
+                    Console.WriteLine(JsonConvert.SerializeObject(detail));
+                    
                     // _detailRepository.Add(detail);
                     _counter++;
 
@@ -113,7 +118,7 @@ namespace Infrastructure.Clients
             }
             
             var mqttSubscribeOptions = _factory.CreateSubscribeOptionsBuilder()
-                .WithTopicFilter(f => { f.WithTopic("iot/ams"); })
+                .WithTopicFilter(f => { f.WithTopic(topic); })
                 .Build();
 
 

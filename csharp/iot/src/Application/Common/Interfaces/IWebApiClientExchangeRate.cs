@@ -7,6 +7,6 @@ namespace Application.Common.Interfaces
 {
     public interface IWebApiClientExchangeRate : IWebApiClient
     {
-        Task<ICollection<ExchengeRate>> DownloadExchangeRates();
+        Task<ICollection<ExchengeRate>> DownloadExchangeRates(DateTime startDate, DateTime? endDate = null);
     }
 }

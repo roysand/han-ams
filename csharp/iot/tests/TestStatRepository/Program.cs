@@ -21,12 +21,15 @@ Console.WriteLine("Hello, World!");
 var statRepository = app.Services.GetService<IStatRepository<Domain.Entities.Detail>>();
 if (statRepository == null)
 {
-     Console.WriteLine("No data found!");
+     Console.WriteLine("No repository found!");
      return;
 }
 
-var result = await statRepository.DailyTotal(DateTime.Now, new CancellationToken());
+var result = await statRepository.DailyTotal(DateTime.Now.AddDays(-1), new CancellationToken());
 Console.WriteLine(JsonSerializer.Serialize(result));
+
+var daySum = await statRepository.GenerateDayStatistics(DateTime.Now.AddDays(-10), new CancellationToken());
+Console.WriteLine(JsonSerializer.Serialize(daySum));
 
 return; 
 
@@ -40,7 +43,7 @@ static IHostBuilder CreateHostBuilder(string[] args, IConfiguration configuratio
         .ConfigureServices((context, services) =>
         {
             // services.AddSingleton<ITemplatePostCodesRepository<TemplatePostCodes>, TemplatePostCodesRepository<TemplatePostCodes>>();
-            services.AddInfrastructure(configuration);
+            services.AddInfrastructure();
         });
 
     return hostBuilder;

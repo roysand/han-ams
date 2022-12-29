@@ -19,5 +19,6 @@ namespace Application.Common.Interfaces
         Task<IEnumerable<T>> Find(Expression<Func<T, bool>> predicate,CancellationToken cancellationToken);
         Task<T> FindSingle(Expression<Func<T, bool>> predicate, CancellationToken cancellationToken);
         Task<int> SaveChangesAsync(CancellationToken cancellationToken);
+        int AddRange(List<T> entities);
     }
 }

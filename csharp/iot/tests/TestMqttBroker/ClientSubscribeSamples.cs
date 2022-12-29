@@ -23,9 +23,11 @@ public static class ClientSubscribeSamples
         using (var mqttClient = mqttFactory.CreateMqttClient())
         {
             var mqttClientOptions = new MqttClientOptionsBuilder()
-                .WithTcpServer("822b669a3fd14b2f818fd40ea11bbaaa.s2.eu.hivemq.cloud")
-                .WithCredentials("iot_sandaas","i3hYtten")
-                .WithTls()
+                // .WithTcpServer("822b669a3fd14b2f818fd40ea11bbaaa.s2.eu.hivemq.cloud")
+                .WithTcpServer("iot-ha43")
+                //.WithCredentials("iot_sandaas","i3hYtten")
+                .WithCredentials("iot","i3hYtte")
+                // .WithTls()
                 .Build();
 
             // Setup message handling before connecting so that queued messages
