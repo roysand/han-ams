@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Application.Common.Exceptions;
 using Application.Common.Interfaces;
+using Application.Common.Interfaces.Config;
 using Microsoft.Extensions.Configuration;
 
 namespace Infrastructure.Config;

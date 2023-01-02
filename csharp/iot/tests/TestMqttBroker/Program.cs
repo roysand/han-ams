@@ -2,6 +2,7 @@
 
 
 using Application.Common.Interfaces;
+using Application.Common.Interfaces.Config;
 using Infrastructure;
 using Infrastructure.Clients;
 using Microsoft.Extensions.Configuration;

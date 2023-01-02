@@ -1,5 +1,6 @@
 ﻿using System.Reflection;
 using Application.Common.Interfaces;
+using Application.Common.Interfaces.Config;
 
 namespace Infrastructure.Config;
 

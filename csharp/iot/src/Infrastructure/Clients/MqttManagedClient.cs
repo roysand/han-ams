@@ -2,6 +2,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Application.Common.Interfaces;
+using Application.Common.Interfaces.Config;
 using Domain.Entities;
 using MQTTnet;
 using MQTTnet.Client;

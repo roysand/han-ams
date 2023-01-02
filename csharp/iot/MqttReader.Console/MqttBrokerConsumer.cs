@@ -1,4 +1,5 @@
 using Application.Common.Interfaces;
+using Application.Common.Interfaces.Config;
 using Domain.Entities;
 
 namespace MqttReader.Console;

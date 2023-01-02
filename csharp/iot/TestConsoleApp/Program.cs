@@ -44,13 +44,13 @@ internal class Worker : BackgroundService
         return Task.CompletedTask;
     }
 
-    public Task StartAsync(CancellationToken cancellationToken)
+    public override Task StartAsync(CancellationToken cancellationToken)
     {
         Console.WriteLine("Hosted worker starts ...");
         return Task.CompletedTask;
     }
 
-    public Task StopAsync(CancellationToken cancellationToken)
+    public override Task StopAsync(CancellationToken cancellationToken)
     {
         Console.WriteLine("Hosted worker stops ...");
         return Task.CompletedTask;

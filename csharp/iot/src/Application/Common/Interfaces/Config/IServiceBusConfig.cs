@@ -1,6 +1,4 @@
-using System.Data.Common;
-
-namespace Application.Common.Interfaces;
+namespace Application.Common.Interfaces.Config;
 
 public interface IServiceBusConfig
 {
