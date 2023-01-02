@@ -34,6 +34,7 @@ namespace Infrastructure.Clients
         }
         private async Task ConnectAsync()
         {
+            var useName = _config.MqttConfig.MQTTUserName();
             var messageBuilder = new MqttClientOptionsBuilder()
                 .WithClientId(ClientId)
                 .WithCredentials(_config.MqttConfig.MQTTUserName(), _config.MqttConfig.MQTTUserPassword())
@@ -66,7 +67,7 @@ namespace Infrastructure.Clients
                 return Task.CompletedTask;
             };
 
-            _client.ApplicationMessageReceivedAsync += async e =>
+            _client.ApplicationMessageReceivedAsync += e =>
             {
                 try
                 {
@@ -106,6 +107,8 @@ namespace Infrastructure.Clients
                     Console.WriteLine(exception);
                     //throw;
                 }
+                
+                return Task.CompletedTask;
             };
             
             await _client.StartAsync(managedOptions);
@@ -121,7 +124,6 @@ namespace Infrastructure.Clients
             var mqttSubscribeOptions = _factory.CreateSubscribeOptionsBuilder()
                 .WithTopicFilter(f => { f.WithTopic(topic); })
                 .Build();
-
 
             await _client.SubscribeAsync(topic, (MqttQualityOfServiceLevel)qos);
         }

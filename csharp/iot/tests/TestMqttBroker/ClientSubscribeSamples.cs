@@ -28,6 +28,7 @@ public static class ClientSubscribeSamples
                 //.WithCredentials("iot_sandaas","i3hYtten")
                 .WithCredentials("iot","i3hYtte")
                 // .WithTls()
+                .WithClientId("test_client_id")
                 .Build();
 
             // Setup message handling before connecting so that queued messages
@@ -36,7 +37,7 @@ public static class ClientSubscribeSamples
             mqttClient.ApplicationMessageReceivedAsync += e =>
             {
                 Console.WriteLine($"{DateTime.Now} - Received application message.");
-                e.DumpToConsole();
+                // e.DumpToConsole();
                 Console.WriteLine($"{DateTime.Now} - {System.Text.Encoding.Default.GetString(e.ApplicationMessage.Payload)}");
 
                 return Task.CompletedTask;
