@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Application.Common.Interfaces;
 using Application.Common.Interfaces.Config;
+using Application.Common.Models;
 using Domain.Entities;
 using MQTTnet;
 using MQTTnet.Client;
@@ -12,29 +13,20 @@ using Newtonsoft.Json;
 
 namespace Infrastructure.Clients
 {
-    public class MqttManagedClient : IMqttManagedClient
+    public abstract class MqttManagedClient : IMqttManagedClient
     {
-        private readonly IDetailRepository<Detail> _detailRepository;
         private readonly IConfig _config;
-        private string ClientId = System.Net.Dns.GetHostName(); //"AMS HA-43"; //Guid.NewGuid().ToString();
-        // private string URI = "822b669a3fd14b2f818fd40ea11bbaaa.s2.eu.hivemq.cloud";
-        // private string User = "iot";
-        // private string Password = "i3hYtten";
-        // private int Port = 8883;
-        //private bool UseTLS = true;
-        
+        private string ClientId = System.Net.Dns.GetHostName();
         private IManagedMqttClient _client;
         private readonly MqttFactory _factory;
         private int _counter = 0;
-        public MqttManagedClient(IDetailRepository<Detail> detailRepository, IConfig config)
+        public MqttManagedClient(IConfig config)
         {
-            _detailRepository = detailRepository;
             _config = config;
             _factory = new MqttFactory();
         }
         private async Task ConnectAsync()
         {
-            var useName = _config.MqttConfig.MQTTUserName();
             var messageBuilder = new MqttClientOptionsBuilder()
                 .WithClientId(ClientId)
                 .WithCredentials(_config.MqttConfig.MQTTUserName(), _config.MqttConfig.MQTTUserPassword())
@@ -67,48 +59,20 @@ namespace Infrastructure.Clients
                 return Task.CompletedTask;
             };
 
-            _client.ApplicationMessageReceivedAsync += e =>
+            _client.ApplicationMessageReceivedAsync += async e =>
             {
                 try
                 {
-                    var amsDate =
+                    var amsReaderData =
                         JsonConvert.DeserializeObject<AMSReaderData>(System.Text.Encoding.Default.GetString(e.ApplicationMessage.Payload));
-                    Console.WriteLine(
-                        $"{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.zzz")}{System.Text.Encoding.Default.GetString(e.ApplicationMessage.Payload)}");
-                
-                    var detail = new Detail()
-                    {
-                        MeasurementId = Guid.NewGuid(),
-                        TimeStamp = amsDate.TimeStamp,
-                        ObisCode = "1-0:1.7.0.255",
-                        Name = "Active power",
-                        ValueStr = "Active power",
-                        ObisCodeId = ObisCodeId.PowerUsed,
-                        Unit = "kW",
-                        Location = _config.ApplicationSettingsConfig.Location(),
-                        ValueNum = (decimal)amsDate.Data.P / 1000
-                    };
 
-                    Console.WriteLine(JsonConvert.SerializeObject(detail));
-                    
-                    // _detailRepository.Add(detail);
-                    _counter++;
-
-                    if (_counter > 9)
-                    {
-                        Console.WriteLine("Writing to database");
-                        // await _detailRepository.SaveChangesAsync(new CancellationToken());
-                        _counter = 0;
-                    }
-                
+                    await Save(amsReaderData);
                 }
                 catch (Exception exception)
                 {
                     Console.WriteLine(exception);
                     //throw;
                 }
-                
-                return Task.CompletedTask;
             };
             
             await _client.StartAsync(managedOptions);
@@ -137,76 +101,28 @@ namespace Infrastructure.Clients
         {
             await _client.StopAsync();
         }
-    }
-    
-    // Root myDeserializedClass = JsonConvert.DeserializeObject<Root>(myJsonResponse);
-    public class Data
-    {
-        [JsonProperty("lv")]
-        public string Lv { get; set; }
 
-        [JsonProperty("id")]
-        public string Id { get; set; }
-
-        [JsonProperty("type")]
-        public string Type { get; set; }
-
-        [JsonProperty("P")]
-        public int P { get; set; }
-
-        [JsonProperty("Q")]
-        public int Q { get; set; }
-
-        [JsonProperty("PO")]
-        public int PO { get; set; }
-
-        [JsonProperty("QO")]
-        public int QO { get; set; }
-
-        [JsonProperty("I1")]
-        public double I1 { get; set; }
-
-        [JsonProperty("I2")]
-        public double I2 { get; set; }
-
-        [JsonProperty("I3")]
-        public double I3 { get; set; }
-
-        [JsonProperty("U1")]
-        public double U1 { get; set; }
-
-        [JsonProperty("U2")]
-        public double U2 { get; set; }
-
-        [JsonProperty("U3")]
-        public double U3 { get; set; }
-    }
-
-    public class AMSReaderData
-    {
-        public DateTime TimeStamp { get; } = DateTime.Now; 
-        [JsonProperty("id")]
-        public string Id { get; set; }
-
-        [JsonProperty("name")]
-        public string Name { get; set; }
-
-        [JsonProperty("up")]
-        public int Up { get; set; }
-
-        [JsonProperty("t")]
-        public int T { get; set; }
-
-        [JsonProperty("vcc")]
-        public double Vcc { get; set; }
-
-        [JsonProperty("rssi")]
-        public int Rssi { get; set; }
-
-        [JsonProperty("temp")]
-        public double Temp { get; set; }
-
-        [JsonProperty("data")]
-        public Data Data { get; set; }
+        public virtual async Task Save(AMSReaderData data)
+        {
+            Console.WriteLine(
+                $"{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.zzz")}{JsonConvert.SerializeObject(data)}");
+                
+            var detail = new Detail()
+            {
+                MeasurementId = Guid.NewGuid(),
+                TimeStamp = data.TimeStamp,
+                ObisCode = "1-0:1.7.0.255",
+                Name = "Active power",
+                ValueStr = "Active power",
+                ObisCodeId = ObisCodeId.PowerUsed,
+                Unit = "kW",
+                Location = _config.ApplicationSettingsConfig.Location(),
+                ValueNum = (decimal)data.Data.P / 1000
+            };
+        
+            Console.WriteLine(JsonConvert.SerializeObject(detail));
+        
+            await Task.CompletedTask;
+        }
     }
 }

@@ -16,27 +16,27 @@ public class MqttConfig : IMqttConfig
     
     public string MQTTTopic()
     {
-        return _config.GetConfigValue<string>($"{ConfigParentKey}:{MethodBase.GetCurrentMethod()!.Name}");
+        return _config.GetConfigValue<string>($"{ConfigParentKey}:{MethodBase.GetCurrentMethod()!.Name}", true);
     }
 
     public string MQTTServerURI()
     {
-        return _config.GetConfigValue<string>($"{ConfigParentKey}:{MethodBase.GetCurrentMethod()!.Name}");
+        return _config.GetConfigValue<string>($"{ConfigParentKey}:{MethodBase.GetCurrentMethod()!.Name}", true);
     }
 
     public int MQTTServerPortNr()
     {
-        return _config.GetConfigValue<int>($"{ConfigParentKey}:{MethodBase.GetCurrentMethod()!.Name}");
+        return _config.GetConfigValue<int>($"{ConfigParentKey}:{MethodBase.GetCurrentMethod()!.Name}", true);
     }
 
     public string MQTTUserName()
     {
-        return _config.GetConfigValue<string>($"{ConfigParentKey}:{MethodBase.GetCurrentMethod()!.Name}");
+        return _config.GetConfigValue<string>($"{ConfigParentKey}:{MethodBase.GetCurrentMethod()!.Name}", true);
     }
 
     public string MQTTUserPassword()
     {
-        return _config.GetConfigValue<string>($"{ConfigParentKey}:{MethodBase.GetCurrentMethod()!.Name}");
+        return _config.GetConfigValue<string>($"{ConfigParentKey}:{MethodBase.GetCurrentMethod()!.Name}", true);
     }
 
     public bool MQTTUseTLS()

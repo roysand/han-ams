@@ -22,9 +22,9 @@ namespace Infrastructure
             services.AddTransient<IPriceDetailRepository<PriceDetail>, PriceDetailRepository>();
             services.AddTransient<IExchangeRateRepository<ExchengeRate>, ExchangeRateRepository>();
             services.AddTransient<IWebApiClientExchangeRate, WebApiClientExchangeRate>();
-            services.AddTransient<IMqttManagedClient, MqttManagedClient>();
+            services.AddTransient<IMqttManagedClient, AMSMqttManagedClient>();
             services.AddSingleton<IConfig, Config.Config>();
-            
+            // services.AddTransient<AMSMqttManagedClient>();
             return services;
         }
     }
