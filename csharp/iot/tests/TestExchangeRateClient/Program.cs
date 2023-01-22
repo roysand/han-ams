@@ -34,7 +34,7 @@ if (args.Length == 2)
 }
 else
 {
-    Console.WriteLine("Missing commandline params. Need to dates 'yyyymmdd'");
+    Console.WriteLine("Missing commandline params. Need two dates 'yyyymmdd'");
     Console.WriteLine("Using data from database");
 
     var exRate = await exchangeRateRepository.FindNewestAsync();
@@ -47,10 +47,11 @@ else
     else
     {
         start = exRate.ExchangeRatePeriod.AddDays(1);
-        end = start.AddDays(1);
+        end = DateTime.Now;
     }
 }
 
+Console.WriteLine($"Using start date: '{start}' end date '{end}'");
 var client = new WebApiClientExchangeRate(configuration);
 
 var exchangeRates = (await client.DownloadExchangeRates(start, end));
