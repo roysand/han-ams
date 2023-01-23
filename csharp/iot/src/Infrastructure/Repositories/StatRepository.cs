@@ -166,7 +166,7 @@ namespace Infrastructure.Repositories
 
             PriceVm priceCurrentHour = null;
 
-            if (currentHour != null)
+            if (currentHour.Count != 0)
             {
                 priceCurrentHour = prices.Where(w => w.PricePeriod == currentHour.First<CurrentHour>().Date).FirstOrDefault();
             }
