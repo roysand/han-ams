@@ -10,6 +10,8 @@ namespace Application.Common.Interfaces
     {
         Task<DailyTotalVm> DailyTotal(DateTime date, CancellationToken cancellationToken);
         Task GeneratePowerUsageStatistics(CancellationToken cancellationToken);
+        Task GenerateMinutePowerUsageStatistics(CancellationToken cancellationToken);
+        Task GenerateHourPowerUsageStatistics(CancellationToken cancellationToken);
         Task<IList<DayVm>> GenerateDayStatistics(DateTime date, CancellationToken cancellationToken);
     }
 }

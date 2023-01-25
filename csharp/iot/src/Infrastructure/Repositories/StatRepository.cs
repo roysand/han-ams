@@ -243,6 +243,17 @@ namespace Infrastructure.Repositories
             await _context.Database.ExecuteSqlRawAsync(GenHourStatistics_SQL, cancellationToken);
         }
 
+        public async Task GenerateMinutePowerUsageStatistics(CancellationToken cancellationToken)
+        {
+            await _context.Database.ExecuteSqlRawAsync(GenMinuteStatistics_SQL, cancellationToken);
+        }
+
+        public async Task GenerateHourPowerUsageStatistics(CancellationToken cancellationToken)
+        {
+            await _context.Database.ExecuteSqlRawAsync(GenHourStatistics_SQL, cancellationToken);
+
+        }
+
         public async Task<IList<DayVm>> GenerateDayStatistics(DateTime date, CancellationToken cancellationToken)
         {
             var result = new List<DayVm>();
