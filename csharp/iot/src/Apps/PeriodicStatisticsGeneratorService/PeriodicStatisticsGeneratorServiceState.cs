@@ -1,0 +1,3 @@
+﻿namespace PeriodicStatisticsGeneratorService;
+
+record PeriodicStatisticsGeneratorServiceState(bool IsEnabled);

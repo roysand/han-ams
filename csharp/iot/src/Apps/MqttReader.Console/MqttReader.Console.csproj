@@ -9,13 +9,13 @@
 
     <ItemGroup>
         <PackageReference Include="App.Metrics.AspNetCore.Health.Endpoints" Version="3.2.0" />
-        <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="6.0.1" />
-        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
+        <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="7.0.0" />
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\src\Application\Application.csproj" />
-      <ProjectReference Include="..\src\Infrastructure\Infrastructure.csproj" />
+      <ProjectReference Include="..\..\Application\Application.csproj" />
+      <ProjectReference Include="..\..\Infrastructure\Infrastructure.csproj" />
     </ItemGroup>
 
     <ItemGroup>

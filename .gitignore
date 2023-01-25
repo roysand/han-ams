@@ -151,6 +151,7 @@ dmypy.json
 # Rider auto-generates .iml files, and contentModel.xml
 **/.idea/**/*.iml
 **/.idea/**/contentModel.xml
+**/.idea/config/**
 **/.idea/**/modules.xml
 **/.idea/**/indexLayout.xml
 **/.idea/**/sqldialects.xml
