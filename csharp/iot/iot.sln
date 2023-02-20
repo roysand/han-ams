@@ -49,7 +49,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MqttReader.Console", "src\A
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PeriodicStatisticsGeneratorService", "src\Apps\PeriodicStatisticsGeneratorService\PeriodicStatisticsGeneratorService.csproj", "{8CA43EA9-5924-4AE9-9E50-8E4022BD0F24}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GenerateMinuteStatistics.Console", "src\Apps\GenerateMinuteStatistics.Console\GenerateMinuteStatistics.Console.csproj", "{41058326-320A-4879-8539-C4A5D9DB3601}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GeneratePeriodicStatistics.Console", "src\Apps\GeneratePeriodicStatistics.Console\GeneratePeriodicStatistics.Console.csproj", "{41058326-320A-4879-8539-C4A5D9DB3601}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
