@@ -31,7 +31,8 @@ public class HourRepository : GenericRepository<Hour>, IHourRepository<Hour>
     public async Task<IList<Hour>> PowerUsageForDays(DateOnly fromDate, DateOnly toDate,
         CancellationToken cancellationToken)
     {
-        var result = await (from hour in _context.HourSet
+
+            /*
             where hour.TimeStamp.Date >= fromDate && hour.TimeStamp.Date <= toDate
             group hour by new {location = hour.Location, date = hour.TimeStamp.Date}
             into g
@@ -39,10 +40,7 @@ public class HourRepository : GenericRepository<Hour>, IHourRepository<Hour>
                 {
                     Date = g.Key.date,
                     Loca
-                }
-    )
-
-    {
-        }
+                }*/
+            throw new NotImplementedException();
     }
 }

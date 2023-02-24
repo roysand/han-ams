@@ -119,7 +119,6 @@ namespace Infrastructure.Repositories
                 Description = "Daily sum",
                 Unit = "kW",
                 Name = "Total"
-                // HourData = powerByHourByDay.OrderBy(o => o.Date).ToList()
             };
 
             var prices = await (from price in _context.PriceSet
