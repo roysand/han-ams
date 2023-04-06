@@ -9,18 +9,23 @@ public class PeriodicStaticsGeneratorWorker : BackgroundService
     private readonly ILogger<PeriodicStaticsGeneratorWorker> _logger;
     private readonly IHostApplicationLifetime _hostApplicationLifetime;
     private readonly IStatRepository<Detail> _statRepository;
+    private readonly IDateTime _dateTime;
     private readonly TimeSpan _period = TimeSpan.FromMilliseconds(2500);
-    private DateTime lastRunTime;
+    private DateTime _lastRunTimeMinute;
+    private DateTime _lastRunTimeHour;
     public bool IsEnabled { get; set; }
 
     public PeriodicStaticsGeneratorWorker(ILogger<PeriodicStaticsGeneratorWorker> logger
         ,IHostApplicationLifetime hostApplicationLifetime
-        ,IStatRepository<Domain.Entities.Detail> statRepository)
+        ,IStatRepository<Domain.Entities.Detail> statRepository
+        ,IDateTime dateTime)
     {
         _logger = logger;
         _hostApplicationLifetime = hostApplicationLifetime;
         _statRepository = statRepository;
-        lastRunTime = DateTime.Now;
+        _dateTime = dateTime;
+        _lastRunTimeMinute = _dateTime.Now;
+        _lastRunTimeHour = _dateTime.Now;
     }
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -35,20 +40,24 @@ public class PeriodicStaticsGeneratorWorker : BackgroundService
             {
                 if (IsEnabled)
                 {
-                    now = DateTime.Now;
+                    now = _dateTime.Now;
                     
-                    _logger.LogInformation($"{now}- Is something happening now");
+                    _logger.LogInformation("{Now}- Is something happening now", now);
                     
-                    if (now.Minute - lastRunTime.Minute >= 1)
+                    if (now.Minute - _lastRunTimeMinute.Minute >= 1 && now.Second >= 2)
                     {
-                        _logger.LogInformation("Creating statistics");
-                        lastRunTime = now;
-                        var overviewData = await _statRepository.DailyTotal(DateTime.Now, stoppingToken);
-                        if (overviewData != null)
-                        {
-                            _logger.LogInformation(JsonSerializer.Serialize(overviewData));
-                        }
+                        _logger.LogInformation("Creating statistics for minute");
+                        _lastRunTimeMinute = now;
+                        await _statRepository.GenerateMinutePowerUsageStatistics(stoppingToken);
                     }
+
+                    if (now.Hour - _lastRunTimeHour.Hour >= 1 && now.Second >= 2)
+                    {
+                        _logger.LogInformation("Creating statistics for hour");
+                        _lastRunTimeHour = now;
+                        await _statRepository.GenerateHourPowerUsageStatistics(stoppingToken);
+                    }
+                    
                 }
                 else
                 {
