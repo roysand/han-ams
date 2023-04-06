@@ -4,6 +4,7 @@ using Domain.Entities;
 using Infrastructure.Clients;
 using Infrastructure.Persistence;
 using Infrastructure.Repositories;
+using Infrastructure.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -23,6 +24,7 @@ namespace Infrastructure
             services.AddTransient<IExchangeRateRepository<ExchengeRate>, ExchangeRateRepository>();
             services.AddTransient<IWebApiClientExchangeRate, WebApiClientExchangeRate>();
             services.AddTransient<IMqttManagedClient, AMSMqttManagedClient>();
+            services.AddTransient<IDateTime, DateTimeService>();
             services.AddSingleton<IConfig, Config.Config>();
             // services.AddTransient<AMSMqttManagedClient>();
             return services;
