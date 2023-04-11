@@ -3,7 +3,7 @@
 public class GenerateStatisticsWorker : BackgroundService
 {
     private readonly ILogger<GenerateStatisticsWorker> _logger;
-    private readonly TimeSpan _periode = TimeSpan.FromSeconds(5);
+    private readonly TimeSpan _periode = TimeSpan.FromMilliseconds(2500);
     public bool IsEnabled { get; set; }
     
     public GenerateStatisticsWorker(ILogger<GenerateStatisticsWorker> logger)
