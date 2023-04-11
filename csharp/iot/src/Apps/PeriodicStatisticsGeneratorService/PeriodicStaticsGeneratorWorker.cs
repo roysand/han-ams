@@ -42,7 +42,8 @@ public class PeriodicStaticsGeneratorWorker : BackgroundService
                 {
                     now = _dateTime.Now;
                     
-                    _logger.LogInformation("{Now}- Timer is running!?", now);
+                    _logger.LogInformation("{Now}- Timer is running! (min) {LastRunMinute} (hour) {LastRunHour}", now,
+                        _lastRunTimeMinute, _lastRunTimeHour);
                     
                     if (now.Minute - _lastRunTimeMinute.Minute >= 1 && now.Second >= 2)
                     {
