@@ -41,9 +41,7 @@ public class PeriodicStaticsGeneratorWorker : BackgroundService
                 if (IsEnabled)
                 {
                     now = _dateTime.Now;
-                    
-                    _logger.LogInformation("{Now}- Is something happening now", now);
-                    
+
                     if (now.Minute - _lastRunTimeMinute.Minute >= 1 && now.Second >= 2)
                     {
                         _logger.LogInformation("Creating statistics for minute");
