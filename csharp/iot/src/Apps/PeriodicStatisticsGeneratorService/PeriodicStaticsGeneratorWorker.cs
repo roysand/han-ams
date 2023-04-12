@@ -45,14 +45,14 @@ public class PeriodicStaticsGeneratorWorker : BackgroundService
                     _logger.LogInformation("{Now}- Timer is running! (min) {LastRunMinute} (hour) {LastRunHour}", now,
                         _lastRunTimeMinute, _lastRunTimeHour);
                     
-                    if (now.Minute - _lastRunTimeMinute.Minute >= 1 && now.Second >= 2)
+                    if (Math.Abs((now.Hour*100 + now.Minute) - (_lastRunTimeMinute.Hour * 100 + _lastRunTimeMinute.Minute)) >= 1 && now.Second >= 2)
                     {
                         _logger.LogInformation("Creating statistics for minute");
                         _lastRunTimeMinute = now;
                         await _statRepository.GenerateMinutePowerUsageStatistics(stoppingToken);
                     }
 
-                    if (now.Hour - _lastRunTimeHour.Hour >= 1 && now.Second >= 2)
+                    if (Math.Abs((now.Hour - _lastRunTimeHour.Hour)) >= 1 && now.Second >= 2)
                     {
                         _logger.LogInformation("Creating statistics for hour");
                         _lastRunTimeHour = now;
