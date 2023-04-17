@@ -52,7 +52,7 @@ public class PeriodicStaticsGeneratorWorker : BackgroundService
                         await _statRepository.GenerateMinutePowerUsageStatistics(stoppingToken);
                     }
 
-                    if (Math.Abs((now.Hour - _lastRunTimeHour.Hour)) >= 1 && now.Minute >= 1)
+                    if (Math.Abs((now.Hour - _lastRunTimeHour.Hour)) >= 1 && now.Minute >= 5)
                     {
                         _logger.LogInformation("Creating statistics for hour");
                         _lastRunTimeHour = now;
