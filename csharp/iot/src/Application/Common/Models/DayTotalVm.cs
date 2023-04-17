@@ -7,7 +7,7 @@ namespace Application.Common.Models
     {
         public DateTime Date { get; set; }
         public string Location { get; set; }
-        public decimal ValueDaySoFar { get; set; }
+        public decimal ValueDaySoFar { get; set; } = 0;
         public decimal? PriceExTaxNOK { get; set; }
         public decimal? PriceNOK { get; set; }
 
@@ -23,7 +23,7 @@ namespace Application.Common.Models
     public class HourTotalDataVm
     {
         public DateTime Date { get; set; }
-        public decimal Value { get; set; }
+        public decimal Value { get; set; } = 0;
         public string Description { get; set; }
         public string Unit { get; set; }
         public decimal? PriceExTaxNOK {get; set; }
