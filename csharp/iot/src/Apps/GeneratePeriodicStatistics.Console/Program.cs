@@ -9,10 +9,12 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using CommandLine;
 using GeneratePeriodicStatistics.Console;
+using Microsoft.Extensions.Logging;
 
 var configuration = new ConfigurationBuilder()
     .AddJsonFile("local.settings.json", optional:false, reloadOnChange: true)
     .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+    .AddJsonFile("appsettings.Development.json", optional: false, reloadOnChange: true)
     .AddEnvironmentVariables()
     .Build();
 
@@ -33,14 +35,26 @@ if (statRepository == null)
     return;
 }
 
+var logger = LoggerFactory.Create(config =>
+{
+    config.AddConsole();
+}).CreateLogger("App");
+
+//app.Services.GetService<ILogger>();
+if (logger == null)
+{
+    Console.WriteLine("Logger is null, program terminates");
+    return;
+}
 var cancellationToken = new CancellationToken(); 
 
 GenerateStatistics(cmdLine);
 
-GenerateMinutePowerUsageStatistics();
-
-
 Console.WriteLine("Program ends");
+
+// Flush logger
+Thread.Sleep(1);
+
 return;
 
 async void  GenerateMinutePowerUsageStatistics()
@@ -53,10 +67,12 @@ void GenerateStatistics(CommandLineOptions commandLineOptions)
     switch (commandLineOptions.Service)
     {
         case ServiceType.Minute:
+            logger.LogInformation("Do Minute Power Usage Statistics");
             GenerateMinutePowerUsageStatistics();
             break;
         
         case ServiceType.Hour:
+            logger.LogInformation("Do Hour Power Usage Statistics");
             GenerateHourPowerUsageStatistics();
             break;
     }
