@@ -240,15 +240,16 @@ namespace Infrastructure.Repositories
             await _context.Database.ExecuteSqlRawAsync(GenHourStatistics_SQL, cancellationToken);
         }
 
-        public async Task GenerateMinutePowerUsageStatistics(CancellationToken cancellationToken)
+        public async Task<int> GenerateMinutePowerUsageStatistics(CancellationToken cancellationToken)
         {
-            await _context.Database.ExecuteSqlRawAsync(GenMinuteStatistics_SQL, cancellationToken);
+            var count = await _context.Database.ExecuteSqlRawAsync(GenMinuteStatistics_SQL, cancellationToken);
+            return count;
         }
 
-        public async Task GenerateHourPowerUsageStatistics(CancellationToken cancellationToken)
+        public async Task<int> GenerateHourPowerUsageStatistics(CancellationToken cancellationToken)
         {
-            await _context.Database.ExecuteSqlRawAsync(GenHourStatistics_SQL, cancellationToken);
-
+            var count = await _context.Database.ExecuteSqlRawAsync(GenHourStatistics_SQL, cancellationToken);
+            return count;
         }
 
         public async Task<IList<DayVm>> GenerateDayStatistics(DateTime date, CancellationToken cancellationToken)

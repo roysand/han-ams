@@ -48,7 +48,7 @@ if (logger == null)
 }
 var cancellationToken = new CancellationToken(); 
 
-GenerateStatistics(cmdLine);
+await GenerateStatistics(cmdLine);
 
 Console.WriteLine("Program ends");
 
@@ -57,30 +57,33 @@ Thread.Sleep(1);
 
 return;
 
-async void  GenerateMinutePowerUsageStatistics()
+async Task<int>  GenerateMinutePowerUsageStatistics()
 {
-    await statRepository.GenerateMinutePowerUsageStatistics(cancellationToken);
+    var count = await statRepository.GenerateMinutePowerUsageStatistics(cancellationToken);
+    return count;
 }
 
-void GenerateStatistics(CommandLineOptions commandLineOptions)
+async Task  GenerateStatistics(CommandLineOptions commandLineOptions)
 {
+    int count;
     switch (commandLineOptions.Service)
     {
         case ServiceType.Minute:
-            logger.LogInformation("Do Minute Power Usage Statistics");
-            GenerateMinutePowerUsageStatistics();
+            count = await GenerateMinutePowerUsageStatistics();
+            logger.LogInformation("Done Minute Power Usage Statistics ({Count})", count);
             break;
         
         case ServiceType.Hour:
-            logger.LogInformation("Do Hour Power Usage Statistics");
-            GenerateHourPowerUsageStatistics();
+            count = await GenerateHourPowerUsageStatistics();
+            logger.LogInformation("Done Hour Power Usage Statistics ({Count})", count);
             break;
     }
 }
 
-async void  GenerateHourPowerUsageStatistics()
+async Task<int>  GenerateHourPowerUsageStatistics()
 {
-    await statRepository.GenerateHourPowerUsageStatistics(cancellationToken);
+    var count = await statRepository.GenerateHourPowerUsageStatistics(cancellationToken);
+    return count;
 }
 
 IHostBuilder CreateHostBuilder(string[] args, IConfiguration configuration)
