@@ -26,7 +26,7 @@ if (statRepository == null)
     Console.WriteLine("Unable to load StatRepository");
     return;
 }
-await statRepository.GenerateMinutePowerUsageStatistics(new CancellationToken());
+// await statRepository.GenerateMinutePowerUsageStatistics(new CancellationToken());
 
 return;
 

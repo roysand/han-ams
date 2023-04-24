@@ -3,7 +3,6 @@
 public class GenerateStatisticsWorker : BackgroundService
 {
     private readonly ILogger<GenerateStatisticsWorker> _logger;
-    private readonly TimeSpan _periode = TimeSpan.FromMilliseconds(2500);
     public bool IsEnabled { get; set; }
     
     public GenerateStatisticsWorker(ILogger<GenerateStatisticsWorker> logger)
@@ -14,9 +13,8 @@ public class GenerateStatisticsWorker : BackgroundService
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
         _logger.LogInformation("Hello from worker");
-        using PeriodicTimer timer = new PeriodicTimer(_periode);
 
-        while (!stoppingToken.IsCancellationRequested && await timer.WaitForNextTickAsync(stoppingToken))
+        while (!stoppingToken.IsCancellationRequested)
         {
             try
             {
@@ -32,6 +30,12 @@ public class GenerateStatisticsWorker : BackgroundService
             catch (Exception e)
             {
                 _logger.LogError($"Failed to execute GenerateStatisticWorker - exception message: '{e.Message}'");
+            }
+            finally
+            {
+                CancellationTokenSource cancellationToken = new CancellationTokenSource();
+                stoppingToken = cancellationToken.Token;
+                cancellationToken.Cancel();
             }
         }
     }
