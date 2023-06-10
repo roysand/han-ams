@@ -120,8 +120,9 @@ namespace Infrastructure.Clients
                 ValueNum = (decimal)data.Data.P / 1000
             };
         
-            Console.WriteLine(JsonConvert.SerializeObject(detail));
+            //Console.WriteLine(JsonConvert.SerializeObject(detail));
         
+            
             await Task.CompletedTask;
         }
     }
