@@ -133,6 +133,7 @@ dmypy.json
 
 # User specific
 .idea/
+.idea/.idea.iot/.idea/projectSettingsUpdater.xml
 **/.idea/**/workspace.xml
 **/.idea/**/tasks.xml
 **/.idea/**/misc.xml
