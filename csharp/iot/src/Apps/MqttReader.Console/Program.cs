@@ -14,6 +14,7 @@ var configuration = builder.Configuration
 var config = new Config(builder.Configuration);
 
 // Add services to the container.
+builder.Services.AddSystemd();
 builder.Services.AddInfrastructure();
 builder.Services.AddHostedService<MqttBrokerConsumer>();
 
