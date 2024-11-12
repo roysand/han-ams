@@ -19,4 +19,4 @@ builder.Services.AddInfrastructure();
 builder.Services.AddHostedService<MqttBrokerConsumer>();
 
 var app = builder.Build();
-app.Run();
+await app.RunAsync();
