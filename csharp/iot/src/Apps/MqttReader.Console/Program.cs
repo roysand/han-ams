@@ -1,5 +1,6 @@
 using Infrastructure;
 using Infrastructure.Config;
+using Microsoft.AspNetCore.Builder;
 using MqttReader.Console;
 
 var builder = WebApplication.CreateBuilder(args);
