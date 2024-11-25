@@ -54,7 +54,7 @@ internal class AMSMqttManagedClient : MqttManagedClient, IMqttManagedClient
         if (counter > _config.MqttConfig.MQTTDelayCountBeforeSaveToDb())
         {
             counter = 0;
-            // _detailRepository.SaveChangesAsync(new CancellationToken());
+            _detailRepository.SaveChangesAsync(new CancellationToken());
         }
         return Task.CompletedTask;
     }
