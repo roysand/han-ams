@@ -1,5 +1,6 @@
 using Infrastructure;
 using Infrastructure.Config;
+using Microsoft.AspNetCore.Builder;
 using MqttReader.Console;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -14,8 +15,9 @@ var configuration = builder.Configuration
 var config = new Config(builder.Configuration);
 
 // Add services to the container.
+builder.Services.AddSystemd();
 builder.Services.AddInfrastructure();
 builder.Services.AddHostedService<MqttBrokerConsumer>();
 
 var app = builder.Build();
-app.Run();
+await app.RunAsync();
