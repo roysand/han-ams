@@ -43,4 +43,9 @@ public class MqttConfig : IMqttConfig
     {
         return _config.GetConfigValue<bool>($"{ConfigParentKey}:{MethodBase.GetCurrentMethod()!.Name}");
     }
+
+    public int MQTTDelayCountBeforeSaveToDb()
+    {
+        return _config.GetConfigValue<int>($"{ConfigParentKey}:{MethodBase.GetCurrentMethod()!.Name}", true);
+    }
 }

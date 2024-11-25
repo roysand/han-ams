@@ -8,4 +8,5 @@ public interface IMqttConfig
     string MQTTUserName();
     string MQTTUserPassword();
     bool MQTTUseTLS();
+    int MQTTDelayCountBeforeSaveToDb();
 }

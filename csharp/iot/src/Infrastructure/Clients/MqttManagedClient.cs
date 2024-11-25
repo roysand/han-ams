@@ -16,7 +16,7 @@ namespace Infrastructure.Clients
     public abstract class MqttManagedClient : IMqttManagedClient
     {
         private readonly IConfig _config;
-        private string ClientId = System.Net.Dns.GetHostName();
+        private readonly string _clientId = System.Net.Dns.GetHostName() + "-" + Guid.NewGuid().ToString().Substring(0,8);
         private IManagedMqttClient _client;
         private readonly MqttFactory _factory;
         private int _counter = 0;
@@ -28,7 +28,7 @@ namespace Infrastructure.Clients
         private async Task ConnectAsync()
         {
             var messageBuilder = new MqttClientOptionsBuilder()
-                .WithClientId(ClientId)
+                .WithClientId(_clientId)
                 .WithCredentials(_config.MqttConfig.MQTTUserName(), _config.MqttConfig.MQTTUserPassword())
                 .WithTcpServer(_config.MqttConfig.MQTTServerURI(), _config.MqttConfig.MQTTServerPortNr())
                 .WithCleanSession();
