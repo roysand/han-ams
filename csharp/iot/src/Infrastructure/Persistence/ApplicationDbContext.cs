@@ -33,7 +33,11 @@ namespace Infrastructure.Persistence
             var sqlTimeout = 600;
             if (!optionsBuilder.IsConfigured)
             {
+                var connString = Environment.GetEnvironmentVariable("SQLAZURECONNSTR_AMS");
                 var connectionString = _configuration.GetConnectionString("SQLAZURECONNSTR_AMS");
+                if (string.IsNullOrWhiteSpace(connectionString))
+                    connectionString = connString;
+
                 optionsBuilder.UseSqlServer(connectionString,
                         opts => opts.CommandTimeout(sqlTimeout))
                     .EnableSensitiveDataLogging(true)

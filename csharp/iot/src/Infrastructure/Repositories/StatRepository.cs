@@ -121,6 +121,15 @@ namespace Infrastructure.Repositories
                 Name = "Total"
             };
 
+            var prices1 = await (from price in _context.PriceSet
+                join priceDetail in _context.PriceDetailSet on price.PriceId equals priceDetail.Price.PriceId
+                join exchangeRate in _context.ExchangeRateSet on price.PricePeriod equals exchangeRate
+                     .ExchangeRatePeriod into pe
+                from subPe in pe.DefaultIfEmpty()
+                                 where price.PricePeriod >= date.Date
+                select price).ToListAsync(cancellationToken);
+
+
             var prices = await (from price in _context.PriceSet
                     join priceDetail in _context.PriceDetailSet on price.PriceId equals priceDetail.Price.PriceId
                     join exchangeRate in _context.ExchangeRateSet on price.PricePeriod equals exchangeRate
@@ -220,7 +229,7 @@ namespace Infrastructure.Repositories
                         Value = power.Value,
                         Description = power.Description,
                         Unit = power.Unit,
-                        PriceExTaxNOK = power.Value * prices.Where(w => w.PricePeriod == power.Date.Date).FirstOrDefault().PriceNOK.Value,
+                        PriceExTaxNOK = power.Value * prices.FirstOrDefault(w => w.PricePeriod == power.Date.Date).PriceNOK.Value,
                         PriceNOK = TaxToolBox.CalculateTax(power.Value * prices.Where(w => w.PricePeriod == power.Date.Date).FirstOrDefault().PriceNOK.Value)
                     });
 
@@ -231,6 +240,7 @@ namespace Infrastructure.Repositories
 
             result.ForEach(w => w.PriceExTaxNOK = w.ValueDaySoFar * prices.Where(p => p.PricePeriod == w.Date.Date).FirstOrDefault().PriceNOK.Value);
             result.ForEach(w => w.PriceNOK = TaxToolBox.CalculateTax(w.PriceExTaxNOK.Value));
+
             return result;
         }
 

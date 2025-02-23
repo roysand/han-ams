@@ -13,14 +13,14 @@ internal class AMSMqttManagedClient : MqttManagedClient, IMqttManagedClient
 {
     private readonly IConfig _config;
     private readonly IDetailRepository<Detail> _detailRepository;
-    private int counter;
+    private int _counter = 0;
 
     public AMSMqttManagedClient(IConfig config
         , IDetailRepository<Detail> detailRepository) : base(config)
     {
         _config = config;
         _detailRepository = detailRepository;
-        counter = 0;
+        _counter = 0;
     }
 
     public override Task Save(AMSReaderData data)
@@ -31,7 +31,7 @@ internal class AMSMqttManagedClient : MqttManagedClient, IMqttManagedClient
         }
         
         var location = _config.ApplicationSettingsConfig.Location();
-        counter++;
+        _counter++;
         
         var detail = new Detail()
         {
@@ -51,9 +51,9 @@ internal class AMSMqttManagedClient : MqttManagedClient, IMqttManagedClient
 
         _detailRepository.Add(detail);
         
-        if (counter > _config.MqttConfig.MQTTDelayCountBeforeSaveToDb())
+        if (_counter > _config.MqttConfig.MQTTDelayCountBeforeSaveToDb())
         {
-            counter = 0;
+            _counter = 0;
             _detailRepository.SaveChangesAsync(new CancellationToken());
         }
         return Task.CompletedTask;

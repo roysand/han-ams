@@ -28,15 +28,18 @@ namespace Application.Common.Helpers
             var price = data.CreatePrice();
             decimal max = 0;
             decimal min = 10000;
+            int rowCount = -1;
             
             foreach (var dataPoint in data.TimeSeries.Period.Point)
             {
+                rowCount++;
                 var priceDetail = new PriceDetail()
                 {
                     PriceDetailId = Guid.NewGuid(),
                     Price = price,
                     Amount = dataPoint.priceamount,
-                    PricePeriod = price.PricePeriod.AddHours(Convert.ToInt16(dataPoint.position) - 1)
+                    //PricePeriod = price.PricePeriod.AddHours(Convert.ToInt16(dataPoint.position) - 1)
+                    PricePeriod = price.PricePeriod.AddHours(rowCount)
                 };
 
                 max = Math.Max(max, priceDetail.Amount);

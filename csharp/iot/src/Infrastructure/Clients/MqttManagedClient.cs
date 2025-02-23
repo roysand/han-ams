@@ -1,4 +1,5 @@
 using System;
+using System.Security.Authentication;
 using System.Threading;
 using System.Threading.Tasks;
 using Application.Common.Interfaces;
@@ -19,7 +20,6 @@ namespace Infrastructure.Clients
         private readonly string _clientId = System.Net.Dns.GetHostName() + "-" + Guid.NewGuid().ToString().Substring(0,8);
         private IManagedMqttClient _client;
         private readonly MqttFactory _factory;
-        private int _counter = 0;
         public MqttManagedClient(IConfig config)
         {
             _config = config;
@@ -35,7 +35,7 @@ namespace Infrastructure.Clients
             
             var options = _config.MqttConfig.MQTTUseTLS()
                 ? messageBuilder
-                    .WithTls()
+                    .WithTlsOptions(o => o.WithSslProtocols(SslProtocols.Tls13))
                     .Build()
                 : messageBuilder
                     .Build();
