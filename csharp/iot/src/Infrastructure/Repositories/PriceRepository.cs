@@ -22,9 +22,10 @@ namespace Infrastructure.Repositories
 
         public Price FindMaxPricePeriod()
         {
-            var price = (from p in _context.PriceSet
-                where p.PricePeriod == _context.PriceSet.Select(u => u.PricePeriod).Max()
-                select p).FirstOrDefault();
+            var price = _context.PriceSet.First(x => x.PricePeriod == _context.PriceSet.Max(y => y.PricePeriod));
+            // var price = (from p in _context.PriceSet
+            //     where p.PricePeriod == _context.PriceSet.Select(u => u.PricePeriod).Max()
+            //     select p).FirstOrDefault();
 
             return price;
         }

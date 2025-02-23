@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Net;
 using Application.Common.Interfaces;
+using Application.Common.Models;
 using Domain.Entities;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
@@ -18,7 +19,7 @@ public class PowerOverview
         _statRepository = statRepository;
     }
     [Function("PowerOverview")]
-    public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "get", "post")] HttpRequestData req,
+    public async Task<DailyTotalVm> Run([HttpTrigger(AuthorizationLevel.Function, "get", "post")] HttpRequestData req,
         FunctionContext executionContext)
     {
         var logger = executionContext.GetLogger("PowerOverview");
@@ -30,6 +31,6 @@ public class PowerOverview
         response.WriteString("Welcome to Azure Functions!");
 
         var result = await _statRepository.DailyTotal(DateTime.Now,new CancellationToken());
-        return new OkObjectResult(result);
+        return result;
     }
 }
