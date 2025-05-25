@@ -1,13 +1,13 @@
 using System;
 using System.IO;
+using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using Application.Common.Interfaces;
+using Application.Common.Models;
 using Domain.Entities;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Azure.WebJobs;
-using Microsoft.Azure.WebJobs.Extensions.Http;
-using Microsoft.AspNetCore.Http;
+using Microsoft.Azure.Functions.Worker;
+using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
@@ -29,12 +29,16 @@ namespace AzureServiceBus
             _statRepository = statRepository;
         }
 
-        [FunctionName("stat")]
-        public async Task<IActionResult> Run(
-            [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req,
-            ILogger log, CancellationToken cancellationToken)
+        [Function("stat")]
+        public async Task<DailyTotalVm> Run(
+            [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequestData req,
+            FunctionContext executionContext)
         {
+            var log = executionContext.GetLogger<HTTPStatistics>();
             log.LogInformation("C# HTTP trigger function processed a request.");
+
+            // Create a cancellation token
+            var cancellationToken = new CancellationToken();
 
             string name = req.Query["name"];
 
@@ -47,7 +51,12 @@ namespace AzureServiceBus
                 : $"Hello, {name}. This HTTP triggered function executed successfully.";
 
             var result = await _statRepository.DailyTotal(DateTime.Now, cancellationToken);
-            return new OkObjectResult(result);
+            
+            // Create the response
+            var response = req.CreateResponse(HttpStatusCode.OK);
+            await response.WriteAsJsonAsync(result);
+            
+            return result;
         }
     }
 }
