@@ -9,6 +9,7 @@ using Domain.Entities;
 using MQTTnet;
 using MQTTnet.Client;
 using MQTTnet.Extensions.ManagedClient;
+using MQTTnet.Packets;
 using MQTTnet.Protocol;
 using Newtonsoft.Json;
 
@@ -18,7 +19,7 @@ namespace Infrastructure.Clients
     {
         private readonly IConfig _config;
         private readonly string _clientId = System.Net.Dns.GetHostName() + "-" + Guid.NewGuid().ToString().Substring(0,8);
-        private IManagedMqttClient _client;
+        private IMqttClient _client;
         private readonly MqttFactory _factory;
         public MqttManagedClient(IConfig config)
         {
@@ -27,6 +28,7 @@ namespace Infrastructure.Clients
         }
         private async Task ConnectAsync()
         {
+            Console.WriteLine("Application is starting up and connecting to broker");
             var messageBuilder = new MqttClientOptionsBuilder()
                 .WithClientId(_clientId)
                 .WithCredentials(_config.MqttConfig.MQTTUserName(), _config.MqttConfig.MQTTUserPassword())
@@ -39,13 +41,7 @@ namespace Infrastructure.Clients
                     .Build()
                 : messageBuilder
                     .Build();
-
-            var managedOptions = new ManagedMqttClientOptionsBuilder()
-                .WithAutoReconnectDelay(TimeSpan.FromSeconds(5))
-                .WithClientOptions(options)
-                .Build();
-
-            _client = _factory.CreateManagedMqttClient();
+            _client = _factory.CreateMqttClient();
 
             _client.ConnectedAsync += e =>
             {
@@ -53,18 +49,12 @@ namespace Infrastructure.Clients
                 return Task.CompletedTask;
             };
 
-            _client.DisconnectedAsync += e =>
-            {
-                Console.WriteLine("Appliction is disconnected from broker");
-                return Task.CompletedTask;
-            };
-
-            _client.ApplicationMessageReceivedAsync += async e =>
+            _client.ApplicationMessageReceivedAsync += async args =>
             {
                 try
                 {
                     var amsReaderData =
-                        JsonConvert.DeserializeObject<AMSReaderData>(System.Text.Encoding.Default.GetString(e.ApplicationMessage.Payload));
+                        JsonConvert.DeserializeObject<AMSReaderData>(System.Text.Encoding.Default.GetString(args.ApplicationMessage.PayloadSegment.ToArray()));
 
                     await Save(amsReaderData);
                 }
@@ -75,7 +65,23 @@ namespace Infrastructure.Clients
                 }
             };
             
-            await _client.StartAsync(managedOptions);
+            await _client.ConnectAsync(options, CancellationToken.None);
+            
+            // Set up disconnection handling and automatic reconnection
+            _client.DisconnectedAsync += async e =>
+            {
+                Console.WriteLine("Application is disconnected from broker");
+                Console.WriteLine("Attempting to reconnect...");
+                await Task.Delay(TimeSpan.FromSeconds(5));
+                try
+                {
+                    await _client.ConnectAsync(options, CancellationToken.None);
+                }
+                catch (Exception exception)
+                {
+                    Console.WriteLine($"Reconnection failed: {exception.Message}");
+                }
+            };
         }
 
         public async Task SubscribeAsync(string topic, int qos = 1)
@@ -86,20 +92,20 @@ namespace Infrastructure.Clients
             }
             
             var mqttSubscribeOptions = _factory.CreateSubscribeOptionsBuilder()
-                .WithTopicFilter(f => { f.WithTopic(topic); })
+                .WithTopicFilter(f => { f.WithTopic(topic).WithQualityOfServiceLevel((MqttQualityOfServiceLevel)qos); })
                 .Build();
 
-            await _client.SubscribeAsync(topic, (MqttQualityOfServiceLevel)qos);
+            await _client.SubscribeAsync(mqttSubscribeOptions, CancellationToken.None);
         }
 
         public async Task UnSubscribeAsync(string topic)
         {
-            await _client.UnsubscribeAsync(topic);
+            await _client.UnsubscribeAsync(new MqttClientUnsubscribeOptions { TopicFilters = { topic } }, CancellationToken.None);
         }
 
         public async Task Disconnect()
         {
-            await _client.StopAsync();
+            await _client.DisconnectAsync(new MqttClientDisconnectOptions(), CancellationToken.None);
         }
 
         public virtual async Task Save(AMSReaderData data)

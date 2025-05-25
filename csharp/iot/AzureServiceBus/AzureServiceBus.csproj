@@ -1,28 +1,27 @@
-<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk.Worker">
+
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
-    <AzureFunctionsVersion>v4</AzureFunctionsVersion>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>dotnet-AzureServiceBus-96924e68-e06e-4ad0-9b75-aa47708ccf12</UserSecretsId>
   </PropertyGroup>
+
   <ItemGroup>
-    <PackageReference Include="Microsoft.ApplicationInsights.WorkerService" Version="2.22.0" />
     <PackageReference Include="Microsoft.Azure.Functions.Extensions" Version="1.1.0" />
-    <PackageReference Include="Microsoft.Azure.WebJobs.Extensions.ServiceBus" Version="5.8.1" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.1" />
+    <PackageReference Include="Microsoft.Azure.Functions.Worker" Version="2.0.0" />
+    <PackageReference Include="Microsoft.Azure.Functions.Worker.Extensions.Http" Version="3.3.0" />
+    <PackageReference Include="Microsoft.Azure.Functions.Worker.Sdk" Version="2.0.4" />
+    <PackageReference Include="Microsoft.Azure.WebJobs.Extensions.ServiceBus" Version="5.16.6" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.1" />
-    <PackageReference Include="Microsoft.NET.Sdk.Functions" Version="4.6.0" />
-    <PackageReference Include="System.Data.SqlClient" Version="4.8.6" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
   </ItemGroup>
+
   <ItemGroup>
-    <ProjectReference Include="..\MBusReader\MBusReader.csproj" />
+    <ProjectReference Include="..\src\Domain\Domain.csproj" />
+    <ProjectReference Include="..\src\Application\Application.csproj" />
     <ProjectReference Include="..\src\Infrastructure\Infrastructure.csproj" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Update="host.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="local.settings.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <CopyToPublishDirectory>Never</CopyToPublishDirectory>
-    </None>
+    <ProjectReference Include="..\MBusReader\MBusReader.csproj" />
+    <ProjectReference Include="..\MessageParser\MessageParser.csproj" />
   </ItemGroup>
 </Project>

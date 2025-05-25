@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Application.Common.Interfaces;
 using Domain.Entities;
+using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;

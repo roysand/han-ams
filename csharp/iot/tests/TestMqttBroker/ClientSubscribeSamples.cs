@@ -38,7 +38,7 @@ public static class ClientSubscribeSamples
             {
                 Console.WriteLine($"{DateTime.Now} - Received application message.");
                 // e.DumpToConsole();
-                Console.WriteLine($"{DateTime.Now} - {System.Text.Encoding.Default.GetString(e.ApplicationMessage.Payload)}");
+                Console.WriteLine($"{DateTime.Now} - {System.Text.Encoding.Default.GetString(e.ApplicationMessage.PayloadSegment.ToArray())}");
 
                 return Task.CompletedTask;
             };
@@ -72,7 +72,7 @@ public static class ClientSubscribeSamples
             var mqttClientOptions = new MqttClientOptionsBuilder()
                 .WithTcpServer("822b669a3fd14b2f818fd40ea11bbaaa.s2.eu.hivemq.cloud")
                 .WithCredentials("iot_sandaas","i3hYtten")
-                .WithTls()
+                .WithTlsOptions(o => o.UseTls())
                 .Build();
 
             await mqttClient.ConnectAsync(mqttClientOptions, CancellationToken.None);
@@ -90,7 +90,7 @@ public static class ClientSubscribeSamples
         }
     }
 
-    public static async Task Managed_Client()
+    public static Task Managed_Client()
     {
         // Creates a new client
         MqttClientOptionsBuilder builder = new MqttClientOptionsBuilder()
@@ -122,6 +122,8 @@ public static class ClientSubscribeSamples
         //
         //     Task.Delay(1000).GetAwaiter().GetResult();
         // }
+
+        return Task.CompletedTask;
     }
     
     public static void OnConnected(MqttClientConnectedEventArgs obj)
