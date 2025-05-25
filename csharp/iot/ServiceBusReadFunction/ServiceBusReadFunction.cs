@@ -9,6 +9,7 @@ using Azure.Messaging.ServiceBus;
 using Domain.Entities;
 using MBusReader.Contracts;
 using MessageParser.Code;
+using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.ServiceBus.Management;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Configuration;

@@ -28,6 +28,7 @@ namespace Infrastructure.Clients
         }
         private async Task ConnectAsync()
         {
+            Console.WriteLine("Application is starting up and connecting to broker");
             var messageBuilder = new MqttClientOptionsBuilder()
                 .WithClientId(_clientId)
                 .WithCredentials(_config.MqttConfig.MQTTUserName(), _config.MqttConfig.MQTTUserPassword())
