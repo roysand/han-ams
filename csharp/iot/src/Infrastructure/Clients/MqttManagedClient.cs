@@ -5,10 +5,8 @@ using System.Threading.Tasks;
 using Application.Common.Interfaces;
 using Application.Common.Interfaces.Config;
 using Application.Common.Models;
-using Domain.Entities;
 using MQTTnet;
 using MQTTnet.Client;
-using MQTTnet.Extensions.ManagedClient;
 using MQTTnet.Packets;
 using MQTTnet.Protocol;
 using Newtonsoft.Json;
@@ -43,7 +41,7 @@ namespace Infrastructure.Clients
                     .Build();
             _client = _factory.CreateMqttClient();
 
-            _client.ConnectedAsync += e =>
+            _client.ConnectedAsync += _ =>
             {
                 Console.WriteLine("Application is connected to broker");
                 return Task.CompletedTask;
@@ -68,7 +66,7 @@ namespace Infrastructure.Clients
             await _client.ConnectAsync(options, CancellationToken.None);
             
             // Set up disconnection handling and automatic reconnection
-            _client.DisconnectedAsync += async e =>
+            _client.DisconnectedAsync += async _ =>
             {
                 Console.WriteLine("Application is disconnected from broker");
                 Console.WriteLine("Attempting to reconnect...");
@@ -90,44 +88,45 @@ namespace Infrastructure.Clients
             {
                 await ConnectAsync();
             }
+
+            var client = _client ?? throw new InvalidOperationException("MQTT client could not be initialized.");
             
             var mqttSubscribeOptions = _factory.CreateSubscribeOptionsBuilder()
                 .WithTopicFilter(f => { f.WithTopic(topic).WithQualityOfServiceLevel((MqttQualityOfServiceLevel)qos); })
                 .Build();
 
-            await _client.SubscribeAsync(mqttSubscribeOptions, CancellationToken.None);
+            await client.SubscribeAsync(mqttSubscribeOptions, CancellationToken.None);
         }
 
         public async Task UnSubscribeAsync(string topic)
         {
-            await _client.UnsubscribeAsync(new MqttClientUnsubscribeOptions { TopicFilters = { topic } }, CancellationToken.None);
+            var client = _client ?? throw new InvalidOperationException("MQTT client is not connected.");
+            await client.UnsubscribeAsync(new MqttClientUnsubscribeOptions { TopicFilters = { topic } }, CancellationToken.None);
         }
 
         public async Task Disconnect()
         {
-            await _client.DisconnectAsync(new MqttClientDisconnectOptions(), CancellationToken.None);
+            var client = _client ?? throw new InvalidOperationException("MQTT client is not connected.");
+            await client.DisconnectAsync(new MqttClientDisconnectOptions(), CancellationToken.None);
         }
 
         public virtual async Task Save(AMSReaderData data)
         {
+            if (data == null)
+            {
+                Console.WriteLine($"{DateTime.Now:yyyy-MM-dd HH:mm:ss.zzz} Ignoring MQTT message because deserialization returned null.");
+                return;
+            }
+
             Console.WriteLine(
                 $"{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.zzz")}{JsonConvert.SerializeObject(data)}");
-                
-            var detail = new Detail()
+
+            if (data.Data?.P == null)
             {
-                MeasurementId = Guid.NewGuid(),
-                TimeStamp = data.TimeStamp,
-                ObisCode = "1-0:1.7.0.255",
-                Name = "Active power",
-                ValueStr = "Active power",
-                ObisCodeId = ObisCodeId.PowerUsed,
-                Unit = "kW",
-                Location = _config.ApplicationSettingsConfig.Location(),
-                ValueNum = (decimal)data.Data.P / 1000
-            };
-        
-            //Console.WriteLine(JsonConvert.SerializeObject(detail));
-        
+                Console.WriteLine($"{DateTime.Now:yyyy-MM-dd HH:mm:ss.zzz} Ignoring MQTT message because data.P is missing.");
+                return;
+            }
+
             
             await Task.CompletedTask;
         }

@@ -9,11 +9,11 @@ using Newtonsoft.Json;
 
 namespace Infrastructure.Clients;
 
-internal class AMSMqttManagedClient : MqttManagedClient, IMqttManagedClient
+internal class AMSMqttManagedClient : MqttManagedClient
 {
     private readonly IConfig _config;
     private readonly IDetailRepository<Detail> _detailRepository;
-    private int _counter = 0;
+    private int _counter;
 
     public AMSMqttManagedClient(IConfig config
         , IDetailRepository<Detail> detailRepository) : base(config)
@@ -23,14 +23,20 @@ internal class AMSMqttManagedClient : MqttManagedClient, IMqttManagedClient
         _counter = 0;
     }
 
-    public override Task Save(AMSReaderData data)
+    public override async Task Save(AMSReaderData data)
     {
-        if (data.Data == null)
+        if (data == null)
         {
-            return Task.CompletedTask;
+            Console.WriteLine($"{DateTime.Now:yyyy-MM-dd HH:mm:ss.zzz} Ignoring MQTT message because deserialization returned null.");
+            return;
         }
-        
-        var location = _config.ApplicationSettingsConfig.Location();
+
+        if (data.Data?.P == null)
+        {
+            Console.WriteLine($"{DateTime.Now:yyyy-MM-dd HH:mm:ss.zzz} Ignoring MQTT message because data.P is missing.");
+            return;
+        }
+
         _counter++;
         
         var detail = new Detail()
@@ -43,7 +49,7 @@ internal class AMSMqttManagedClient : MqttManagedClient, IMqttManagedClient
             ObisCodeId = ObisCodeId.PowerUsed,
             Unit = "kW",
             Location = _config.ApplicationSettingsConfig.Location(),
-            ValueNum = (decimal)data.Data.P / 1000
+            ValueNum = (decimal)data.Data.P.Value / 1000
         };
         
         Console.WriteLine(
@@ -54,8 +60,7 @@ internal class AMSMqttManagedClient : MqttManagedClient, IMqttManagedClient
         if (_counter > _config.MqttConfig.MQTTDelayCountBeforeSaveToDb())
         {
             _counter = 0;
-            _detailRepository.SaveChangesAsync(new CancellationToken());
+            await _detailRepository.SaveChangesAsync(new CancellationToken());
         }
-        return Task.CompletedTask;
     }
 }

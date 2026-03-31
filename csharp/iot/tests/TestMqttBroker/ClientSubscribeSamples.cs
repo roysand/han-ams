@@ -7,57 +7,90 @@ using MQTTnet;
 using MQTTnet.Client;
 using MQTTnet.Extensions.ManagedClient;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace TestMqttBroker;
 
 public static class ClientSubscribeSamples
 {
-    public static async Task Handle_Received_Application_Message()
+public static async Task Handle_Received_Application_Message()
+{
+    var mqttFactory = new MqttFactory();
+
+    using var mqttClient = mqttFactory.CreateMqttClient();
+
+    var startedAt = DateTime.Now;
+    var fileName = $"values-{startedAt:yyyyMMdd-HHmmss}.txt";
+    var filePath = Path.Combine(Directory.GetCurrentDirectory(), fileName);
+
+    await using var writer = new StreamWriter(filePath, append: true);
+    writer.AutoFlush = true;
+    await writer.WriteLineAsync("timestamp\tp");
+
+    // Async-safe gate for concurrent MQTT callbacks.
+    var writeGate = new SemaphoreSlim(1, 1);
+
+    var mqttClientOptions = new MqttClientOptionsBuilder()
+        .WithTcpServer("iot-hytta")
+        .WithCredentials("mqtt-ams", "mqtt-ams")
+        .WithClientId("test_client_id-")
+        .Build();
+
+    mqttClient.ApplicationMessageReceivedAsync += async e =>
     {
-        /*
-         * This sample subscribes to a topic and processes the received message.
-         */
+        var payload = System.Text.Encoding.Default.GetString(e.ApplicationMessage.PayloadSegment.ToArray());
 
-        var mqttFactory = new MqttFactory();
+        Console.WriteLine($"{DateTime.Now} - Received application message.");
+        Console.WriteLine($"{DateTime.Now:yyyy-MM-dd HH:mm:ss.fff} - {payload}");
 
-        using (var mqttClient = mqttFactory.CreateMqttClient())
+        try
         {
-            var mqttClientOptions = new MqttClientOptionsBuilder()
-                // .WithTcpServer("822b669a3fd14b2f818fd40ea11bbaaa.s2.eu.hivemq.cloud")
-                .WithTcpServer("iot-ha43")
-                //.WithCredentials("iot_sandaas","i3hYtten")
-                .WithCredentials("iot","i3hYtte")
-                // .WithTls()
-                .WithClientId("test_client_id")
-                .Build();
+            var json = JObject.Parse(payload);
+            int? p = json["data"]?["P"]?.Value<int>();
 
-            // Setup message handling before connecting so that queued messages
-            // are also handled properly. When there is no event handler attached all
-            // received messages get lost.
-            mqttClient.ApplicationMessageReceivedAsync += e =>
+            if (p.HasValue)
             {
-                Console.WriteLine($"{DateTime.Now} - Received application message.");
-                // e.DumpToConsole();
-                Console.WriteLine($"{DateTime.Now} - {System.Text.Encoding.Default.GetString(e.ApplicationMessage.PayloadSegment.ToArray())}");
+                var rowTimestamp = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff");
+                var line = $"{rowTimestamp}\t{p.Value}";
 
-                return Task.CompletedTask;
-            };
+                await writeGate.WaitAsync();
+                try
+                {
+                    await writer.WriteLineAsync(line);
+                }
+                finally
+                {
+                    writeGate.Release();
+                }
 
-            await mqttClient.ConnectAsync(mqttClientOptions, CancellationToken.None);
-
-            var mqttSubscribeOptions = mqttFactory.CreateSubscribeOptionsBuilder()
-                .WithTopicFilter(f => { f.WithTopic("iot/ams"); })
-                .Build();
-
-            await mqttClient.SubscribeAsync(mqttSubscribeOptions, CancellationToken.None);
-
-            Console.WriteLine("MQTT client subscribed to topic.");
-
-            Console.WriteLine("Press enter to exit.");
-            Console.ReadLine();
-            Console.WriteLine(".... stopping");
+                Console.WriteLine($"Parsed data.P = {p.Value} (written to {fileName})");
+            }
+            else
+            {
+                Console.WriteLine("JSON parsed, but data.P was missing.");
+            }
         }
-    }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Failed to parse payload JSON: {ex.Message}");
+        }
+    };
+
+    await mqttClient.ConnectAsync(mqttClientOptions, CancellationToken.None);
+
+    var mqttSubscribeOptions = mqttFactory.CreateSubscribeOptionsBuilder()
+        .WithTopicFilter(f => { f.WithTopic("iot/ams"); })
+        .Build();
+
+    await mqttClient.SubscribeAsync(mqttSubscribeOptions, CancellationToken.None);
+
+    Console.WriteLine("MQTT client subscribed to topic.");
+    Console.WriteLine($"Writing values to: {filePath}");
+    Console.WriteLine("Press enter to exit.");
+    Console.ReadLine();
+    Console.WriteLine(".... stopping");
+}
+
 
     public static async Task Subscribe_Topic()
     {
