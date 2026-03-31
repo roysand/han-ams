@@ -14,7 +14,7 @@ public class AMSReaderDataDetail
         public string Type { get; set; }
 
         [JsonProperty("P")]
-        public int P { get; set; }
+        public int? P { get; set; }
 
         [JsonProperty("Q")]
         public int Q { get; set; }
